@@ -1,0 +1,14 @@
+.jumbotron {
+    margin:0px; padding:0px; height:600px; margin-bottom:20px;
+    background: transparent; background-position:center center;
+    background-repeat:no-repeat; background-size:cover;
+    background-image: url("../pictures/farm1.jpg");
+}
+
+
+.jumbimg{
+    margin:0px; padding:0px; height:500px; width: 1400px;  margin-bottom:20px;
+    background: transparent; background-position:center center;
+    background-repeat:no-repeat; background-size:cover;
+    border-radius: 15px;
+}

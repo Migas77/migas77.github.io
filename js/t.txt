@@ -1,0 +1,140 @@
+b = {}
+{}
+b["nome"] = "Rafael"
+'Rafael'
+b = {}
+b["nome"] = {"Quantidade" : "x", "precototal" : "y"}
+{Quantidade: 'x', precototal: 'y'}
+x = 2
+2
+y = 3.45
+3.45
+b["nome"] = {"Quantidade" : x, "precototal": y}
+{Quantidade: 2, precototal: 3.45}
+xi = 3
+3
+precodefult = 2.2
+2.2
+iy= precodefult * xi
+6.6000000000000005
+b["nome"] = {"Quantidade" : x += xi, "precototal": y += iy}
+{Quantidade: 5, precototal: 10.05}
+
+
+
+
+let controlCabaz = function(){
+    additem = function(nome, preco) { 
+        let cabaz = JSON.parse(localStorage.getItem("itensCabaz"))
+
+        if(cabaz == null){
+            console.log("null")
+
+            let x = parseInt(0)
+            let y = parseFloat(0)
+
+            cabaz = {}
+
+            cabaz[`${nome}`] = {"quantidade" : x += 1, "preco" : y += preco}
+
+            localStorage.setItem("itensCabaz", JSON.stringify(cabaz))
+        }
+        else if(cabaz != null){
+            console.log("non-null")
+
+            cabaz[`${nome}`].quantidade += 1
+            cabaz[`${nome}`].preco += preco
+            localStorage.setItem("itensCabaz", JSON.stringify(cabaz))
+            console.log(cabaz)
+        }
+    }
+
+
+
+
+
+}
+
+
+
+$(document).ready(function () { 
+    console.log('Running...')
+    ko.applyBindings(new controlCabaz());
+});
+
+
+
+
+
+
+
+console.log(cabaz, typeof(cabaz))
+
+        /*
+        if(cabaz == null || cabaz == {}){
+            console.log("null")
+
+            let x = parseInt(0)
+            let y = parseFloat(0)
+
+            let cabaz = {}
+
+            cabaz[`${nome}`] = {"quantidade" : x += 1, "preco" : y += preco}
+
+            console.log(cabaz)
+            localStorage.setItem("itensCabaz", JSON.stringify(cabaz))
+        }
+
+        else if(cabaz != null && cabaz != {}){
+            console.log("non null")
+            if(cabaz[`${nome}`] == null) {
+                let x = parseInt(0)
+                let y = parseFloat(0)
+
+                cabaz[`${nome}`] = {"quantidade" : x += 1, "preco" : y += preco}
+
+            }
+            else if(cabaz[`${nome}`] != null){
+                cabaz[`${nome}`]["quantidade"] += 1
+                cabaz[`${nome}`]["preco"] += preco
+            }
+
+            
+        }
+        */
+
+
+
+let cabaz = JSON.parse(localStorage.getItem("cabaz"))
+undefined
+cabaz
+{}
+localStorage.setItem("cabaz", JSON.stringify({}))
+undefined
+let cabaz = JSON.parse(localStorage.getItem("cabaz"))
+undefined
+cabaz["produto"] = {"quantidade" : 1, "preco" : 2.55}
+{quantidade: 1, preco: 2.55}
+localStorage.setItem("cabaz", JSON.stringify(cabaz))
+undefined
+let cabaz = JSON.parse(localStorage.getItem("cabaz"))
+undefined
+cabaz["produto2"] = {"quantidade" : 3, "preco" : 4.55}
+{quantidade: 3, preco: 4.55}
+localStorage.setItem("cabaz", JSON.stringify(cabaz))
+undefined
+let cabaz = JSON.parse(localStorage.getItem("cabaz"))
+undefined
+cabaz["produto"]
+{quantidade: 1, preco: 2.55}
+
+
+
+
+
+
+
+
+
+
+<div class="testshow"></div><a data-bind="attr : {href : 'confirmation.html'}"><ul class="list-group" data-bind="foreach:showItens()"><li class="list-group-item" data-bind="text:produto"></li><li class="list-group-item" data-bind="text:preco"></li></ul></a>

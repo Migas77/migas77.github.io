@@ -1,0 +1,59 @@
+input[type="radio"]{
+    visibility:hidden;
+}
+
+html,body{
+    height: 100%;
+    background: linear-gradient(to bottom, white 0px, white 125px, green 125px)    
+}
+
+
+.user{
+    height: 250px;
+    width: 250px;
+    border-radius: 50%;
+    border: 2px solid black;
+    display: inline-block;
+    position: relative; 
+    background-image: url(unknownk.png);
+    background-position: center;
+    background-size: 85%;
+}
+
+#map{
+    height: 500px;
+    border-bottom-right-radius: 5%;
+    border-top-right-radius:5% ;
+    background-color: #AAD3DF;
+}
+
+
+.container-fluid{
+    margin-top: 50px;
+    background-color: green;
+}
+
+
+.letras{
+    font-size: 2.8rem;
+    font-weight:600;
+    cursor: pointer;
+    padding: 5px;
+    border: 3px solid #AEE7F8 ;
+    border-radius: 4px;
+}
+
+.letras:hover,.letras:focus{
+    background-color: aliceblue;
+}
+/* 
+.opcao{
+    display: flex;
+    justify-content: left;
+    align-items: center;
+} */
+
+.opcao{
+    height: 50%;
+    margin-bottom: 20px;
+}

@@ -1,0 +1,55 @@
+html, body {
+    height: 100%;
+    background-image: url("fundo2.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+
+.btn-success, #cpass{
+    background-image: linear-gradient(to right,#198754 30%,#2DD5A1);
+}
+
+.btn-outline-secondary,.btn-outline-secondary:hover {
+    background-color: transparent;
+    border:none;
+    padding: 0px;
+    padding-bottom: 0px;
+}
+
+.btn-outline-secondary{
+    color:#6C757D;
+}
+
+.btn-outline-secondary:hover{
+    color:black;
+}
+
+
+.shadow:hover {
+    box-shadow: black 5px 10px;
+}
+
+.btn-outline-success, .btn-outline-success:hover,.btn-outline-success:focus{
+    padding: 4px;
+    border: none;
+    background-color: #F7F7F7;
+    color: black;
+}
+
+#grad{
+    background-image: linear-gradient(to right,#198754 30%,#2DD5A1);
+    padding: 2px 2px;
+    border-radius: .25rem;
+}
+
+.sombra:hover{
+    box-shadow: 0px 8px 8px rgba(20, 20, 20, 0.2);
+    transition: all 0.3s ease 0s;
+}
+
+.input-group-text{
+    border-left: none;
+    background-color: white;
+}
+
