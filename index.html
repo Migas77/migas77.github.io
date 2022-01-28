@@ -30,6 +30,9 @@
                     </div>
                     <form>
                       <!-- LOGIN -->
+                        <div class="text-center">
+                          <button type="button" data-bind="click:ofertas" class="btn btn-success btn-block sombra" style="width: 100%; margin-top: 8px; font-size: smaller;">Ver ofertas sem fazer login </button>
+                        </div>
                         <div id="emailHelp" class="form-text mt-3">
                             Faz o login na tua conta
                             <p data-bind="if:userExists" style="color: red; margin-top: 3px;margin-bottom: -3px;"><i class="fa fa-exclamation-circle"></i> Utilizador não existe</p>
@@ -102,26 +105,33 @@
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="staticBackdropLabel">Registo de cliente</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-bind="click:clear"></button>
             </div>
             <div class="modal-body">
               <p data-bind="visible:all" style="color: red;margin-top:-5px; margin-bottom: -1px;"><i class="fa fa-exclamation-circle"></i> Preencha todos os segmentos corretamente</p>
-                <input class="form-control" type="text" placeholder="Nome">
-                <form>
-                  <label for="Email2" class="form-label">Insira o seu endereço de e-mail:</label>
-                  <input class="form-control" type="email" placeholder="Email" aria-label="default input example"id="Email2">
-                  <label for="p3" class="form-label my-2">Insira a sua nova palavra passe:</label>
-                  <div class="input-group">
-                    <input type="password" class="form-control" placeholder="Password" maxlength="20"id="p3">
-                  </div>
-                  <label for="p4" class="form-label my-2">Repita a sua nova palavra passe:</label>
-                  <div class="input-group">
-                    <input type="password" class="form-control" placeholder="Password" maxlength="20"  id="p4">
-                  </div>
-                </form>
+              <input class="form-control" type="text" placeholder="Nome" id="newClient">
+              <form>
+                <label for="Email2" class="form-label">Insira o seu endereço de e-mail:</label>
+                <input class="form-control" type="email" placeholder="Email" aria-label="default input example"id="Email2">
+                <label for="p3" class="form-label my-2">Insira a sua palavra passe:</label>
+                <div class="input-group">
+                  <input type="password" class="form-control" placeholder="Password" maxlength="20"id="p3">
+                </div>
+                <label for="p4" class="form-label my-2">Repita a sua palavra passe:</label>
+                <div class="input-group">
+                  <input type="password" class="form-control" placeholder="Password" maxlength="20"  id="p4">
+                </div>
+                <select class="form-select" aria-label="Default select example" style="margin-top: 6px;">
+                  <option selected value="" hidden>Escolha o método de pagamento</option>
+                  <option value="MbWay">MbWay</option>
+                  <option value="PayPal">PayPal</option>
+                  <option value="Multibanco">Multibanco</option>
+                  <option value="Dinheiro">Dinheiro à entrega</option>
+                </select>
+              </form>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancelar</button>
+              <button type="button" class="btn btn-dark" data-bs-dismiss="modal" data-bind="click:clear">Cancelar</button>
               <button type="button" class="btn btn-success" data-bind="click:registo">Regista-te!</button>
             </div>
           </div>

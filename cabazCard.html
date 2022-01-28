@@ -36,7 +36,7 @@
                 <a class="nav-link active" aria-current="page" href="marketplace.html">MarketPlace</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="html/subscription.html">Assinaturas</a>
+                <a class="nav-link" href="subscription.html">Assinaturas</a>
               </li>
             </ul>   
           </div>
@@ -57,17 +57,27 @@
                   <div class="col-1" ><span class="badge bg-light text-dark badige">Nome : </span></div>
                   <div class="col-3"><p class="h5" data-bind="text:nome"></p></div>
 
-                  <div class="col-1" ><span class="badge bg-light text-dark badige">Localização :   </span></div>
-                    <div class="col-3"><p class="h5" data-bind="text:localizacao"></p><p data-bind="text:distancia"></p></div>
+                  <div class="col-1" ><span class="badge bg-light text-dark badige">Localização : </span></div>
+                  <div class="col-3"><p class="h5" data-bind="text:localizacao"></p></div>
 
                   <div class="col-1" ><span class="badge bg-light text-dark badige">Rating : </span></div>
                   <div class="col-3"><p class="h5" data-bind="text:rating"></p></div>
 
                   <br><br><hr><br><br><br>
 
-                  <div class="col-12">
+                 <div class="row g-8">
+                    <div class="col-2">
+                      <img src="pictures/cabaz.png" >
+                    </div>
+                    <div class="col-6">
+                      <p class="h5">Seu pedido está sendo preparado pelo </p><p data-bind="text:nome"></p>
+                    </div>
+                 </div>
 
-                    <table class="table table-success table-striped">
+                  <div class="row g-12">
+                      <div class="col-8">
+
+                          <table class="table table-success table-striped">
                         <thead>
 
                             <tr>
@@ -93,67 +103,27 @@
                         </tbody>
                     </table>
 
+                      </div>
+
                     
-                    <br><hr>
 
-                    <div class="row g-12">
 
-                        <div class="col-2">
-                          <ol class="list-group list-group">
-                            <li class="list-group-item">Entrega :<p data-bind="text:entrega"></p> </li>
-                            <li class="list-group-item">Subtotal : <p data-bind="text:getTotal()"></p></li>
-                            <li class="list-group-item">Total : <p data-bind="text:total"></p></li>
-                          </ol>
-                        </div>
-
-                        <div class="col-8">
-                            <div class="row g-8">
-                              <div class="col-3"></div>
-                                <div class="col-5"><span class="badge bg-light text-dark badige">Método de pagamento : </span><br><br>
-                              <div class="form-check form-check-inline" style="padding: 5px;">
-                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="Multibanco" value="Multibanco">
-                                <img class="paymentImg" src="pictures/multibanco.png">
-                              </div>
-                              <div class="form-check form-check-inline" style="padding: 5px;">
-                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="MbWay" value="MbWay">
-                                <img class="paymentImg" src="pictures/mbway.png">
-                              </div>
-                              <div class="form-check form-check-inline" style="padding: 5px;">
-                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="PayPal" value="PayPal">
-                                <img class="paymentImg" src="pictures/paypal.png">
-                              </div>
-                              <div class="form-check form-check-inline" style="padding: 5px;">
-                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="Dinheiro" value="Dinheiro">
-                                <img class="paymentImg" src="pictures/Dinheiro.png">
-                              </div>
-                            </div>
-                              
-                            </div>
-                        </div>
+                    <div class="col-4">
+                      <ol class="list-group list-group">
+                        <li class="list-group-item">Entrega :<p data-bind="text:entrega"></p> </li>
+                        <li class="list-group-item">Subtotal : <p data-bind="text:getTotal()"></p></li>
+                        <li class="list-group-item">Total : <p data-bind="text:total"></p></li>
+                      </ol>
                     </div>
-                    
-                    <br><br>
-                    
-                    <div class="row 4">
-                      <div class="col-3"><button type="button" class="btn btn-success" data-bind="click:PageCard">Encomendar</button></div>
-                      <div class="col-1"><button type="button" class="btn btn-light" data-bind="click:PageTransition">Alterar</button></div>
-                        
-                    </div>
-
-                    <br><br><br><hr>
-                    
-
+                  </div>
 
           </div>
               
-
         </div>
 
-
       </div>
-    </div>
-
-    <br><br><br><br><br>
+      
+      <br><br><br><br><br>
       <footer class="text-center text-white" style="background-color: #37a140;">
         <!-- Grid container -->
         <div class="container pt-4">
@@ -222,6 +192,7 @@
         </div>
         <!-- Copyright -->
       </footer>
+
 
 
     <script src ="jquery-ui.js"></script>

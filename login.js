@@ -1,4 +1,5 @@
 var vm = function(){
+    localStorage.setItem("OfertasOnly",false)
     var clientes;
     var fornecedores;
     $.get("https://retoolapi.dev/84bNn4/users",function(data,status){
@@ -19,6 +20,13 @@ var vm = function(){
         }
         return true
     }
+
+    self.ofertas=function(){
+        localStorage.setItem("OfertasOnly",true)
+        window.location.href="marketplace.html"
+
+    }
+
     self.userExists=ko.observable(false)
     self.incdata=ko.observable(false)
     self.valmail1=ko.observable(false)
@@ -28,65 +36,91 @@ var vm = function(){
 
     /* LOGIN */
     self.login=function(){
+        self.userExists(false)
+        self.incdata(false)
+        self.valmail1(false)
+        self.campos(false)
         self.endereco($("#exampleInputEmail1").val())
         self.pass($("#exampleInputPassword1").val())
         console.log("Login")
         if (self.endereco()=="" || self.pass()==""){
             console.log("Preencher todos os campos")
-            self.userExists(false)
-            self.incdata(false)
-            self.valmail1(false)
+
             self.campos(true)
             return
         } 
         if ((self.endereco().includes("@"))==false || (self.endereco().includes("."))==false){
             console.log("E-mail inválido")
-            self.userExists(false)
-            self.incdata(false)
             self.valmail1(true)
-            self.campos(false)
             return
         } 
         if(self.person()=="Cliente"){
             for (ele of clientes){
-                if (self.endereco()!=ele.mail){
-                    self.userExists(true)
-                    self.incdata(false)
-                    self.valmail1(false)
-                    self.campos(false)
-                    return
-                }
-                if (self.pass()!=ele.password){
-                    console.log("Passe Cliente incorreta")
-                    self.userExists(false)
-                    self.incdata(true)
-                    self.valmail1(false)
-                    self.campos(false)
-                    return
-                }
-                console.log("redirecting client")
-                window.location.href="home_cliente.html"
-                localStorage.setItem("cliente",ele.nome)
+                self.userExists(false)
+                self.incdata(false)
+                self.valmail1(false)
+                self.campos(false)
+                if (self.endereco()==ele.mail){
+                    if (self.pass()==ele.password){
+                        console.log("redirecting client")
+                        window.location.href="home_cliente.html"
+                        localStorage.setItem("cliente",ele.nome)
+                        localStorage.setItem("pagamento",ele.pagamento)
+                        localStorage.setItem("mail",ele.mail)
+                        break
+                    }else{
+                        console.log("Passe Cliente incorreta")
+                        self.userExists(false)
+                        self.incdata(true)
+                        self.valmail1(false)
+                        self.campos(false)
+                        break
+                    }
+                }else{
+                    if(clientes.indexOf(ele)!=(clientes.length-1)){
+                        console.log(clientes.indexOf(ele),clientes.length)
+                        continue
+                    }else{
+                        console.log("last")
+                        self.userExists(true)
+                        self.incdata(false)
+                        self.valmail1(false)
+                        self.campos(false)
+                    }
+                } 
             }
         }
         else{
-            for (ele of fornecedores){
-                if (self.endereco()!=ele.mail){
-                    self.userExists(true)
-                    self.incdata(false)
-                    self.valmail1(false)
-                    self.campos(false)
-                    return
-                }
-                if(self.pass()!=ele.password){
-                    self.userExists(false)
-                    self.incdata(true)
-                    self.valmail1(false)
-                    self.campos(false)
-                    return
-                }
-                console.log("redirecting fornecedor")
-                window.location.href="home_fornecedor.html"
+            for (ele of clientes){
+                self.userExists(false)
+                self.incdata(false)
+                self.valmail1(false)
+                self.campos(false)
+                if (self.endereco()==ele.mail){
+                    if (self.pass()==ele.password){
+                        console.log("redirecting client")
+                        window.location.href="emDesenvolvimento.html"
+                        break
+                    }else{
+                        console.log("Passe Cliente incorreta")
+                        self.userExists(false)
+                        self.incdata(true)
+                        self.valmail1(false)
+                        self.campos(false)
+                        break
+                    }
+                }else{
+                    if(clientes.indexOf(ele)!=(clientes.length-1)){
+                        console.log(clientes.indexOf(ele),clientes.length)
+                        continue
+                    }else{
+                        console.log("last")
+                        self.userExists(true)
+                        self.incdata(false)
+                        self.valmail1(false)
+                        self.campos(false)
+                    }
+                } 
             }
         }
     }
@@ -156,8 +190,14 @@ var vm = function(){
         $("#Email").val("")
         $("#p1").val("")
         $("#p2").val("")
+        $("#p3").val("")
+        $("#p4").val("")
+        $("#Email2").val("")
+        $("option[value='']").prop("selected",true)
+        $("#newClient").val("")
         self.exist(false)
         self.bola(false)
+        self.all(false)
     }
     /* --FIM-- */
 
@@ -173,9 +213,31 @@ var vm = function(){
     
     self.all=ko.observable(false)
     self.registo=function(){
-        if ($("#p3").val()==$("#p4").val() & $("#p3").val()!="" & $("#Email2").val().includes("@")==true){
-            clientes[$("#Email2").val()]=$("#p3").val()
-            window.location.href="home_cliente.html"
+        if ($("#p3").val()==$("#p4").val() & $("#p3").val()!="" & $("#Email2").val().includes("@")==true & $("#Email2").val().includes(".")==true & $("select option:selected").val()!=""){
+            $('button').last().prop('disabled', true);
+            for (ele of clientes){
+                if (ele.mail==$("#Email2").val().trim()){
+                    alert("Conta Email já utilizada neste site")
+                    $('button').last().prop('disabled', false);
+                    return
+                }
+            }
+            console.log($("select option:selected").val())
+            $.post("https://retoolapi.dev/84bNn4/users",
+            {
+                "mail":$("#Email2").val(),
+                "nome":$("#newClient").val(),
+                "password":$("#p3").val(),
+                "pagamento":$("select option:selected").val()
+            })
+            localStorage.setItem("cliente",$("#newClient").val())
+            localStorage.setItem("pagamento",$("select option:selected").val())
+            localStorage.setItem("mail",$("#Email2").val())
+            self.clear()
+            temporizador1=setInterval(function(){
+                window.location.href="home_cliente.html"
+                clearInterval(temporizador1)
+            },3000)
         }else{
             self.all(true)
         }

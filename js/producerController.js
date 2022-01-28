@@ -114,33 +114,8 @@ let ProducerVM = function(){
         localStorage.setItem("cabaz", JSON.stringify(cabaz))
         self.cabazPreenchido(true)
 
-        let htmlCode = `
-        <table class="table bg-light tabelaprodutos">
-        <thead>
-          <tr>
-            <th scope="col">Produto</th>
-            <th scope="col">Quantidade</th>
-            <th scope="col">Preço</th>
-            <th scope="col">Tipo</th>
-          </tr>
-        </thead>
-          <tbody id="itenscabaz" data-bind="foreach:GetItensCabaz()">
-          <tr>
-            <td data-bind="text:produto"></td>
-            <td data-bind="text:quantidade"></td>
-            <td data-bind="text:preco"></td>
-            <td data-bind="text:tipo"></td>
-          </tr>
-        </tbody>
-        
-      </table>
-      
-      
-      <button type="button" class="btn btn-success " data-bind="click:pageTransition">Confirmar pedido</button>
-      <button type="button" class="btn btn-success " data-bind="click:pageTransition"
-      data-bs-toggle="modal" data-bs-target="#exampleModal">Confirmar pedido</button>
-        `
-        //document.getElementById("listaDoCabaz").innerHTML = htmlCode
+        document.location.reload(true)
+
         
 
     }
@@ -174,11 +149,14 @@ let ProducerVM = function(){
                 
 
                 console.log(cabaz[index].quantidade, cabaz[index].preco)
+                
+
             }
             
         }
 
         localStorage.setItem("cabaz", JSON.stringify(cabaz))
+        document.location.reload(true)
         //show()
 
 

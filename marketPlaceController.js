@@ -4,7 +4,72 @@ let MarketPlaceVM = function(){
     //let produtos = JSON.parse(localStorage.getItem('produtos'))
     let self = this
 
-    self.produtos = JSON.parse(localStorage.getItem("produtos"))
+    self.produtos = ko.observableArray(JSON.parse(localStorage.getItem("produtos")))
+    console.log(self.produtos())
+    self.pesquisado = ko.observable("")
+    console.log(localStorage.getItem("OfertasOnly"))
+    if((localStorage.getItem("OfertasOnly")) == "true"){
+        $("nav, #dropdownMenuButton1, #dropdownMenuButton2").hide()
+        $("html").css("pointer-events","none")
+        $("input[type='search']").css("pointer-events","auto")
+    }else{
+        $("nav, #dropdownMenuButton1, #dropdownMenuButton2").show()
+        $("html").css("pointer-events","auto")
+    }
+
+    self.zero=function(){
+        $(".dist").each(function(){
+            if(parseFloat($(this).text())>10){
+                $(this).parent().parent().parent().hide()
+            }else $(this).parent().parent().parent().show()
+        })
+    }
+    self.dez=function(){
+        $(".dist").each(function(){
+            if(parseFloat($(this).text())<10 || parseFloat($(this).text())>20){
+                $(this).parent().parent().parent().hide()
+            }else $(this).parent().parent().parent().show()
+        })
+    }
+    self.vinte=function(){
+        $(".dist").each(function(){
+            if(parseFloat($(this).text())<20 || parseFloat($(this).text())>30){
+                $(this).parent().parent().parent().hide()
+            }else $(this).parent().parent().parent().show()
+        })
+    }
+    self.trinta=function(){
+        $(".dist").each(function(){
+            if(parseFloat($(this).text())<30 || parseFloat($(this).text())>40){
+                $(this).parent().parent().parent().hide()
+            }else $(this).parent().parent().parent().show()
+        })
+    }
+    
+    self.noventa=function(){
+        $(".avaliacao").each(function(){
+            if(parseFloat($(this).text().slice(0,2))<90){
+                $(this).parent().parent().parent().hide()
+            }else $(this).parent().parent().parent().show()
+        })
+    }
+    self.oitenta=function(){
+        $(".avaliacao").each(function(){
+            if(parseFloat($(this).text().slice(0,2))>90 || parseFloat($(this).text().slice(0,2))<80){
+                $(this).parent().parent().parent().hide()
+            }else $(this).parent().parent().parent().show()
+        })
+    }
+    self.setenta=function(){
+        $(".avaliacao").each(function(){
+            if(parseFloat($(this).text().slice(0,2))>80 || parseFloat($(this).text().slice(0,2))<70){
+                $(this).parent().parent().parent().hide()
+            }else $(this).parent().parent().parent().show()
+        })
+    }
+
+
+
 
     function CreateCabazInical(id){
         let listaprodutores = JSON.parse(localStorage.getItem("produtores"));

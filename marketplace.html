@@ -12,6 +12,7 @@
     <style>
       .card{
         border-radius: 10px;
+        cursor: pointer;
         
       }
       img{
@@ -33,13 +34,13 @@
           <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link" href="index.html">Home</a>
+                <a class="nav-link" href="home_cliente.html">Home</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="marketplace.html">MarketPlace</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Assinaturas</a>
+                <a class="nav-link" href="html/subscription.html">Assinaturas</a>
               </li>
             </ul>   
           </div>
@@ -48,18 +49,38 @@
 
       <br><br>
       <div class="row">
-          <div class="col-4" style="padding-left: 50px;"><input class="form-control" type="search" placeholder="Alface, morango, tomate, milho ?" aria-label="Search"></div>
+          <div class="col-4" style="padding-left: 50px;"><input class="form-control" type="search" placeholder="Alface, morango, tomate, milho?" aria-label="Search" data-bind="value:pesquisado"></div>
+          <div class="col-3 dropdown">
+            <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+              Filtre por distância ao produtor
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+              <li style="cursor: pointer; padding-left: 14px;" data-bind="click:zero">00 - 10km </li>
+              <li style="cursor: pointer; padding-left: 14px;padding-right: 5px;" data-bind="click:dez"> 10 - 20km</li>
+              <li style="cursor: pointer; padding-left: 14px;" data-bind="click:vinte"> 20 - 30km </li>
+              <li style="cursor: pointer; padding-left: 14px;" data-bind="click:trinta"> 30 - 40km </li>
+            </ul>
+          </div>
+          <div class="col-3 dropdown">
+            <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+              Filtre por avaliação do produtor
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+              <li style="cursor: pointer; padding-left: 14px;" data-bind="click:noventa">100 - 90% </li>
+              <li style="cursor: pointer; padding-left: 14px;padding-right: 5px;" data-bind="click:oitenta"> 90 - 80% </li>
+              <li style="cursor: pointer; padding-left: 14px;" data-bind="click:setenta"> 80 - 70% </li>
+            </ul>
+          </div>
       </div>
         <br><br><br>
 
       
 
     <div class="d-flex justify-content-center">
-
       <div class="row g-12" data-bind="foreach:produtos"> 
-
+          <!-- ko if: $parent.pesquisado()!=""-->
+          <!-- ko if: produto.toLowerCase().includes($parent.pesquisado())  -->
           <div class="col-4 prodcol">
-
               <div class="card prodcard hvr-grow" style="width:400px">
                 <a data-bind="click: PageTrasition">
                   <img class="card-img-top" data-bind="attr: {src : ImagemSrc}" alt="Card image" style="width:100%">
@@ -68,17 +89,38 @@
                   <h4 class="card-title" data-bind="text:produto"></h4>
                   <p class="card-text" data-bind="text:GetProdutorNome(productorID)"></p>
                   <br>
-                  <i class="fas fa-map-marker-alt"></i><p class="card-text" data-bind="text:GetProdutorlocalizacao(productorID)"> <p class="card-text" data-bind="text:distancia"></p>
-                  <i class="fas fa-thumbs-up"></i><p class="card-text" data-bind="text:GetProdutorRating(productorID)"></p>
+                  <i class="fas fa-map-marker-alt"></i>
+                  <p class="card-text" data-bind="text:GetProdutorlocalizacao(productorID)">
+                     <p class="card-text dist" data-bind="text:distancia"></p>
+                     <i class="fas fa-thumbs-up"></i>
+                     <p class="card-text avaliacao" data-bind="text:GetProdutorRating(productorID)">
+                  </p>
                 </div>
               </div>
-
-          </div>
-
+            </div>
+          <!-- /ko -->
+          <!-- /ko -->
+          <!-- ko if:$parent.pesquisado()=="" -->
+                <div class="col-lg-4 prodcol">
+                  <div class="card prodcard hvr-grow" style="width:400px">
+                    <a data-bind="click: PageTrasition">
+                      <img class="card-img-top" data-bind="attr: {src : ImagemSrc}" alt="Card image" style="width:100%">
+                    </a>
+                    <div class="card-body">
+                      <h4 class="card-title" data-bind="text:produto"></h4>
+                      <p class="card-text" data-bind="text:GetProdutorNome(productorID)"></p>
+                      <br>
+                      <i class="fas fa-map-marker-alt"></i>
+                      <p class="card-text" data-bind="text:GetProdutorlocalizacao(productorID)">
+                        <p class="card-text dist" data-bind="text:distancia"></p>
+                        <i class="fas fa-thumbs-up"></i>
+                        <p class="card-text avaliacao" data-bind="text:GetProdutorRating(productorID)"></p>
+                    </div>
+                  </div>
+              </div>
+              <!-- /ko -->
+            </div>
       </div>
-
-      
-
     </div>
 
     <br><br><br><br><br>
