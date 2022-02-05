@@ -91,14 +91,14 @@ var vm = function(){
             }
         }
         else{
-            for (ele of clientes){
+            for (ele of fornecedores){
                 self.userExists(false)
                 self.incdata(false)
                 self.valmail1(false)
                 self.campos(false)
                 if (self.endereco()==ele.mail){
                     if (self.pass()==ele.password){
-                        console.log("redirecting client")
+                        console.log("redirecting fornecedor")
                         window.location.href="emDesenvolvimento.html"
                         break
                     }else{
@@ -110,7 +110,7 @@ var vm = function(){
                         break
                     }
                 }else{
-                    if(clientes.indexOf(ele)!=(clientes.length-1)){
+                    if(fornecedores.indexOf(ele)!=(clientes.length-1)){
                         console.log(clientes.indexOf(ele),clientes.length)
                         continue
                     }else{
