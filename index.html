@@ -22,6 +22,7 @@
     <script type="module">
 
         import * as THREE from "https://threejs.org/build/three.module.js";
+        import * as CANNON from 'https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/+esm'
         import { MapControls } from 'three/addons/controls/MapControls.js';
 
 
@@ -30,11 +31,12 @@
 
         // To store the scene graph, and elements usefull to rendering the scene
         const sceneElements = {
-            sceneGraph: null,
-            camera: null,
             renderer: null,
+            camera: null,
+            sceneGraph: null,
+            world: null,
             raycaster: null, 
-            pointer: null
+            pointer: null,
         };
 
         // HELPER FUNCTIONS
@@ -120,6 +122,13 @@
                 // ************************** //
                 sceneElements.raycaster = new THREE.Raycaster();
                 sceneElements.pointer = new THREE.Vector2();
+
+                // ************************** //
+                // Create physics world
+                // ************************** //
+                sceneElements.world = new CANNON.World({
+                    gravity: new CANNON.Vec3(0, -9.82, 0), // m/s²
+                })
             },
 
             render: function (sceneElements) {
@@ -158,7 +167,6 @@
                 // ************************** //
                 // Create a cube
                 // ************************** //
-                
                 const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
                 const cubeMaterial = new THREE.MeshPhongMaterial({ color: 'rgb(255,0,0)' });
                 const cubeObject = new THREE.Mesh(cubeGeometry, cubeMaterial);
@@ -166,11 +174,33 @@
                 // Cube center is at (0,0,0)
                 // Set position of the cube
                 // The base of the cube will be on the plane 
-                cubeObject.translateY(0.5);
+                cubeObject.translateY(10);
                 // Set shadow property
                 cubeObject.castShadow = true;
                 cubeObject.receiveShadow = true;
                 cubeObject.name = "cube";
+
+                
+
+                const sphereBody = new CANNON.Body({
+                    mass: 5, // kg
+                    shape: new CANNON.Sphere(1),
+                })
+                sphereBody.position.set(0, 10, 0) // m
+                sceneElements.world.addBody(sphereBody)
+
+                const sphereMesh = new THREE.Mesh(new THREE.SphereGeometry(1), new THREE.MeshNormalMaterial())
+                sphereMesh.name = "sphereMesh"
+                sceneElements.sceneGraph.add(sphereMesh)
+
+                // Create a static plane for the ground
+                const groundBody = new CANNON.Body({
+                    type: CANNON.Body.STATIC, // can also be achieved by setting the mass to 0
+                    shape: new CANNON.Plane(),
+                })
+                groundBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0) // make it face up
+                sceneElements.world.addBody(groundBody)
+                console.log(sceneElements.world)
 
 
                 // ************************** //
@@ -267,6 +297,14 @@
             // Animation
             // Call for the next frame
             requestAnimationFrame(computeFrame);
+
+            // Run the simulation
+            sceneElements.world.fixedStep()
+
+            const sphereMesh = sceneElements.sceneGraph.getObjectByName("sphereMesh")
+            const sphereBody = sceneElements.world.bodies[0]
+            sphereMesh.position.copy(sphereBody.position)
+            sphereMesh.quaternion.copy(sphereBody.quaternion)
         }
 
         // ************************** //
