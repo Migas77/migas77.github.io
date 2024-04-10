@@ -22,7 +22,8 @@
     <script type="module">
 
         import * as THREE from "https://threejs.org/build/three.module.js";
-        import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+        import { MapControls } from 'three/addons/controls/MapControls.js';
+
 
         // Camera Positions
         const [cameraOffsetX, cameraOffsetY, cameraOffsetZ] = [8, 6, 8]
@@ -101,8 +102,13 @@
                 // ************************** //
                 // Control for the camera
                 // ************************** //
-                sceneElements.control = new OrbitControls(camera, renderer.domElement);
-                sceneElements.control.screenSpacePanning = true;
+                const controls = new MapControls( camera, renderer.domElement );
+                sceneElements.controls = controls
+                controls.enableZoom = false; // Disable zooming
+                controls.enableRotate = false; // Enable rotating
+                controls.enableDamping = true;
+                controls.dampingFactor = 0.05;
+                controls.panSpeed = 2
             },
 
             render: function (sceneElements) {
@@ -191,16 +197,17 @@
                 // If car moved, then track the car.
                 const camera = sceneElements.camera;
                 const cameraOffset = new THREE.Vector3(cameraOffsetX, cameraOffsetY, cameraOffsetZ);
-                const objectPosition = new THREE.Vector3();
-                cube.getWorldPosition(objectPosition);
-                camera.position.copy(objectPosition).add(cameraOffset);
+                const cubePosition = new THREE.Vector3();
+                cube.getWorldPosition(cubePosition);
+                camera.position.copy(cubePosition).add(cameraOffset);
+                sceneElements.controls.target = cubePosition
             }
 
-            
+            sceneElements.controls.update(); // required if controls.enableDamping is set to true
             // Rendering
             helper.render(sceneElements);
             // Animation
-            //Call for the next frame
+            // Call for the next frame
             requestAnimationFrame(computeFrame);
         }
 
