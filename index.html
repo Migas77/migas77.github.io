@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title> 3D scene </title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script type="importmap">
+        {
+          "imports": {
+            "three": "https://threejs.org/build/three.module.js",
+            "three/addons/": "https://threejs.org/examples/jsm/"
+          }
+        }
+      </script>
+
+    <script type="module">
+
+        import * as THREE from "https://threejs.org/build/three.module.js";
+        import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+        // Camera Positions
+        const [cameraOffsetX, cameraOffsetY, cameraOffsetZ] = [8, 6, 8]
+
+        // To store the scene graph, and elements usefull to rendering the scene
+        const sceneElements = {
+            sceneGraph: null,
+            camera: null,
+            renderer: null,
+        };
+
+        // HELPER FUNCTIONS
+
+        const helper = {
+
+            initEmptyScene: function (sceneElements) {
+
+                // ************************** //
+                // Create the 3D scene
+                // ************************** //
+                sceneElements.sceneGraph = new THREE.Scene();
+
+                // ************************** //
+                // Add camera
+                // ************************** //
+                const width = window.innerWidth;
+                const height = window.innerHeight;
+                const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 500);
+                sceneElements.camera = camera;
+                camera.position.set(cameraOffsetX, cameraOffsetY, cameraOffsetZ);
+                camera.lookAt(0, 0, 0);
+
+                // ************************** //
+                // Illumination
+                // ************************** //
+
+                // ************************** //
+                // Add ambient light
+                // ************************** //
+                const ambientLight = new THREE.AmbientLight('rgb(255, 255, 255)');
+                sceneElements.sceneGraph.add(ambientLight);
+
+                // ***************************** //
+                // Add spotlight (with shadows)
+                // ***************************** //
+                const spotLight1 = new THREE.SpotLight('rgb(255, 255, 255)', 40);
+                spotLight1.decay = 1;
+                spotLight1.position.set(-5, 8, 0);
+                sceneElements.sceneGraph.add(spotLight1);
+
+                // Setup shadow properties for the spotlight
+                spotLight1.castShadow = true;
+                spotLight1.shadow.mapSize.width = 2048;
+                spotLight1.shadow.mapSize.height = 2048;
+                spotLight1.name = "light 1";
+
+                // *********************************** //
+                // Create renderer (with shadow map)
+                // *********************************** //
+                const renderer = new THREE.WebGLRenderer({ antialias: true });
+                sceneElements.renderer = renderer;
+                renderer.setPixelRatio(window.devicePixelRatio);
+                renderer.setClearColor('rgb(255, 255, 150)', 1.0);
+                renderer.setSize(width, height);
+
+                // Setup shadowMap property
+                renderer.shadowMap.enabled = true;
+                renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+                // **************************************** //
+                // Add the rendered image in the HTML DOM
+                // **************************************** //
+                const htmlElement = document.querySelector("#Tag3DScene");
+                htmlElement.appendChild(renderer.domElement);
+
+                // ************************** //
+                // Control for the camera
+                // ************************** //
+                sceneElements.control = new OrbitControls(camera, renderer.domElement);
+                sceneElements.control.screenSpacePanning = true;
+            },
+
+            render: function (sceneElements) {
+                sceneElements.renderer.render(sceneElements.sceneGraph, sceneElements.camera);
+            },
+        };
+
+        // FUCNTIONS FOR BUILDING THE SCENE
+
+        const scene = {
+
+            // Create and insert in the scene graph the models of the 3D scene
+
+            load3DObjects: function (sceneGraph) {
+
+                // ************************** //
+                // Create a ground plane
+                // ************************** //
+                const planeGeometry = new THREE.PlaneGeometry(48, 48);
+                const planeMaterial = new THREE.MeshPhongMaterial({ color: 'rgb(200, 200, 200)', side: THREE.DoubleSide });
+                const planeObject = new THREE.Mesh(planeGeometry, planeMaterial);
+                sceneGraph.add(planeObject);
+                // Change orientation of the plane using rotation
+                planeObject.rotation.x = Math.PI/2
+                // Set shadow property
+                planeObject.receiveShadow = true;
+
+                // ************************** //
+                // Coordinate Axis
+                // ************************** //
+                const axes = new THREE.AxesHelper(15);
+                sceneGraph.add(axes);
+                
+
+
+                // ************************** //
+                // Create a cube
+                // ************************** //
+                
+                const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+                const cubeMaterial = new THREE.MeshPhongMaterial({ color: 'rgb(255,0,0)' });
+                const cubeObject = new THREE.Mesh(cubeGeometry, cubeMaterial);
+                sceneGraph.add(cubeObject);
+                // Cube center is at (0,0,0)
+                // Set position of the cube
+                // The base of the cube will be on the plane 
+                cubeObject.translateY(0.5);
+                // Set shadow property
+                cubeObject.castShadow = true;
+                cubeObject.receiveShadow = true;
+                cubeObject.name = "cube";
+
+            }
+        };
+
+        // ************************** //
+        // Animation
+        // Displacement Values
+        var dispX = 0.2, dispZ = 0.2;
+        // To keep Track of the keyboard
+        var carMoved = false;
+        var keyArrowLeft = false, keyArrowUp = false, keyArrowRight = false, keyArrowDown = false;
+        // ************************** //
+
+        function computeFrame(time) {
+
+            const cube = sceneElements.sceneGraph.getObjectByName("cube");
+            
+            if (keyArrowRight) {
+                cube.translateX(dispX);
+                carMoved = true;
+            }
+            if (keyArrowUp) {
+                cube.translateZ(-dispZ);
+                carMoved = true;
+            }
+            if (keyArrowLeft) {
+                cube.translateX(-dispX);
+                carMoved = true;
+            }
+            if (keyArrowDown) {
+                cube.translateZ(dispZ);
+                carMoved = true;
+            }
+            if (carMoved){
+                // If car moved, then track the car.
+                const camera = sceneElements.camera;
+                const cameraOffset = new THREE.Vector3(cameraOffsetX, cameraOffsetY, cameraOffsetZ);
+                const objectPosition = new THREE.Vector3();
+                cube.getWorldPosition(objectPosition);
+                camera.position.copy(objectPosition).add(cameraOffset);
+            }
+
+            
+            // Rendering
+            helper.render(sceneElements);
+            // Animation
+            //Call for the next frame
+            requestAnimationFrame(computeFrame);
+        }
+
+        // ************************** //
+        // Initialization
+        //  1. Initialize the empty scene
+        //  2. Add elements within the scene
+        //  3. Animate
+        // ************************** //
+        function init() {
+            helper.initEmptyScene(sceneElements);
+            scene.load3DObjects(sceneElements.sceneGraph);
+            requestAnimationFrame(computeFrame);
+        }
+
+        // HANDLING EVENTS
+
+        // ************************** //
+        // Handling Events
+        //  Resize Window
+        //  User interaction
+        // ************************** //
+
+        window.addEventListener('resize', resizeWindow);
+        // Update render image size and camera aspect when the window is resized
+        function resizeWindow(eventParam) {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+
+            sceneElements.camera.aspect = width / height;
+            sceneElements.camera.updateProjectionMatrix();
+
+            sceneElements.renderer.setSize(width, height);
+
+            // Comment when doing animation
+            // computeFrame(sceneElements);
+        }
+
+        document.addEventListener('keydown', onDocumentKeyDown, false);
+        document.addEventListener('keyup', onDocumentKeyUp, false);
+        function onDocumentKeyDown(event) {
+            switch (event.keyCode) {
+                case 37: // ArrowLeft
+                    keyArrowLeft = true;
+                    break;
+                case 38: // ArrowUp
+                    keyArrowUp = true;
+                    break;
+                case 39: // ArrowRight
+                    keyArrowRight = true;
+                    break;
+                case 40: // ArrowDown
+                    keyArrowDown = true;
+                    break;
+            }
+        }
+
+        function onDocumentKeyUp(event) {
+            switch (event.keyCode) {
+                case 37: // ArrowLeft
+                    keyArrowLeft = false;
+                    carMoved = false;
+                    break;
+                case 38: // ArrowUp
+                    keyArrowUp = false;
+                    carMoved = false;
+                    break;
+                case 39: // ArrowRight
+                    keyArrowRight = false;
+                    carMoved = false;
+                    break;
+                case 40: // ArrowDown
+                    keyArrowDown = false;
+                    carMoved = false;
+                    break;
+            }
+        }
+
+        // STARTING
+        init();
+
+    </script>
+
+</head>
+
+<body>
+    <div id="Tag3DScene"> </div>
+</body>
+
+</html>
