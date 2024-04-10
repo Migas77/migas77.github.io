@@ -33,6 +33,8 @@
             sceneGraph: null,
             camera: null,
             renderer: null,
+            raycaster: null, 
+            pointer: null
         };
 
         // HELPER FUNCTIONS
@@ -104,11 +106,20 @@
                 // ************************** //
                 const controls = new MapControls( camera, renderer.domElement );
                 sceneElements.controls = controls
-                controls.enableZoom = false; // Disable zooming
-                controls.enableRotate = false; // Enable rotating
+                // how far can you dolly in and out
+                // controls.minDistance = 10.0
+                // controls.maxDistance = 20.0
+                // Disable rotating
+                // controls.enableRotate = false; 
                 controls.enableDamping = true;
                 controls.dampingFactor = 0.05;
                 controls.panSpeed = 2
+
+                // ************************** //
+                // Create raycaster and pointer
+                // ************************** //
+                sceneElements.raycaster = new THREE.Raycaster();
+                sceneElements.pointer = new THREE.Vector2();
             },
 
             render: function (sceneElements) {
@@ -161,6 +172,30 @@
                 cubeObject.receiveShadow = true;
                 cubeObject.name = "cube";
 
+
+                // ************************** //
+                // Create an empty rectangle
+                // ************************** //
+                const empty_rectangle = new THREE.Group()
+                const points = [
+                    new THREE.Vector3( -1, 0, 1),
+                    new THREE.Vector3( 1, 0, 1),
+                    new THREE.Vector3( 1, 0, -1),
+                    new THREE.Vector3( -1, 0, -1),
+                    new THREE.Vector3( -1, 0, 1,)
+                ];
+                const material = new THREE.LineBasicMaterial( {
+                    color: 0x0000ff ,
+                    linewidth: 10,    // Line thickness
+                    opacity: 0.5,    // Line opacity
+                    transparent: true // Enable transparency
+                } );
+                const geometry = new THREE.BufferGeometry().setFromPoints( points );
+                const line = new THREE.Line( geometry, material );
+                empty_rectangle.add(line);
+                empty_rectangle.name = "empty_rectangle"
+                sceneElements.sceneGraph.add(empty_rectangle)
+                
             }
         };
 
@@ -171,11 +206,34 @@
         // To keep Track of the keyboard
         var carMoved = false;
         var keyArrowLeft = false, keyArrowUp = false, keyArrowRight = false, keyArrowDown = false;
+        var keyEnter = false;
         // ************************** //
 
         function computeFrame(time) {
+            const empty_rectangle = sceneElements.sceneGraph.getObjectByName("empty_rectangle");
+
+            sceneElements.raycaster.setFromCamera( sceneElements.pointer, sceneElements.camera);
+            const intersects = sceneElements.raycaster.intersectObject( empty_rectangle );
+            if (intersects.length > 0){
+                console.log("mouse intersecting empty_rectangle")
+                empty_rectangle.children[0].material.color.setHex( 0xffffff );
+                
+            }
 
             const cube = sceneElements.sceneGraph.getObjectByName("cube");
+
+            sceneElements.raycaster.set(cube.position, new THREE.Vector3(0, 1, 0));
+            const intersects2 = sceneElements.raycaster.intersectObject( empty_rectangle );
+            if (intersects2.length > 0){
+                console.log("cube intersecting empty_rectangle")
+                if (keyEnter){
+                    // console.log("key enter pressed")
+                    empty_rectangle.children[0].material.color.setHex( 0x0000ff );
+                }
+            } else {
+                // empty_rectangle.children[0].material.color.setHex( 0x000000 );
+            }
+
             
             if (keyArrowRight) {
                 cube.translateX(dispX);
@@ -227,8 +285,8 @@
 
         // ************************** //
         // Handling Events
-        //  Resize Window
-        //  User interaction
+        //   Resize Window
+        //   User interaction
         // ************************** //
 
         window.addEventListener('resize', resizeWindow);
@@ -250,6 +308,9 @@
         document.addEventListener('keyup', onDocumentKeyUp, false);
         function onDocumentKeyDown(event) {
             switch (event.keyCode) {
+                case 13: // Enter
+                    keyEnter = true;
+                    break;
                 case 37: // ArrowLeft
                     keyArrowLeft = true;
                     break;
@@ -267,6 +328,9 @@
 
         function onDocumentKeyUp(event) {
             switch (event.keyCode) {
+                case 13: // Enter
+                    keyEnter = false;
+                    break;
                 case 37: // ArrowLeft
                     keyArrowLeft = false;
                     carMoved = false;
@@ -284,6 +348,12 @@
                     carMoved = false;
                     break;
             }
+        }
+
+        document.addEventListener( 'pointermove', onPointerMove );
+        function onPointerMove( event ) {
+            sceneElements.pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+            sceneElements.pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
         }
 
         // STARTING
