@@ -138,20 +138,6 @@
                 })
 
                 debugcannon = new cannonEsDebugger(sceneElements.sceneGraph, sceneElements.world);
-
-
-                // ************************** //
-                // Adding model (I didn't do this model)
-                // ************************** //
-                
-
-                /* loader.load( 'rocket_league_octane_chassi.glb', function ( gltf ) {
-                    const scaleFactor = 0.01
-                    gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
-                    sceneElements.sceneGraph.add( gltf.scene );
-                }, undefined, function ( error ) {
-                    console.error( error );
-                } ); */
             },
 
             render: function (sceneElements) {
@@ -200,16 +186,7 @@
                 cubeObject.receiveShadow = true;
                 cubeObject.name = "cube";
 
-                const sphereBody = new CANNON.Body({
-                    mass: 5, // kg
-                    shape: new CANNON.Sphere(1),
-                })
-                sphereBody.position.set(0, 0, 0) // m
-                // sceneElements.world.addBody(sphereBody)
-
-                const sphereMesh = new THREE.Mesh(new THREE.SphereGeometry(1), new THREE.MeshNormalMaterial())
-                sphereMesh.name = "ball_0"
-                sceneElements.sceneGraph.add(sphereMesh)
+                
 
                 // Create a static plane for the ground
                 const groundBody = new CANNON.Body({
@@ -222,7 +199,9 @@
                 // ************************** //
                 // Create the Car Model
                 // ************************** //
+                loadBall();
                 loadCar();
+                console.log("after load ball")
 
                 // ************************** //
                 // Create an empty rectangle
@@ -247,7 +226,6 @@
                 line.name = "empty_rectangle"
                 empty_rectangle.name = "empty_rectangle"
                 sceneElements.sceneGraph.add(line)
-                
             }
         };
 
@@ -319,25 +297,48 @@
             // Run the simulation
             sceneElements.world.fixedStep()
 
-            // Link visual and pysics world
+            // Link visual and physics world
+            // console.log(sceneElements.world.bodies)
             // sphere   
-            const sphereMesh = sceneElements.sceneGraph.getObjectByName("ball_0")
-            const sphereBody = sceneElements.world.bodies[getPhysicsWorldId("ball_0")]
-            console.log(sphereMesh)
-            sphereMesh.position.copy(sphereBody.position)
-            sphereMesh.quaternion.copy(sphereBody.quaternion)
+            const sphereMesh = sceneElements.sceneGraph.getObjectByName("ball_1")
+            if (sphereMesh != undefined){
+                const sphereBody = sceneElements.world.bodies[getPhysicsWorldId("ball_1")]
+                sphereMesh.position.copy(sphereBody.position)
+                sphereMesh.quaternion.copy(sphereBody.quaternion)
+            }
             // vehicle
-            const vehicleGroup = sceneElements.sceneGraph.getObjectByName("vehicleGroup_1")
-            const vehicleBody = sceneElements.world.bodies[getPhysicsWorldId("vehicleGroup_1")]
-            vehicleGroup.position.copy({x: vehicleBody.position.x, y: vehicleBody.position.y - 0.3, z: vehicleBody.position.z})
-            vehicleGroup.quaternion.copy(vehicleBody.quaternion)
+            const vehicleGroup = sceneElements.sceneGraph.getObjectByName("vehicleGroup_2")
+            if (vehicleGroup != undefined){
+                const vehicleBody = sceneElements.world.bodies[getPhysicsWorldId("vehicleGroup_2")]
+                vehicleGroup.position.copy({x: vehicleBody.position.x, y: vehicleBody.position.y - 0.3, z: vehicleBody.position.z})
+                vehicleGroup.quaternion.copy(vehicleBody.quaternion)
+            }
         }
 
         // ************************** //
         // HELPER FUNCTIONS
-        // 1. Load, add to the scene and world the Car Model at the position (0, 0, 0) facing the z axis
-        // 2. visual_world_name = custom_name + physicsWorldId. Function to get the physicsWorldId from visual_world_name
+        // 1. Load, add to the scene and world the ball model at the position (0,0,0)
+        // 2. Load, add to the scene and world the Car Model at the position (0, 0, 0) facing the z axis
+        // 3. visual_world_name = custom_name + physicsWorldId. Function to get the physicsWorldId from visual_world_name
         // ************************** //
+        function loadBall() {
+            const sphereBody = new CANNON.Body({
+                mass: 5, // kg
+                shape: new CANNON.Sphere(0.68),
+            })
+            sphereBody.position.set(0,10,0)
+            sceneElements.world.addBody(sphereBody)
+            const scaleFactor = 0.7
+            loader.load( "rocket_league_ball.glb", function ( gltf ) {
+                gltf.scene.scale.set(scaleFactor,scaleFactor,scaleFactor)
+                gltf.scene.name = "ball_1"
+                sceneElements.sceneGraph.add(gltf.scene)
+            }, undefined, function ( error ) {
+                console.error( `loadBall() - Error loading model rocket_league_ball.glb:\n${error}`);
+            } );
+            
+        }
+
         function loadCar() {
             const backX = -0.40; // same for both wheels at the back
             const backZ =  0.30; // symetric for both wheels at the back
@@ -345,7 +346,7 @@
             const frontZ = 0.27; // symetric for both wheels at the front
             const scaleFactor = 0.01
             const vehicleGroup = new THREE.Group();
-            vehicleGroup.name = "vehicleGroup_1"
+            vehicleGroup.name = "vehicleGroup_2"
 
             // physics vehichle
             const vehicleBody = new CANNON.Body({
@@ -358,11 +359,10 @@
             
             // back left
             loader.load( "rocket_league_octane_wheel_bl.glb", function ( gltf ) {
-                const scaleFactor = 0.01
                 gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
                 gltf.scene.translateX(backX)
                 gltf.scene.translateZ(-backZ)
-                gltf.scene.name = "lbw_1"
+                gltf.scene.name = "lbw_2"
                 sceneElements.sceneGraph.add(gltf.scene)
                 vehicleGroup.add(gltf.scene)
             }, undefined, function ( error ) {
@@ -393,7 +393,7 @@
                 gltf.scene.translateX(backX)
                 gltf.scene.translateZ(backZ)
                 gltf.scene.rotateY(Math.PI)
-                gltf.scene.name = "rbw_1"
+                gltf.scene.name = "rbw_2"
                 sceneElements.sceneGraph.add(gltf.scene)
                 vehicleGroup.add(gltf.scene)
             }, undefined, function ( error ) {
@@ -405,7 +405,7 @@
                 gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
                 gltf.scene.translateX(frontX)
                 gltf.scene.translateZ(-frontZ)
-                gltf.scene.name = "lfw_1"
+                gltf.scene.name = "lfw_2"
                 sceneElements.sceneGraph.add(gltf.scene)
                 vehicleGroup.add(gltf.scene)
             }, undefined, function ( error ) {
@@ -418,7 +418,7 @@
                 gltf.scene.translateX(frontX)
                 gltf.scene.translateZ(frontZ)
                 gltf.scene.rotateY(Math.PI)
-                gltf.scene.name = "lfw_1"
+                gltf.scene.name = "lfw_2"
                 sceneElements.sceneGraph.add(gltf.scene)
                 vehicleGroup.add(gltf.scene)
             }, undefined, function ( error ) {
@@ -428,7 +428,7 @@
             // chassi
             loader.load( "rocket_league_octane_chassi.glb", function ( gltf ) {
                 gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
-                gltf.scene.name = "chassi_1"
+                gltf.scene.name = "chassi_2"
                 sceneElements.sceneGraph.add(gltf.scene)
                 vehicleGroup.add(gltf.scene)
             }, undefined, function ( error ) {
@@ -468,6 +468,7 @@
         document.addEventListener('keydown', onDocumentKeyDown, false);
         document.addEventListener('keyup', onDocumentKeyUp, false);
         function onDocumentKeyDown(event) {
+            console.log(event.keyCode)
             switch (event.keyCode) {
                 case 13: // Enter
                     keyEnter = true;
