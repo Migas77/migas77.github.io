@@ -24,6 +24,10 @@
         import * as THREE from "https://threejs.org/build/three.module.js";
         import * as CANNON from 'https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/+esm'
         import { MapControls } from 'three/addons/controls/MapControls.js';
+        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+        // loader
+        const loader = new GLTFLoader();
 
 
         // Camera Positions
@@ -129,6 +133,20 @@
                 sceneElements.world = new CANNON.World({
                     gravity: new CANNON.Vec3(0, -9.82, 0), // m/s²
                 })
+
+
+                // ************************** //
+                // Adding model (I didn't do this model)
+                // ************************** //
+                
+
+                /* loader.load( 'rocket_league_octane_chassi.glb', function ( gltf ) {
+                    const scaleFactor = 0.01
+                    gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
+                    sceneElements.sceneGraph.add( gltf.scene );
+                }, undefined, function ( error ) {
+                    console.error( error );
+                } ); */
             },
 
             render: function (sceneElements) {
@@ -137,7 +155,6 @@
         };
 
         // FUCNTIONS FOR BUILDING THE SCENE
-
         const scene = {
 
             // Create and insert in the scene graph the models of the 3D scene
@@ -162,8 +179,6 @@
                 const axes = new THREE.AxesHelper(15);
                 sceneGraph.add(axes);
                 
-
-
                 // ************************** //
                 // Create a cube
                 // ************************** //
@@ -180,13 +195,11 @@
                 cubeObject.receiveShadow = true;
                 cubeObject.name = "cube";
 
-                
-
                 const sphereBody = new CANNON.Body({
                     mass: 5, // kg
                     shape: new CANNON.Sphere(1),
                 })
-                sphereBody.position.set(0, 10, 0) // m
+                sphereBody.position.set(0, 0, 0) // m
                 sceneElements.world.addBody(sphereBody)
 
                 const sphereMesh = new THREE.Mesh(new THREE.SphereGeometry(1), new THREE.MeshNormalMaterial())
@@ -194,13 +207,18 @@
                 sceneElements.sceneGraph.add(sphereMesh)
 
                 // Create a static plane for the ground
-                const groundBody = new CANNON.Body({
+                /* const groundBody = new CANNON.Body({
                     type: CANNON.Body.STATIC, // can also be achieved by setting the mass to 0
-                    shape: new CANNON.Plane(),
+                    shape: new CANNON.Plane(), // in z = 0
                 })
                 groundBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0) // make it face up
                 sceneElements.world.addBody(groundBody)
-                console.log(sceneElements.world)
+                console.log(sceneElements.world) */
+
+                // ************************** //
+                // Create the Car Model
+                // ************************** //
+                loadCar();
 
 
                 // ************************** //
@@ -308,7 +326,7 @@
         }
 
         // ************************** //
-        // Initialization
+        // INITIALIZATION
         //  1. Initialize the empty scene
         //  2. Add elements within the scene
         //  3. Animate
@@ -319,10 +337,71 @@
             requestAnimationFrame(computeFrame);
         }
 
-        // HANDLING EVENTS
+        // ************************** //
+        // HELPER FUNCTIONS
+        // 1. Load and add to the scene the Car Model at the position (0, 0, 0) facing the z axis
+        // ************************** //
+        function loadCar() {
+            const backX = -0.40; // same for both wheels at the back
+            const backZ =  0.30; // symetric for both wheels at the back
+            const frontX = 0.45; // same for both wheels at the front
+            const frontZ = 0.27; // symetric for both wheels at the front
+            const scaleFactor = 0.01
+
+            // back left
+            loader.load( "rocket_league_octane_wheel_bl.glb", function ( gltf ) {
+                const scaleFactor = 0.01
+                gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
+                gltf.scene.translateX(backX)
+                gltf.scene.translateZ(-backZ)
+                sceneElements.sceneGraph.add(gltf.scene)
+            }, undefined, function ( error ) {
+                console.error( `Error loading model rocket_league_octane_wheel_bl.glb: ${error}`);
+            } );
+
+            // back right
+            loader.load( "rocket_league_octane_wheel_bl.glb", function ( gltf ) {
+                gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
+                gltf.scene.translateX(backX)
+                gltf.scene.translateZ(backZ)
+                gltf.scene.rotateY(Math.PI)
+                sceneElements.sceneGraph.add(gltf.scene)
+            }, undefined, function ( error ) {
+                console.error( `Error loading model rocket_league_octane_wheel_bl.glb: ${error}`);
+            } );
+
+            // front left
+            loader.load( "rocket_league_octane_wheel_fl.glb", function ( gltf ) {
+                gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
+                gltf.scene.translateX(frontX)
+                gltf.scene.translateZ(-frontZ)
+                sceneElements.sceneGraph.add(gltf.scene)
+            }, undefined, function ( error ) {
+                console.error( `Error loading model rocket_league_octane_wheel_bl.glb: ${error}`);
+            } );
+
+            // front right
+            loader.load( "rocket_league_octane_wheel_fl.glb", function ( gltf ) {
+                gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
+                gltf.scene.translateX(frontX)
+                gltf.scene.translateZ(frontZ)
+                gltf.scene.rotateY(Math.PI)
+                sceneElements.sceneGraph.add(gltf.scene)
+            }, undefined, function ( error ) {
+                console.error( `Error loading model rocket_league_octane_wheel_bl.glb: ${error}`);
+            } );
+
+            // chassi
+            loader.load( "rocket_league_octane_chassi.glb", function ( gltf ) {
+                gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
+                sceneElements.sceneGraph.add(gltf.scene)
+            }, undefined, function ( error ) {
+                console.error( `Error loading model rocket_league_octane_wheel_bl.glb: ${error}`);
+            } );
+        }
 
         // ************************** //
-        // Handling Events
+        // HANDLING EVENTS
         //   Resize Window
         //   User interaction
         // ************************** //
