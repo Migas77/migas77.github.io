@@ -19,12 +19,16 @@
         }
       </script>
 
+
     <script type="module">
 
         import * as THREE from "https://threejs.org/build/three.module.js";
         import * as CANNON from 'https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/+esm'
+        import cannonEsDebugger from 'https://cdn.jsdelivr.net/npm/cannon-es-debugger@1.0.0/+esm'
         import { MapControls } from 'three/addons/controls/MapControls.js';
         import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+        var debugcannon;
 
         // loader
         const loader = new GLTFLoader();
@@ -133,6 +137,8 @@
                     gravity: new CANNON.Vec3(0, -9.82, 0), // m/s²
                 })
 
+                debugcannon = new cannonEsDebugger(sceneElements.sceneGraph, sceneElements.world);
+
 
                 // ************************** //
                 // Adding model (I didn't do this model)
@@ -199,10 +205,10 @@
                     shape: new CANNON.Sphere(1),
                 })
                 sphereBody.position.set(0, 0, 0) // m
-                sceneElements.world.addBody(sphereBody)
+                // sceneElements.world.addBody(sphereBody)
 
                 const sphereMesh = new THREE.Mesh(new THREE.SphereGeometry(1), new THREE.MeshNormalMaterial())
-                sphereMesh.name = "sphereMesh_0"
+                sphereMesh.name = "ball_0"
                 sceneElements.sceneGraph.add(sphereMesh)
 
                 // Create a static plane for the ground
@@ -212,13 +218,11 @@
                 })
                 groundBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0) // make it face up
                 sceneElements.world.addBody(groundBody)
-                console.log(sceneElements.world)
 
                 // ************************** //
                 // Create the Car Model
                 // ************************** //
                 loadCar();
-
 
                 // ************************** //
                 // Create an empty rectangle
@@ -240,8 +244,9 @@
                 const geometry = new THREE.BufferGeometry().setFromPoints( points );
                 const line = new THREE.Line( geometry, material );
                 empty_rectangle.add(line);
+                line.name = "empty_rectangle"
                 empty_rectangle.name = "empty_rectangle"
-                sceneElements.sceneGraph.add(empty_rectangle)
+                sceneElements.sceneGraph.add(line)
                 
             }
         };
@@ -258,23 +263,19 @@
         function computeFrame(time) {
             const empty_rectangle = sceneElements.sceneGraph.getObjectByName("empty_rectangle");
 
-            sceneElements.raycaster.setFromCamera( sceneElements.pointer, sceneElements.camera);
-            const intersects = sceneElements.raycaster.intersectObject( empty_rectangle );
-            if (intersects.length > 0){
-                console.log("mouse intersecting empty_rectangle")
-                empty_rectangle.children[0].material.color.setHex( 0xffffff );
-                
-            }
 
+            sceneElements.raycaster.setFromCamera( sceneElements.pointer, sceneElements.camera);
+            // console.log(sceneElements.pointer)
+            // console.log(sceneElements.camera)
             const cube = sceneElements.sceneGraph.getObjectByName("cube");
 
             sceneElements.raycaster.set(cube.position, new THREE.Vector3(0, 1, 0));
             const intersects2 = sceneElements.raycaster.intersectObject( empty_rectangle );
             if (intersects2.length > 0){
-                console.log("cube intersecting empty_rectangle")
+                // console.log("cube intersecting empty_rectangle")
                 if (keyEnter){
                     // console.log("key enter pressed")
-                    empty_rectangle.children[0].material.color.setHex( 0x0000ff );
+                    // empty_rectangle.children[0].material.color.setHex( 0x0000ff );
                 }
             } else {
                 // empty_rectangle.children[0].material.color.setHex( 0x000000 );
@@ -307,6 +308,7 @@
                 sceneElements.controls.target = cubePosition
             }
 
+            debugcannon.update()
             sceneElements.controls.update(); // required if controls.enableDamping is set to true
             // Rendering
             helper.render(sceneElements);
@@ -318,10 +320,17 @@
             sceneElements.world.fixedStep()
 
             // Link visual and pysics world
-            const sphereMesh = sceneElements.sceneGraph.getObjectByName("sphereMesh_0")
-            const sphereBody = sceneElements.world.bodies[getPhysicsWorldId("sphereMesh_0")]
+            // sphere   
+            const sphereMesh = sceneElements.sceneGraph.getObjectByName("ball_0")
+            const sphereBody = sceneElements.world.bodies[getPhysicsWorldId("ball_0")]
+            console.log(sphereMesh)
             sphereMesh.position.copy(sphereBody.position)
             sphereMesh.quaternion.copy(sphereBody.quaternion)
+            // vehicle
+            const vehicleGroup = sceneElements.sceneGraph.getObjectByName("vehicleGroup_1")
+            const vehicleBody = sceneElements.world.bodies[getPhysicsWorldId("vehicleGroup_1")]
+            vehicleGroup.position.copy({x: vehicleBody.position.x, y: vehicleBody.position.y - 0.3, z: vehicleBody.position.z})
+            vehicleGroup.quaternion.copy(vehicleBody.quaternion)
         }
 
         // ************************** //
@@ -335,17 +344,48 @@
             const frontX = 0.45; // same for both wheels at the front
             const frontZ = 0.27; // symetric for both wheels at the front
             const scaleFactor = 0.01
+            const vehicleGroup = new THREE.Group();
+            vehicleGroup.name = "vehicleGroup_1"
 
+            // physics vehichle
+            const vehicleBody = new CANNON.Body({
+                mass: 10,
+                shape: new CANNON.Box(new CANNON.Vec3(0.71, 0.28, 0.4))
+            })
+            const raycastVehicle = new CANNON.RaycastVehicle({
+                chassisBody: vehicleBody
+            })
+            
             // back left
             loader.load( "rocket_league_octane_wheel_bl.glb", function ( gltf ) {
                 const scaleFactor = 0.01
                 gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
                 gltf.scene.translateX(backX)
                 gltf.scene.translateZ(-backZ)
+                gltf.scene.name = "lbw_1"
                 sceneElements.sceneGraph.add(gltf.scene)
+                vehicleGroup.add(gltf.scene)
             }, undefined, function ( error ) {
-                console.error( `Error loading model rocket_league_octane_wheel_bl.glb: ${error}`);
+                console.error( `Back Left Wheel - Error loading model rocket_league_octane_wheel_bl.glb:\n${error}`);
             } );
+            /* raycastVehicle.addWheel({
+                radius: 1,
+                height: 1,
+                suspensionStiffness: 1,
+                suspensionRestLength: 2,
+                frictionSlip: 2,
+                dampingRelaxation: 3,
+                dampingCompression: 5,
+                maxSuspensionForce: 4,
+                rollInfluence: 3,
+                maxSuspensionTravel: 3,
+                customSlidingRotationalSpeed: 3,
+                useCustomSlidingRotationalSpeed: true,
+                directionLocal: new CANNON.Vec3(0, 0, - 1),
+                axleLocal: new CANNON.Vec3(0, 1, 0),
+                chassisConnectionPointLocal: new CANNON.Vec3(1, 1, 0)
+            }) */
+            
 
             // back right
             loader.load( "rocket_league_octane_wheel_bl.glb", function ( gltf ) {
@@ -353,9 +393,11 @@
                 gltf.scene.translateX(backX)
                 gltf.scene.translateZ(backZ)
                 gltf.scene.rotateY(Math.PI)
+                gltf.scene.name = "rbw_1"
                 sceneElements.sceneGraph.add(gltf.scene)
+                vehicleGroup.add(gltf.scene)
             }, undefined, function ( error ) {
-                console.error( `Error loading model rocket_league_octane_wheel_bl.glb: ${error}`);
+                console.error( `Back Right Wheel - Error loading model rocket_league_octane_wheel_bl.glb:\n${error}`);
             } );
 
             // front left
@@ -363,9 +405,11 @@
                 gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
                 gltf.scene.translateX(frontX)
                 gltf.scene.translateZ(-frontZ)
+                gltf.scene.name = "lfw_1"
                 sceneElements.sceneGraph.add(gltf.scene)
+                vehicleGroup.add(gltf.scene)
             }, undefined, function ( error ) {
-                console.error( `Error loading model rocket_league_octane_wheel_bl.glb: ${error}`);
+                console.error( `Front Left Wheel - Error loading model rocket_league_octane_wheel_fl.glb:\n${error}`);
             } );
 
             // front right
@@ -374,18 +418,26 @@
                 gltf.scene.translateX(frontX)
                 gltf.scene.translateZ(frontZ)
                 gltf.scene.rotateY(Math.PI)
+                gltf.scene.name = "lfw_1"
                 sceneElements.sceneGraph.add(gltf.scene)
+                vehicleGroup.add(gltf.scene)
             }, undefined, function ( error ) {
-                console.error( `Error loading model rocket_league_octane_wheel_bl.glb: ${error}`);
+                console.error( `Front Right Wheel - Error loading model rocket_league_octane_wheel_fl.glb:\n${error}`);
             } );
 
             // chassi
             loader.load( "rocket_league_octane_chassi.glb", function ( gltf ) {
                 gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
+                gltf.scene.name = "chassi_1"
                 sceneElements.sceneGraph.add(gltf.scene)
+                vehicleGroup.add(gltf.scene)
             }, undefined, function ( error ) {
-                console.error( `Error loading model rocket_league_octane_wheel_bl.glb: ${error}`);
+                console.error( `Error loading model chassi: ${error}`);
             } );
+
+            raycastVehicle.addToWorld(sceneElements.world)
+            sceneElements.sceneGraph.add(vehicleGroup)
+            
         }
 
         function getPhysicsWorldId(visual_world_name) {
@@ -399,7 +451,7 @@
         //   3. User interaction with mouse
         // ************************** //
         window.addEventListener('resize', resizeWindow);
-        // Update render image size and camera aspect when the window is resized
+        // Update render image (size) and camera aspect when the window is resized
         function resizeWindow(eventParam) {
             const width = window.innerWidth;
             const height = window.innerHeight;
@@ -463,6 +515,7 @@
         function onPointerMove( event ) {
             sceneElements.pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
             sceneElements.pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+            // console.log(sceneElements.pointer)
         }
 
         // ************************** //
