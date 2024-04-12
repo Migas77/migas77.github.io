@@ -158,11 +158,11 @@
                 const planeGeometry = new THREE.PlaneGeometry(48, 48);
                 const planeMaterial = new THREE.MeshPhongMaterial({ color: 'rgb(200, 200, 200)', side: THREE.DoubleSide });
                 const planeObject = new THREE.Mesh(planeGeometry, planeMaterial);
-                sceneGraph.add(planeObject);
                 // Change orientation of the plane using rotation
                 planeObject.rotation.x = Math.PI/2
                 // Set shadow property
                 planeObject.receiveShadow = true;
+                sceneGraph.add(planeObject);
 
                 // ************************** //
                 // Coordinate Axis
@@ -194,7 +194,7 @@
                     shape: new CANNON.Plane(), // in z = 0
                 })
                 groundBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0) // make it face up
-                sceneElements.world.addBody(groundBody)
+                // sceneElements.world.addBody(groundBody)
 
                 // ************************** //
                 // Create the Car Model
@@ -327,12 +327,12 @@
                 shape: new CANNON.Sphere(0.68),
             })
             sphereBody.position.set(0,10,0)
-            sceneElements.world.addBody(sphereBody)
+            // sceneElements.world.addBody(sphereBody)
             const scaleFactor = 0.7
             loader.load( "rocket_league_ball.glb", function ( gltf ) {
                 gltf.scene.scale.set(scaleFactor,scaleFactor,scaleFactor)
                 gltf.scene.name = "ball_1"
-                sceneElements.sceneGraph.add(gltf.scene)
+                // sceneElements.sceneGraph.add(gltf.scene)
             }, undefined, function ( error ) {
                 console.error( `loadBall() - Error loading model rocket_league_ball.glb:\n${error}`);
             } );
@@ -340,6 +340,103 @@
         }
 
         function loadCar() {
+            // ************************** //
+            // WORKING EXAMPLE
+            //   1. Resize Window
+            //   2. User interaction with keyboard
+            //   3. User interaction with mouse
+            // ************************** //
+
+            // Build the car chassis
+            const chassisShape = new CANNON.Box(new CANNON.Vec3(2, 0.5, 1))
+            const chassisBody = new CANNON.Body({ mass: 100 })
+            chassisBody.addShape(chassisShape)
+            chassisBody.position.set(0, 4, 0)
+            chassisBody.angularVelocity.set(0, 0.5, 0)
+
+            // Create the vehicle
+            const vehicle = new CANNON.RaycastVehicle({
+                chassisBody,
+            })
+
+            const wheelOptions = {
+                radius: 0.5,
+                directionLocal: new CANNON.Vec3(0, -1, 0),
+                suspensionStiffness: 30,
+                suspensionRestLength: 0.5,
+                frictionSlip: 1.4,
+                dampingRelaxation: 1,
+                dampingCompression: 4.4,
+                maxSuspensionForce: 100000,
+                rollInfluence: 0.01,
+                axleLocal: new CANNON.Vec3(0, 0, 1),
+                chassisConnectionPointLocal: new CANNON.Vec3(-1, 0, 1),
+                maxSuspensionTravel: 0.3,
+                customSlidingRotationalSpeed: -30,
+                useCustomSlidingRotationalSpeed: true,
+            }
+
+            wheelOptions.chassisConnectionPointLocal.set(-1, 0, 1)
+            vehicle.addWheel(wheelOptions)
+
+            wheelOptions.chassisConnectionPointLocal.set(-1, 0, -1)
+            vehicle.addWheel(wheelOptions)
+
+            wheelOptions.chassisConnectionPointLocal.set(1, 0, 1)
+            vehicle.addWheel(wheelOptions)
+
+            wheelOptions.chassisConnectionPointLocal.set(1, 0, -1)
+            vehicle.addWheel(wheelOptions)
+
+            vehicle.addToWorld(sceneElements.world)
+
+            // Add the wheel bodies
+            const wheelBodies = []
+            const wheelMaterial = new CANNON.Material('wheel')
+            vehicle.wheelInfos.forEach((wheel) => {
+                const cylinderShape = new CANNON.Cylinder(wheel.radius, wheel.radius, wheel.radius / 2, 20)
+                const wheelBody = new CANNON.Body({
+                    mass: 0,
+                    material: wheelMaterial,
+                })
+                    wheelBody.type = CANNON.Body.KINEMATIC
+                    wheelBody.collisionFilterGroup = 0 // turn off collisions
+                    const quaternion = new CANNON.Quaternion().setFromEuler(-Math.PI / 2, 0, 0)
+                    wheelBody.addShape(cylinderShape, new CANNON.Vec3(), quaternion)
+                    wheelBodies.push(wheelBody)
+                    sceneElements.world.addBody(wheelBody)
+            })
+
+            // Update the wheel bodies
+            sceneElements.world.addEventListener('postStep', () => {
+            for (let i = 0; i < vehicle.wheelInfos.length; i++) {
+                vehicle.updateWheelTransform(i)
+                const transform = vehicle.wheelInfos[i].worldTransform
+                const wheelBody = wheelBodies[i]
+                wheelBody.position.copy(transform.position)
+                wheelBody.quaternion.copy(transform.quaternion)
+            }
+            })
+
+            // Define interactions between wheels and ground
+            const groundMaterial = new CANNON.Material('ground')
+            const groundBody = new CANNON.Body({
+                type: CANNON.Body.STATIC, // can also be achieved by setting the mass to 0
+                material: groundMaterial
+            })
+            groundBody.addShape(new CANNON.Plane())
+            groundBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0) // make it face up
+            sceneElements.world.addBody(groundBody)
+
+            // Define interactions between wheels and ground
+            const wheel_ground = new CANNON.ContactMaterial(wheelMaterial, groundMaterial, {
+                friction: 0.3,
+                restitution: 0,
+                contactEquationStiffness: 1000,
+            })
+            sceneElements.world.addContactMaterial(wheel_ground)
+
+
             const backX = -0.40; // same for both wheels at the back
             const backZ =  0.30; // symetric for both wheels at the back
             const frontX = 0.45; // same for both wheels at the front
@@ -352,6 +449,7 @@
             const vehicleBody = new CANNON.Body({
                 mass: 10,
                 shape: new CANNON.Box(new CANNON.Vec3(0.71, 0.28, 0.4))
+                // shape: new CANNON.Box(new CANNON.Vec3(0.71, 0.28, 0.4))
             })
             const raycastVehicle = new CANNON.RaycastVehicle({
                 chassisBody: vehicleBody
@@ -363,29 +461,11 @@
                 gltf.scene.translateX(backX)
                 gltf.scene.translateZ(-backZ)
                 gltf.scene.name = "lbw_2"
-                sceneElements.sceneGraph.add(gltf.scene)
+                // sceneElements.sceneGraph.add(gltf.scene)
                 vehicleGroup.add(gltf.scene)
             }, undefined, function ( error ) {
                 console.error( `Back Left Wheel - Error loading model rocket_league_octane_wheel_bl.glb:\n${error}`);
             } );
-            /* raycastVehicle.addWheel({
-                radius: 1,
-                height: 1,
-                suspensionStiffness: 1,
-                suspensionRestLength: 2,
-                frictionSlip: 2,
-                dampingRelaxation: 3,
-                dampingCompression: 5,
-                maxSuspensionForce: 4,
-                rollInfluence: 3,
-                maxSuspensionTravel: 3,
-                customSlidingRotationalSpeed: 3,
-                useCustomSlidingRotationalSpeed: true,
-                directionLocal: new CANNON.Vec3(0, 0, - 1),
-                axleLocal: new CANNON.Vec3(0, 1, 0),
-                chassisConnectionPointLocal: new CANNON.Vec3(1, 1, 0)
-            }) */
-            
 
             // back right
             loader.load( "rocket_league_octane_wheel_bl.glb", function ( gltf ) {
@@ -394,7 +474,7 @@
                 gltf.scene.translateZ(backZ)
                 gltf.scene.rotateY(Math.PI)
                 gltf.scene.name = "rbw_2"
-                sceneElements.sceneGraph.add(gltf.scene)
+                // sceneElements.sceneGraph.add(gltf.scene)
                 vehicleGroup.add(gltf.scene)
             }, undefined, function ( error ) {
                 console.error( `Back Right Wheel - Error loading model rocket_league_octane_wheel_bl.glb:\n${error}`);
@@ -406,7 +486,7 @@
                 gltf.scene.translateX(frontX)
                 gltf.scene.translateZ(-frontZ)
                 gltf.scene.name = "lfw_2"
-                sceneElements.sceneGraph.add(gltf.scene)
+                // sceneElements.sceneGraph.add(gltf.scene)
                 vehicleGroup.add(gltf.scene)
             }, undefined, function ( error ) {
                 console.error( `Front Left Wheel - Error loading model rocket_league_octane_wheel_fl.glb:\n${error}`);
@@ -419,7 +499,7 @@
                 gltf.scene.translateZ(frontZ)
                 gltf.scene.rotateY(Math.PI)
                 gltf.scene.name = "lfw_2"
-                sceneElements.sceneGraph.add(gltf.scene)
+                // sceneElements.sceneGraph.add(gltf.scene)
                 vehicleGroup.add(gltf.scene)
             }, undefined, function ( error ) {
                 console.error( `Front Right Wheel - Error loading model rocket_league_octane_wheel_fl.glb:\n${error}`);
@@ -429,15 +509,14 @@
             loader.load( "rocket_league_octane_chassi.glb", function ( gltf ) {
                 gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
                 gltf.scene.name = "chassi_2"
-                sceneElements.sceneGraph.add(gltf.scene)
+                // sceneElements.sceneGraph.add(gltf.scene)
                 vehicleGroup.add(gltf.scene)
             }, undefined, function ( error ) {
                 console.error( `Error loading model chassi: ${error}`);
             } );
 
-            raycastVehicle.addToWorld(sceneElements.world)
-            sceneElements.sceneGraph.add(vehicleGroup)
-            
+            // raycastVehicle.addToWorld(sceneElements.world)
+            // sceneElements.sceneGraph.add(vehicleGroup)
         }
 
         function getPhysicsWorldId(visual_world_name) {
