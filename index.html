@@ -153,18 +153,6 @@
             load3DObjects: function (sceneGraph) {
 
                 // ************************** //
-                // Create a ground plane
-                // ************************** //
-                const planeGeometry = new THREE.PlaneGeometry(48, 48);
-                const planeMaterial = new THREE.MeshPhongMaterial({ color: 'rgb(200, 200, 200)', side: THREE.DoubleSide });
-                const planeObject = new THREE.Mesh(planeGeometry, planeMaterial);
-                // Change orientation of the plane using rotation
-                planeObject.rotation.x = Math.PI/2
-                // Set shadow property
-                planeObject.receiveShadow = true;
-                sceneGraph.add(planeObject);
-
-                // ************************** //
                 // Coordinate Axis
                 // ************************** //
                 const axes = new THREE.AxesHelper(15);
@@ -186,22 +174,12 @@
                 cubeObject.receiveShadow = true;
                 cubeObject.name = "cube";
 
-                
-
-                // Create a static plane for the ground
-                const groundBody = new CANNON.Body({
-                    type: CANNON.Body.STATIC, // can also be achieved by setting the mass to 0
-                    shape: new CANNON.Plane(), // in z = 0
-                })
-                groundBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0) // make it face up
-                // sceneElements.world.addBody(groundBody)
-
                 // ************************** //
                 // Create the Car Model
                 // ************************** //
-                loadBall();
+                loadGround();
+                // loadBall();
                 loadCar();
-                console.log("after load ball")
 
                 // ************************** //
                 // Create an empty rectangle
@@ -296,46 +274,62 @@
 
             // Run the simulation
             sceneElements.world.fixedStep()
-
-            // Link visual and physics world
-            // console.log(sceneElements.world.bodies)
-            // sphere   
-            const sphereMesh = sceneElements.sceneGraph.getObjectByName("ball_1")
-            if (sphereMesh != undefined){
-                const sphereBody = sceneElements.world.bodies[getPhysicsWorldId("ball_1")]
-                sphereMesh.position.copy(sphereBody.position)
-                sphereMesh.quaternion.copy(sphereBody.quaternion)
-            }
-            // vehicle
-            const vehicleGroup = sceneElements.sceneGraph.getObjectByName("vehicleGroup_2")
-            if (vehicleGroup != undefined){
-                const vehicleBody = sceneElements.world.bodies[getPhysicsWorldId("vehicleGroup_2")]
-                vehicleGroup.position.copy({x: vehicleBody.position.x, y: vehicleBody.position.y - 0.3, z: vehicleBody.position.z})
-                vehicleGroup.quaternion.copy(vehicleBody.quaternion)
-            }
         }
 
         // ************************** //
         // HELPER FUNCTIONS
+        // 1. Load, add to the scene and world the ground model at y = 0
         // 1. Load, add to the scene and world the ball model at the position (0,0,0)
         // 2. Load, add to the scene and world the Car Model at the position (0, 0, 0) facing the z axis
         // 3. visual_world_name = custom_name + physicsWorldId. Function to get the physicsWorldId from visual_world_name
         // ************************** //
+        function loadGround() {
+            // Visual Representation
+            const planeGeometry = new THREE.PlaneGeometry(48, 48);
+            const planeMaterial = new THREE.MeshPhongMaterial({ color: 'rgb(200, 200, 200)', side: THREE.DoubleSide });
+            const planeObject = new THREE.Mesh(planeGeometry, planeMaterial);
+            planeObject.rotation.x = Math.PI/2
+            planeObject.receiveShadow = true;
+            planeObject.name = "ground_0"
+            sceneElements.sceneGraph.add(planeObject);
+
+            // Physic Representation
+            const groundMaterial = new CANNON.Material('ground')
+            const groundBody = new CANNON.Body({
+                type: CANNON.Body.STATIC,
+                material: groundMaterial
+            })
+            groundBody.addShape(new CANNON.Plane())
+            groundBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0) // make it face up
+            sceneElements.world.addBody(groundBody)
+        }
+
+
         function loadBall() {
+            let sphereMesh;
             const sphereBody = new CANNON.Body({
                 mass: 5, // kg
                 shape: new CANNON.Sphere(0.68),
             })
             sphereBody.position.set(0,10,0)
-            // sceneElements.world.addBody(sphereBody)
+            sceneElements.world.addBody(sphereBody)
             const scaleFactor = 0.7
             loader.load( "rocket_league_ball.glb", function ( gltf ) {
                 gltf.scene.scale.set(scaleFactor,scaleFactor,scaleFactor)
                 gltf.scene.name = "ball_1"
-                // sceneElements.sceneGraph.add(gltf.scene)
+                sphereMesh = gltf.scene
+                sceneElements.sceneGraph.add(gltf.scene)
             }, undefined, function ( error ) {
                 console.error( `loadBall() - Error loading model rocket_league_ball.glb:\n${error}`);
             } );
+
+            // Link visual and physics world
+            sceneElements.world.addEventListener('postStep', () => {
+                if (sphereMesh != undefined){
+                    sphereMesh.position.copy(sphereBody.position)
+                    sphereMesh.quaternion.copy(sphereBody.quaternion)
+                }
+            })
             
         }
 
@@ -347,12 +341,21 @@
             //   3. User interaction with mouse
             // ************************** //
 
+            const backX = -0.40; // same for both wheels at the back
+            const backZ =  0.30; // symetric for both wheels at the back
+            const frontX = 0.45; // same for both wheels at the front
+            const frontZ = 0.27; // symetric for both wheels at the front
+            const scaleFactor = 0.01
+            const vehicleGroup = new THREE.Group();
+            vehicleGroup.name = "vehicleGroup_2"
+
+
+
             // Build the car chassis
-            const chassisShape = new CANNON.Box(new CANNON.Vec3(2, 0.5, 1))
+            const chassisShape = new CANNON.Box(new CANNON.Vec3(0.71, 0.28, 0.4))
             const chassisBody = new CANNON.Body({ mass: 100 })
             chassisBody.addShape(chassisShape)
             chassisBody.position.set(0, 4, 0)
-            chassisBody.angularVelocity.set(0, 0.5, 0)
 
             // Create the vehicle
             const vehicle = new CANNON.RaycastVehicle({
@@ -360,7 +363,7 @@
             })
 
             const wheelOptions = {
-                radius: 0.5,
+                radius: 0.12,
                 directionLocal: new CANNON.Vec3(0, -1, 0),
                 suspensionStiffness: 30,
                 suspensionRestLength: 0.5,
@@ -376,16 +379,17 @@
                 useCustomSlidingRotationalSpeed: true,
             }
 
-            wheelOptions.chassisConnectionPointLocal.set(-1, 0, 1)
+            wheelOptions.chassisConnectionPointLocal.set(backX, 0, -backZ)
             vehicle.addWheel(wheelOptions)
 
-            wheelOptions.chassisConnectionPointLocal.set(-1, 0, -1)
+            wheelOptions.chassisConnectionPointLocal.set(backX, 0, backZ)
             vehicle.addWheel(wheelOptions)
 
-            wheelOptions.chassisConnectionPointLocal.set(1, 0, 1)
+            wheelOptions.radius = 0.10
+            wheelOptions.chassisConnectionPointLocal.set(frontX, 0, -frontZ)
             vehicle.addWheel(wheelOptions)
 
-            wheelOptions.chassisConnectionPointLocal.set(1, 0, -1)
+            wheelOptions.chassisConnectionPointLocal.set(frontX, 0, frontZ)
             vehicle.addWheel(wheelOptions)
 
             vehicle.addToWorld(sceneElements.world)
@@ -407,28 +411,8 @@
                     sceneElements.world.addBody(wheelBody)
             })
 
-            // Update the wheel bodies
-            sceneElements.world.addEventListener('postStep', () => {
-            for (let i = 0; i < vehicle.wheelInfos.length; i++) {
-                vehicle.updateWheelTransform(i)
-                const transform = vehicle.wheelInfos[i].worldTransform
-                const wheelBody = wheelBodies[i]
-                wheelBody.position.copy(transform.position)
-                wheelBody.quaternion.copy(transform.quaternion)
-            }
-            })
-
             // Define interactions between wheels and ground
-            const groundMaterial = new CANNON.Material('ground')
-            const groundBody = new CANNON.Body({
-                type: CANNON.Body.STATIC, // can also be achieved by setting the mass to 0
-                material: groundMaterial
-            })
-            groundBody.addShape(new CANNON.Plane())
-            groundBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0) // make it face up
-            sceneElements.world.addBody(groundBody)
-
-            // Define interactions between wheels and ground
+            const groundMaterial = sceneElements.world.bodies[getPhysicsWorldId("ground_0")].material
             const wheel_ground = new CANNON.ContactMaterial(wheelMaterial, groundMaterial, {
                 friction: 0.3,
                 restitution: 0,
@@ -437,31 +421,13 @@
             sceneElements.world.addContactMaterial(wheel_ground)
 
 
-            const backX = -0.40; // same for both wheels at the back
-            const backZ =  0.30; // symetric for both wheels at the back
-            const frontX = 0.45; // same for both wheels at the front
-            const frontZ = 0.27; // symetric for both wheels at the front
-            const scaleFactor = 0.01
-            const vehicleGroup = new THREE.Group();
-            vehicleGroup.name = "vehicleGroup_2"
-
-            // physics vehichle
-            const vehicleBody = new CANNON.Body({
-                mass: 10,
-                shape: new CANNON.Box(new CANNON.Vec3(0.71, 0.28, 0.4))
-                // shape: new CANNON.Box(new CANNON.Vec3(0.71, 0.28, 0.4))
-            })
-            const raycastVehicle = new CANNON.RaycastVehicle({
-                chassisBody: vehicleBody
-            })
-            
             // back left
             loader.load( "rocket_league_octane_wheel_bl.glb", function ( gltf ) {
                 gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
                 gltf.scene.translateX(backX)
                 gltf.scene.translateZ(-backZ)
                 gltf.scene.name = "lbw_2"
-                // sceneElements.sceneGraph.add(gltf.scene)
+                sceneElements.sceneGraph.add(gltf.scene)
                 vehicleGroup.add(gltf.scene)
             }, undefined, function ( error ) {
                 console.error( `Back Left Wheel - Error loading model rocket_league_octane_wheel_bl.glb:\n${error}`);
@@ -474,7 +440,7 @@
                 gltf.scene.translateZ(backZ)
                 gltf.scene.rotateY(Math.PI)
                 gltf.scene.name = "rbw_2"
-                // sceneElements.sceneGraph.add(gltf.scene)
+                sceneElements.sceneGraph.add(gltf.scene)
                 vehicleGroup.add(gltf.scene)
             }, undefined, function ( error ) {
                 console.error( `Back Right Wheel - Error loading model rocket_league_octane_wheel_bl.glb:\n${error}`);
@@ -486,7 +452,7 @@
                 gltf.scene.translateX(frontX)
                 gltf.scene.translateZ(-frontZ)
                 gltf.scene.name = "lfw_2"
-                // sceneElements.sceneGraph.add(gltf.scene)
+                sceneElements.sceneGraph.add(gltf.scene)
                 vehicleGroup.add(gltf.scene)
             }, undefined, function ( error ) {
                 console.error( `Front Left Wheel - Error loading model rocket_league_octane_wheel_fl.glb:\n${error}`);
@@ -499,7 +465,7 @@
                 gltf.scene.translateZ(frontZ)
                 gltf.scene.rotateY(Math.PI)
                 gltf.scene.name = "lfw_2"
-                // sceneElements.sceneGraph.add(gltf.scene)
+                sceneElements.sceneGraph.add(gltf.scene)
                 vehicleGroup.add(gltf.scene)
             }, undefined, function ( error ) {
                 console.error( `Front Right Wheel - Error loading model rocket_league_octane_wheel_fl.glb:\n${error}`);
@@ -509,14 +475,30 @@
             loader.load( "rocket_league_octane_chassi.glb", function ( gltf ) {
                 gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
                 gltf.scene.name = "chassi_2"
-                // sceneElements.sceneGraph.add(gltf.scene)
+                sceneElements.sceneGraph.add(gltf.scene)
                 vehicleGroup.add(gltf.scene)
             }, undefined, function ( error ) {
                 console.error( `Error loading model chassi: ${error}`);
             } );
 
-            // raycastVehicle.addToWorld(sceneElements.world)
-            // sceneElements.sceneGraph.add(vehicleGroup)
+            sceneElements.sceneGraph.add(vehicleGroup)
+
+            // Update the wheel bodies + car
+            sceneElements.world.addEventListener('postStep', () => {
+                const vehicleGroup = sceneElements.sceneGraph.getObjectByName("vehicleGroup_2")
+                const vehicleBody = sceneElements.world.bodies[getPhysicsWorldId("vehicleGroup_2")]
+                vehicleGroup.position.copy({x: chassisBody.position.x, y: chassisBody.position.y - 0.51  , z: chassisBody.position.z})
+                vehicleGroup.quaternion.copy(chassisBody.quaternion)
+
+                // update wheels
+                for (let i = 0; i < vehicle.wheelInfos.length; i++) {
+                    vehicle.updateWheelTransform(i)
+                    const transform = vehicle.wheelInfos[i].worldTransform
+                    const wheelBody = wheelBodies[i]
+                    wheelBody.position.copy(transform.position)
+                    wheelBody.quaternion.copy(transform.quaternion)
+                }
+            })
         }
 
         function getPhysicsWorldId(visual_world_name) {
