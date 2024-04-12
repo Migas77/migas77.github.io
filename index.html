@@ -242,14 +242,14 @@
             const maxForce = 100
             const brakeForce = 1000000
             
-            if (keyArrowRight) {
-                sceneElements.vehicle.setSteeringValue(-maxSteerVal, 0)
-                sceneElements.vehicle.setSteeringValue(-maxSteerVal, 1)
-                carMoved = true;
-            }
             if (keyArrowUp) {
                 sceneElements.vehicle.applyEngineForce(-maxForce, 2)
                 sceneElements.vehicle.applyEngineForce(-maxForce, 3)
+                carMoved = true;
+            }
+            if (keyArrowDown) {
+                sceneElements.vehicle.applyEngineForce(maxForce, 2)
+                sceneElements.vehicle.applyEngineForce(maxForce, 3)
                 carMoved = true;
             }
             if (keyArrowLeft) {
@@ -257,9 +257,9 @@
                 sceneElements.vehicle.setSteeringValue(maxSteerVal, 1)
                 carMoved = true;
             }
-            if (keyArrowDown) {
-                sceneElements.vehicle.applyEngineForce(maxForce, 2)
-                sceneElements.vehicle.applyEngineForce(maxForce, 3)
+            if (keyArrowRight) {
+                sceneElements.vehicle.setSteeringValue(-maxSteerVal, 0)
+                sceneElements.vehicle.setSteeringValue(-maxSteerVal, 1)
                 carMoved = true;
             }
             if (carMoved){
@@ -316,7 +316,7 @@
         function loadBall() {
             let sphereMesh;
             const sphereBody = new CANNON.Body({
-                mass: 0, // kg
+                mass: 10, // kg
                 shape: new CANNON.Sphere(0.68),
             })
             sphereBody.position.set(2,0,0)
@@ -358,21 +358,21 @@
             const scaleFactor = 0.01
 
             // Build the car chassis
-            const chassisShape = new CANNON.Box(new CANNON.Vec3(0.71, 0.28, 0.4))
+            const chassisShape = new CANNON.Box(new CANNON.Vec3(0.71, 0.20, 0.4))
             const chassisBody = new CANNON.Body({ mass: 100 })
             chassisBody.addShape(chassisShape)
             chassisBody.position.set(0, 1, 0)
 
             // Create the vehicle
             const vehicle = new CANNON.RaycastVehicle({
-                chassisBody,
+                chassisBody: chassisBody,
             })
 
             const wheelOptions = {
                 radius: 0,
                 directionLocal: new CANNON.Vec3(0, -1, 0),
                 suspensionStiffness: 30,
-                suspensionRestLength: 0.5,
+                suspensionRestLength: 0,
                 frictionSlip: 1.4,
                 dampingRelaxation: 1,
                 dampingCompression: 4.4,
@@ -396,58 +396,60 @@
                 console.error( `Error loading model chassis: ${error}`);
             } );
 
-            // back left
-            loader.load( "rocket_league_octane_wheel_bl.glb", function ( gltf ) {
-                gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
-                gltf.scene.translateX(backX)
-                gltf.scene.translateZ(-backZ)
-                gltf.scene.name = "wheel_5"
-                sceneElements.sceneGraph.add(gltf.scene)
-            }, undefined, function ( error ) {
-                console.error( `Back Left Wheel - Error loading model rocket_league_octane_wheel_bl.glb:\n${error}`);
-            } );
-            wheelOptions.radius = 0.142
-            wheelOptions.chassisConnectionPointLocal.set(backX, backY, -backZ)
-            vehicle.addWheel(wheelOptions)
-
-            // back right
-            loader.load( "rocket_league_octane_wheel_bl.glb", function ( gltf ) {
-                gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
-                gltf.scene.translateX(backX)
-                gltf.scene.translateZ(backZ)
-                gltf.scene.rotateY(Math.PI)
-                gltf.scene.name = "wheel_6"
-                sceneElements.sceneGraph.add(gltf.scene)
-            }, undefined, function ( error ) {
-                console.error( `Back Right Wheel - Error loading model rocket_league_octane_wheel_bl.glb:\n${error}`);
-            } );
-            wheelOptions.chassisConnectionPointLocal.set(backX , backY, backZ)
-            vehicle.addWheel(wheelOptions)
-
             // front left
             loader.load( "rocket_league_octane_wheel_fl.glb", function ( gltf ) {
                 gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
-                gltf.scene.translateX(frontX)
-                gltf.scene.translateZ(-frontZ)
+                gltf.scene.translateX(backX)
+                gltf.scene.translateZ(-backZ)
                 gltf.scene.name = "wheel_3"
                 sceneElements.sceneGraph.add(gltf.scene)
             }, undefined, function ( error ) {
                 console.error( `Front Left Wheel - Error loading model rocket_league_octane_wheel_fl.glb:\n${error}`);
             } );
             wheelOptions.radius = 0.124
-            wheelOptions.chassisConnectionPointLocal.set(frontX, frontY, -frontZ)
+            wheelOptions.suspensionRestLength = 0.48
+            wheelOptions.chassisConnectionPointLocal.set(backX, backY, -backZ)
             vehicle.addWheel(wheelOptions)
 
             // front right
             loader.load( "rocket_league_octane_wheel_fl.glb", function ( gltf ) {
                 gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
-                gltf.scene.translateX(frontX)
-                gltf.scene.translateZ(frontZ)
+                gltf.scene.translateX(backX)
+                gltf.scene.translateZ(backZ)
                 gltf.scene.rotateY(Math.PI)
                 gltf.scene.name = "wheel_4"
                 sceneElements.sceneGraph.add(gltf.scene)
             }, undefined, function ( error ) {
                 console.error( `Front Right Wheel - Error loading model rocket_league_octane_wheel_fl.glb:\n${error}`);
+            } );
+            wheelOptions.chassisConnectionPointLocal.set(backX , backY, backZ)
+            vehicle.addWheel(wheelOptions)
+
+            // back left
+            loader.load( "rocket_league_octane_wheel_bl.glb", function ( gltf ) {
+                gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
+                gltf.scene.translateX(frontX)
+                gltf.scene.translateZ(-frontZ)
+                gltf.scene.name = "wheel_5"
+                sceneElements.sceneGraph.add(gltf.scene)
+            }, undefined, function ( error ) {
+                console.error( `Back Left Wheel - Error loading model rocket_league_octane_wheel_bl.glb:\n${error}`);
+            } );
+            wheelOptions.radius = 0.142
+            wheelOptions.suspensionRestLength = 0.46
+            wheelOptions.chassisConnectionPointLocal.set(frontX, frontY, -frontZ)
+            vehicle.addWheel(wheelOptions)
+
+            // back right
+            loader.load( "rocket_league_octane_wheel_bl.glb", function ( gltf ) {
+                gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
+                gltf.scene.translateX(frontX)
+                gltf.scene.translateZ(frontZ)
+                gltf.scene.rotateY(Math.PI)
+                gltf.scene.name = "wheel_6"
+                sceneElements.sceneGraph.add(gltf.scene)
+            }, undefined, function ( error ) {
+                console.error( `Back Right Wheel - Error loading model rocket_league_octane_wheel_bl.glb:\n${error}`);
             } );
             wheelOptions.chassisConnectionPointLocal.set(frontX, frontY, frontZ)
             vehicle.addWheel(wheelOptions)
@@ -460,7 +462,7 @@
             const wheelMaterial = new CANNON.Material('wheel')
             vehicle.wheelInfos.forEach((wheel, i) => {
                 // isBack ? backValue : frontValue
-                const cylinderShape = new CANNON.Cylinder(wheel.radius, wheel.radius, i < 2 ? 0.11 : 0.11, 20)
+                const cylinderShape = new CANNON.Cylinder(wheel.radius, wheel.radius, i + 3 < 5 ? 0.11 : 0.11, 20)
                 const wheelBody = new CANNON.Body({
                     mass: 0,
                     material: wheelMaterial,
@@ -487,7 +489,7 @@
             // Update the wheel bodies + car
             sceneElements.world.addEventListener('postStep', () => {
                 if (chassisVisual!=undefined){
-                    chassisVisual.position.copy({x: chassisBody.position.x, y: chassisBody.position.y - 0.51, z: chassisBody.position.z})
+                    chassisVisual.position.copy({x: chassisBody.position.x + 0.055, y: chassisBody.position.y - 0.49, z: chassisBody.position.z})
                     chassisVisual.quaternion.copy(chassisBody.quaternion)
 
                     // update wheels
@@ -501,16 +503,17 @@
                         const wheelVisual = sceneElements.sceneGraph.getObjectByName("wheel_" + (3 + i))
                         if (wheelVisual != undefined){
                             if (i + 3 > 4){
+                                // back wheels offset
+                                wheelVisual.position.copy({x: transform.position.x, y: transform.position.y - 0.13, z: transform.position.z})
+                            } else {
                                 // front wheels offset
                                 wheelVisual.position.copy({x: transform.position.x, y: transform.position.y - 0.11, z: transform.position.z})
-                            } else {
-                                wheelVisual.position.copy({x: transform.position.x, y: transform.position.y - 0.13, z: transform.position.z})
                             }
 
                             if (i + 3 == 4 || i + 3 == 6){
                                 // if they are right wheels we need to flip them
-                                const flip_quaternion = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI)
-                                wheelVisual.quaternion.copy(transform.quaternion.clone().mult(flip_quaternion))
+                                const flip_y = new CANNON.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0), Math.PI);
+                                wheelVisual.quaternion.copy(flip_y.mult(transform.quaternion))
                             } else {
                                 wheelVisual.quaternion.copy(transform.quaternion)
                             }
