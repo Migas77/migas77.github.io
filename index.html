@@ -213,7 +213,7 @@
         // Displacement Values
         var dispX = 0.2, dispZ = 0.2;
         // To keep Track of the keyboard
-        var carMoved = false;
+        var trackingVehicle = true;
         var keyArrowLeft = false, keyArrowUp = false, keyArrowRight = false, keyArrowDown = false;
         var keyEnter = false;
         // ************************** //
@@ -245,31 +245,26 @@
             if (keyArrowUp) {
                 sceneElements.vehicle.applyEngineForce(-maxForce, 2)
                 sceneElements.vehicle.applyEngineForce(-maxForce, 3)
-                carMoved = true;
             }
             if (keyArrowDown) {
                 sceneElements.vehicle.applyEngineForce(maxForce, 2)
                 sceneElements.vehicle.applyEngineForce(maxForce, 3)
-                carMoved = true;
             }
             if (keyArrowLeft) {
                 sceneElements.vehicle.setSteeringValue(maxSteerVal, 0)
                 sceneElements.vehicle.setSteeringValue(maxSteerVal, 1)
-                carMoved = true;
             }
             if (keyArrowRight) {
                 sceneElements.vehicle.setSteeringValue(-maxSteerVal, 0)
                 sceneElements.vehicle.setSteeringValue(-maxSteerVal, 1)
-                carMoved = true;
             }
-            if (carMoved){
-                // If car moved, then track the car.
-                /* const camera = sceneElements.camera;
-                const cameraOffset = new THREE.Vector3(cameraOffsetX, cameraOffsetY, cameraOffsetZ);
-                const cubePosition = new THREE.Vector3();
-                cube.getWorldPosition(cubePosition);
-                camera.position.copy(cubePosition).add(cameraOffset);
-                sceneElements.controls.target = cubePosition */
+            
+            if (trackingVehicle == true){
+                const camera_position = sceneElements.camera.position
+                const vehicle_position_cannon = sceneElements.vehicle.chassisBody.position
+                const vehicle_position = new THREE.Vector3(vehicle_position_cannon.x, vehicle_position_cannon.y, vehicle_position_cannon.z)
+                camera_position.copy(vehicle_position).add(new THREE.Vector3(cameraOffsetX, cameraOffsetY, cameraOffsetZ));
+                sceneElements.controls.target = vehicle_position
             }
 
             debugcannon.update()
@@ -316,7 +311,7 @@
         function loadBall() {
             let sphereMesh;
             const sphereBody = new CANNON.Body({
-                mass: 10, // kg
+                mass: 0.1, // kg
                 shape: new CANNON.Sphere(0.68),
             })
             sphereBody.position.set(2,0,0)
@@ -342,13 +337,6 @@
         }
 
         function loadCar() {
-            // ************************** //
-            // WORKING EXAMPLE
-            //   1. Resize Window
-            //   2. User interaction with keyboard
-            //   3. User interaction with mouse
-            // ************************** //
-
             const backX = -0.40;    // same for both wheels at the back
             const backY = 0.02;     // same for both wheels at the back
             const backZ =  0.30;    // symetric for both wheels at the back
@@ -542,59 +530,60 @@
             // computeFrame(sceneElements);
         }
 
-        document.addEventListener('keydown', onDocumentKeyDown, false);
-        document.addEventListener('keyup', onDocumentKeyUp, false);
-        function onDocumentKeyDown(event) {
-            console.log(event.keyCode)
+        document.addEventListener('keydown', function onDocumentKeyDown(event) {
             switch (event.keyCode) {
                 case 13: // Enter
                     keyEnter = true;
                     break;
                 case 37: // ArrowLeft
                     keyArrowLeft = true;
+                    trackingVehicle = true;
                     break;
                 case 38: // ArrowUp
                     keyArrowUp = true;
+                    trackingVehicle = true;
                     break;
                 case 39: // ArrowRight
                     keyArrowRight = true;
+                    trackingVehicle = true;
                     break;
                 case 40: // ArrowDown
                     keyArrowDown = true;
+                    trackingVehicle = true;
                     break;
             }
-        }
+        }, false);
 
-        function onDocumentKeyUp(event) {
+        document.addEventListener('keyup', function onDocumentKeyUp(event) {
             switch (event.keyCode) {
                 case 13: // Enter
                     keyEnter = false;
                     break;
                 case 37: // ArrowLeft
                     keyArrowLeft = false;
-                    carMoved = false;
                     break;
                 case 38: // ArrowUp
                     keyArrowUp = false;
-                    carMoved = false;
                     break;
                 case 39: // ArrowRight
                     keyArrowRight = false;
-                    carMoved = false;
                     break;
                 case 40: // ArrowDown
                     keyArrowDown = false;
-                    carMoved = false;
                     break;
             }
-        }
+        }, false);
 
-        document.addEventListener( 'pointermove', onPointerMove );
-        function onPointerMove( event ) {
+        document.addEventListener("mousedown", function onDocumentClick(event){
+            // Dragging/moving the camera -> stop tracking the vehicle
+            trackingVehicle = false
+        });
+
+        document.addEventListener( 'pointermove', function onPointerMove( event ) {
             sceneElements.pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
             sceneElements.pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
             // console.log(sceneElements.pointer)
-        }
+        });
 
         // ************************** //
         // INITIALIZATION
@@ -616,7 +605,7 @@
 </head>
 
 <body>
-    <div id="Tag3DScene"> </div>
+    <div id="Tag3DScene"></div>
 </body>
 
 </html>
