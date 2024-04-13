@@ -436,7 +436,7 @@
                 console.error( `Back Left Wheel - Error loading model rocket_league_octane_wheel_bl.glb:\n${error}`);
             } );
             wheelOptions.radius = 0.142
-            wheelOptions.suspensionRestLength = 0.46
+            wheelOptions.suspensionRestLength = 0.45
             wheelOptions.chassisConnectionPointLocal.set(frontX, frontY, -frontZ)
             vehicle.addWheel(wheelOptions)
 
@@ -502,13 +502,7 @@
                         wheelBody.quaternion.copy(transform.quaternion)
                         const wheelVisual = sceneElements.sceneGraph.getObjectByName("wheel_" + (3 + i))
                         if (wheelVisual != undefined){
-                            if (i + 3 > 4){
-                                // back wheels offset
-                                wheelVisual.position.copy({x: transform.position.x, y: transform.position.y - 0.13, z: transform.position.z})
-                            } else {
-                                // front wheels offset
-                                wheelVisual.position.copy({x: transform.position.x, y: transform.position.y - 0.11, z: transform.position.z})
-                            }
+                            wheelVisual.position.copy(transform.position)
 
                             if (i + 3 == 4 || i + 3 == 6){
                                 // if they are right wheels we need to flip them
