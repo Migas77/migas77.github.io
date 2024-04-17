@@ -214,7 +214,6 @@
         var dispX = 0.2, dispZ = 0.2;
         // To keep Track of the keyboard
         var trackingVehicle = true;
-        var keyArrowLeft = false, keyArrowUp = false, keyArrowRight = false, keyArrowDown = false;
         var keyEnter = false;
         // ************************** //
         function computeFrame(time) {
@@ -238,26 +237,8 @@
                 // empty_rectangle.children[0].material.color.setHex( 0x000000 );
             }
 
-            const maxSteerVal = 0.5
-            const maxForce = 100
-            const brakeForce = 1000000
             
-            if (keyArrowUp) {
-                sceneElements.vehicle.applyEngineForce(-maxForce, 2)
-                sceneElements.vehicle.applyEngineForce(-maxForce, 3)
-            }
-            if (keyArrowDown) {
-                sceneElements.vehicle.applyEngineForce(maxForce, 2)
-                sceneElements.vehicle.applyEngineForce(maxForce, 3)
-            }
-            if (keyArrowLeft) {
-                sceneElements.vehicle.setSteeringValue(maxSteerVal, 0)
-                sceneElements.vehicle.setSteeringValue(maxSteerVal, 1)
-            }
-            if (keyArrowRight) {
-                sceneElements.vehicle.setSteeringValue(-maxSteerVal, 0)
-                sceneElements.vehicle.setSteeringValue(-maxSteerVal, 1)
-            }
+            
             
             if (trackingVehicle == true){
                 const camera_position = sceneElements.camera.position
@@ -362,7 +343,7 @@
                 suspensionStiffness: 30,
                 suspensionRestLength: 0,
                 frictionSlip: 1.4,
-                dampingRelaxation: 1,
+                dampingRelaxation: 2.3,
                 dampingCompression: 4.4,
                 maxSuspensionForce: 100000,
                 rollInfluence: 0.01,
@@ -465,6 +446,7 @@
 
             // Define interactions between wheels and ground
             const groundMaterial = sceneElements.world.bodies[getPhysicsWorldId("ground_0")].material
+            console.log("ground material", groundMaterial)
             const wheel_ground = new CANNON.ContactMaterial(wheelMaterial, groundMaterial, {
                 friction: 0.3,
                 restitution: 0,
@@ -530,46 +512,66 @@
             // computeFrame(sceneElements);
         }
 
+
+        const maxSteerVal = 0.5
+        const maxForce = 100
+        const brakeForce = 1000000
         document.addEventListener('keydown', function onDocumentKeyDown(event) {
-            switch (event.keyCode) {
-                case 13: // Enter
+            switch (event.key) {
+                case 'Enter':
                     keyEnter = true;
                     break;
-                case 37: // ArrowLeft
-                    keyArrowLeft = true;
+                case 'w':
+                case 'ArrowUp':
+                    sceneElements.vehicle.applyEngineForce(-maxForce, 2)
+                    sceneElements.vehicle.applyEngineForce(-maxForce, 3)
                     trackingVehicle = true;
                     break;
-                case 38: // ArrowUp
-                    keyArrowUp = true;
+                case 's':
+                case 'ArrowDown':
+                    sceneElements.vehicle.applyEngineForce(maxForce, 2)
+                    sceneElements.vehicle.applyEngineForce(maxForce, 3)
                     trackingVehicle = true;
                     break;
-                case 39: // ArrowRight
-                    keyArrowRight = true;
+                case 'a':
+                case 'ArrowLeft': 
+                    sceneElements.vehicle.setSteeringValue(maxSteerVal, 0)
+                    sceneElements.vehicle.setSteeringValue(maxSteerVal, 1)
                     trackingVehicle = true;
                     break;
-                case 40: // ArrowDown
-                    keyArrowDown = true;
+                case 'd': 
+                case 'ArrowRight': 
+                    sceneElements.vehicle.setSteeringValue(-maxSteerVal, 0)
+                    sceneElements.vehicle.setSteeringValue(-maxSteerVal, 1)
                     trackingVehicle = true;
                     break;
             }
         }, false);
 
         document.addEventListener('keyup', function onDocumentKeyUp(event) {
-            switch (event.keyCode) {
-                case 13: // Enter
+            switch (event.key) {
+                case 'Enter':
                     keyEnter = false;
                     break;
-                case 37: // ArrowLeft
-                    keyArrowLeft = false;
+                case 'w':
+                case 'ArrowUp':
+                    sceneElements.vehicle.applyEngineForce(0, 2)
+                    sceneElements.vehicle.applyEngineForce(0, 3)
                     break;
-                case 38: // ArrowUp
-                    keyArrowUp = false;
+                case 's':
+                case 'ArrowDown':
+                    sceneElements.vehicle.applyEngineForce(0, 2)
+                    sceneElements.vehicle.applyEngineForce(0, 3)
                     break;
-                case 39: // ArrowRight
-                    keyArrowRight = false;
+                case 'a':
+                case 'ArrowLeft': 
+                    sceneElements.vehicle.setSteeringValue(0, 0)
+                    sceneElements.vehicle.setSteeringValue(0, 1)
                     break;
-                case 40: // ArrowDown
-                    keyArrowDown = false;
+                case 'd': 
+                case 'ArrowRight': 
+                    sceneElements.vehicle.setSteeringValue(0, 0)
+                    sceneElements.vehicle.setSteeringValue(0, 1)
                     break;
             }
         }, false);
