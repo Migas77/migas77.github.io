@@ -27,11 +27,13 @@
         import cannonEsDebugger from 'https://cdn.jsdelivr.net/npm/cannon-es-debugger@1.0.0/+esm'
         import { MapControls } from 'three/addons/controls/MapControls.js';
         import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+        import { FontLoader } from 'three/addons/loaders/FontLoader.js';
+        import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 
         var debugcannon;
 
         // loader
-        const loader = new GLTFLoader();
+        const gltfLoader = new GLTFLoader();
 
         // Camera Positions
         const [cameraOffsetX, cameraOffsetY, cameraOffsetZ] = [8, 6, 8]
@@ -179,8 +181,9 @@
                 // Create the Car Model
                 // ************************** //
                 loadGround();
-                loadBall();
+                // loadBall();
                 loadCar();
+                loadNameText();
 
                 // ************************** //
                 // Create an empty rectangle
@@ -322,7 +325,7 @@
             sceneElements.sceneGraph.add(planeObject);
 
             // Physic Representation
-            const groundMaterial = new CANNON.Material('ground')
+            const groundMaterial = new CANNON.Material("ground")
             const groundBody = new CANNON.Body({
                 type: CANNON.Body.STATIC,
                 material: groundMaterial
@@ -341,10 +344,11 @@
                 shape: new CANNON.Sphere(0.68),
                 material: ballMaterial
             })
+            sphereBody.linearDamping = sphereBody.angularDamping = 0.5
             sphereBody.position.set(2,0,0)
             sceneElements.world.addBody(sphereBody)
             const scaleFactor = 0.7
-            loader.load( "rocket_league_ball.glb", function ( gltf ) {
+            gltfLoader.load( "rocket_league_ball.glb", function ( gltf ) {
                 gltf.scene.scale.set(scaleFactor,scaleFactor,scaleFactor)
                 gltf.scene.name = "ball_1"
                 sphereMesh = gltf.scene
@@ -383,7 +387,7 @@
             const chassisShape = new CANNON.Box(new CANNON.Vec3(0.71, 0.20, 0.4))
             const chassisBody = new CANNON.Body({ mass: 100 })
             chassisBody.addShape(chassisShape)
-            chassisBody.position.set(0, 4, 0)
+            chassisBody.position.set(0, 4, -5)
 
             // Create the vehicle
             const vehicle = new CANNON.RaycastVehicle({
@@ -409,7 +413,7 @@
 
             let chassisVisual;
             // chassis
-            loader.load( "rocket_league_octane_chassis.glb", function ( gltf ) {
+            gltfLoader.load( "rocket_league_octane_chassis.glb", function ( gltf ) {
                 gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
                 gltf.scene.name = "chassis_2"
                 chassisVisual = gltf.scene
@@ -419,7 +423,7 @@
             } );
 
             // front right
-            loader.load( "rocket_league_octane_wheel_fl.glb", function ( gltf ) {
+            gltfLoader.load( "rocket_league_octane_wheel_fl.glb", function ( gltf ) {
                 gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
                 gltf.scene.translateX(frontX)
                 gltf.scene.translateZ(-frontZ)
@@ -434,7 +438,7 @@
             vehicle.addWheel(wheelOptions)
 
             // front left
-            loader.load( "rocket_league_octane_wheel_fl.glb", function ( gltf ) {
+            gltfLoader.load( "rocket_league_octane_wheel_fl.glb", function ( gltf ) {
                 gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
                 gltf.scene.translateX(frontX)
                 gltf.scene.translateZ(frontZ)
@@ -448,7 +452,7 @@
             vehicle.addWheel(wheelOptions)
 
             // back right
-            loader.load( "rocket_league_octane_wheel_bl.glb", function ( gltf ) {
+            gltfLoader.load( "rocket_league_octane_wheel_bl.glb", function ( gltf ) {
                 gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
                 gltf.scene.translateX(backX)
                 gltf.scene.translateZ(-backZ)
@@ -463,7 +467,7 @@
             vehicle.addWheel(wheelOptions)
 
             // back left
-            loader.load( "rocket_league_octane_wheel_bl.glb", function ( gltf ) {
+            gltfLoader.load( "rocket_league_octane_wheel_bl.glb", function ( gltf ) {
                 gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
                 gltf.scene.translateX(backX)
                 gltf.scene.translateZ(backZ)
@@ -488,8 +492,6 @@
                 const wheelBody = new CANNON.Body({
                     mass: 0,
                     material: wheelMaterial,
-                    linearDamping: 0.5,
-                    angularDamping: 0.4
                 })
                 console.log(wheelBody)
                 wheelBody.type = CANNON.Body.KINEMATIC
@@ -538,6 +540,200 @@
                     }
                 }
             })
+        }
+
+        function loadNameText() {
+            const fontLoader = new FontLoader();
+
+            fontLoader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
+
+                const materials = [
+					new THREE.MeshPhongMaterial( { color: 0xffffff, flatShading: true } ), // front
+					new THREE.MeshPhongMaterial( { color: 0xffffff } ) // side
+				];
+
+                const textOptions = {
+                    font: font,
+                    size: 80,
+                    depth: 5,
+                    curveSegments: 12,
+                    bevelEnabled: true,
+                    bevelThickness: 10,
+                    bevelSize: 8,
+                    bevelOffset: 0,
+                    bevelSegments: 5
+                }
+
+                const letter_mass = 10
+
+                const models = [
+                    {
+                        "body": new CANNON.Body({
+                            mass: letter_mass,
+                            shape: new CANNON.Box(new CANNON.Vec3(0.4, 0.1, 0.1))
+                        }),
+                        "letter": "M",
+                        "x": 0,
+                    }, 
+                    {
+                        "body": new CANNON.Body({
+                            mass: letter_mass,
+                            shape: new CANNON.Box(new CANNON.Vec3(0.1, 0.1, 0.1))
+                        }),
+                        "letter": "I",
+                        "x": 1,
+                    },
+                    {
+                        "body": new CANNON.Body({
+                            mass: letter_mass,
+                            shape: new CANNON.Box(new CANNON.Vec3(0.1, 0.1, 0.1))
+                        }),
+                        "letter": "G",
+                        "x": 2,
+                    },
+                    {
+                        "body": new CANNON.Body({
+                            mass: letter_mass,
+                            shape: new CANNON.Box(new CANNON.Vec3(0.1, 0.1, 0.1))
+                        }),
+                        "letter": "U",
+                        "x": 3,
+                    },
+                    {
+                        "body": new CANNON.Body({
+                            mass: letter_mass,
+                            shape: new CANNON.Box(new CANNON.Vec3(0.1, 0.1, 0.1))
+                        }),
+                        "letter": "E",
+                        "x": 4,
+                    },
+                    {
+                        "body": new CANNON.Body({
+                            mass: letter_mass,
+                            shape: new CANNON.Box(new CANNON.Vec3(0.1, 0.1, 0.1))
+                        }),
+                        "letter": "L",
+                        "x": 5,
+                    },
+                    {
+                        "body": null,
+                        "letter": " ",
+                        "x": null,
+                    },
+                    {
+                        "body": new CANNON.Body({
+                            mass: letter_mass,
+                            shape: new CANNON.Box(new CANNON.Vec3(0.1, 0.1, 0.1))
+                        }),
+                        "letter": "F",
+                        "x": 7,
+                    },
+                    {
+                        "body": new CANNON.Body({
+                            mass: letter_mass,
+                            shape: new CANNON.Box(new CANNON.Vec3(0.1, 0.1, 0.1))
+                        }),
+                        "letter": "I",
+                        "x": 8,
+                    },
+                    {
+                        "body": new CANNON.Body({
+                            mass: letter_mass,
+                            shape: new CANNON.Box(new CANNON.Vec3(0.1, 0.1, 0.1))
+                        }),
+                        "letter": "G",
+                        "x": 9,
+                    },
+                    {
+                        "body": new CANNON.Body({
+                            mass: letter_mass,
+                            shape: new CANNON.Box(new CANNON.Vec3(0.1, 0.1, 0.1))
+                        }),
+                        "letter": "U",
+                        "x": 10,
+                    },
+                    {
+                        "body": new CANNON.Body({
+                            mass: letter_mass,
+                            shape: new CANNON.Box(new CANNON.Vec3(0.1, 0.1, 0.1))
+                        }),
+                        "letter": "E",
+                        "x": 11,
+                    },
+                    {
+                        "body": new CANNON.Body({
+                            mass: letter_mass,
+                            shape: new CANNON.Box(new CANNON.Vec3(0.1, 0.1, 0.1))
+                        }),
+                        "letter": "I",
+                        "x": 12,
+                    },
+                    {
+                        "body": new CANNON.Body({
+                            mass: letter_mass,
+                            shape: new CANNON.Box(new CANNON.Vec3(0.1, 0.1, 0.1))
+                        }),
+                        "letter": "R",
+                        "x": 13,
+                    },
+                    {
+                        "body": new CANNON.Body({
+                            mass: letter_mass,
+                            shape: new CANNON.Box(new CANNON.Vec3(0.1, 0.1, 0.1))
+                        }),
+                        "letter": "E",
+                        "x": 14,
+                    },
+                    {
+                        "body": new CANNON.Body({
+                            mass: letter_mass,
+                            shape: new CANNON.Box(new CANNON.Vec3(0.1, 0.1, 0.1))
+                        }),
+                        "letter": "D",
+                        "x": 15,
+                    },
+                    {
+                        "body": new CANNON.Body({
+                            mass: letter_mass,
+                            shape: new CANNON.Box(new CANNON.Vec3(0.1, 0.1, 0.1))
+                        }),
+                        "letter": "O",
+                        "x": 16,
+                    }
+                ]
+
+                for (let index = 0; index < models.length; index++) {
+                    let dict = models[index]
+                    let textBody = dict.body
+                    if (textBody == null)
+                        continue
+                    if (dict.letter != 'M')
+                        continue
+                    
+                    
+                    const textGeometry = new TextGeometry( dict.letter,  textOptions);
+                    const textMesh = new THREE.Mesh( textGeometry, materials );
+                    textMesh.scale.set(0.01, 0.01, 0.01)
+                    textMesh.name = "name"
+                    const center = new THREE.Vector3()
+                    textGeometry.center()
+                    textBody.position.set(0,0.08,0)
+                    sceneElements.world.addBody(textBody)
+                    sceneElements.sceneGraph.add(textMesh)
+                    
+                    // Link visual and physics world
+                    /* sceneElements.world.addEventListener('postStep', () => {
+                        if (textMesh != undefined){
+                            textMesh.position.copy(textBody.position)
+                            textMesh.quaternion.copy(textBody.quaternion)
+                        }
+                    }) */
+                }
+
+                
+            }, undefined, function ( error ) {
+                console.error( `Error Loading Font:\n${error}`);
+            } );
         }
 
         function getPhysicsWorldId(visual_world_name) {
