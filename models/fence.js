@@ -1,0 +1,75 @@
+import * as THREE from "https://threejs.org/build/three.module.js";
+import * as CANNON from 'https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/+esm'
+import { sceneElements } from "../main.js";
+
+function loadFenceItem(position, rotation_y) {
+    const fenceItem = new THREE.Group();
+
+    const fenceSupportXZ = 0.1
+    const fenceSupportY = 1.12
+    const fenceFrontX = 1.65
+    const fenceFrontY = 0.4
+    const fenceFrontZ = 0.1
+
+    const fenceSupportGeometry1 = new THREE.BoxGeometry( fenceSupportXZ, fenceSupportY, fenceSupportXZ );
+    const fenceSupportMaterial1 = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+    const fenceSupport1 = new THREE.Mesh( fenceSupportGeometry1, fenceSupportMaterial1 );
+    fenceSupport1.translateY(0.5 * fenceSupportY)
+
+    const fenceSupportGeometry2 = new THREE.BoxGeometry( fenceSupportXZ, fenceSupportY, fenceSupportXZ );
+    const fenceSupportMaterial2 = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+    const fenceSupport2 = new THREE.Mesh( fenceSupportGeometry2, fenceSupportMaterial2 );
+    fenceSupport2.translateX(1.35)
+    fenceSupport2.translateY(0.5 * fenceSupportY)
+
+    const fenceFrontGeometry1 = new THREE.BoxGeometry( fenceFrontX, fenceFrontY, fenceFrontZ );
+    const fenceFrontMaterial1 = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+    const fenceFront1 = new THREE.Mesh( fenceFrontGeometry1, fenceFrontMaterial1 );
+    fenceFront1.translateX(0.675)
+    fenceFront1.translateY(0.4)
+    fenceFront1.translateZ(fenceSupportXZ)
+
+    const fenceFrontGeometry2 = new THREE.BoxGeometry( fenceFrontX, fenceFrontY, fenceFrontZ );
+    const fenceFrontMaterial2 = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+    const fenceFront2 = new THREE.Mesh( fenceFrontGeometry2, fenceFrontMaterial2 );
+    fenceFront2.translateX(0.675)
+    fenceFront2.translateY(0.84)
+    fenceFront2.translateZ(fenceSupportXZ)
+
+    fenceItem.add(fenceSupport1)
+    fenceItem.add(fenceSupport2)
+    fenceItem.add(fenceFront1)
+    fenceItem.add(fenceFront2)
+
+
+    fenceItem.position.set(position.x, position.y, position.z)
+    return fenceItem
+}
+
+function loadFenceGroup(position, rotation_y, name) {
+    const fenceGroup = new THREE.Group();
+    for (let i = 0; i < 26; i++) {
+        let fenceItem = loadFenceItem({x: 1.68*i, y:0, z:0}, 0)
+        console.log(fenceItem)
+        fenceGroup.add(fenceItem)
+    }
+
+    fenceGroup.position.set(position.x, position.y, position.z)
+    new THREE.Box3().setFromObject(fenceGroup).getCenter(fenceGroup.position).multiplyScalar(-1)
+    fenceGroup.translateY(0.56)
+    fenceGroup.name = name
+    sceneElements.sceneGraph.add(fenceGroup)
+}
+
+export function loadFence() {
+    const fences = [
+        {position: {x: 0, y: 0, z: 20}, rotation_y: 0, name: "upper_fence"},
+        {position: {x: 20, y: 0, z: 0}, rotation_y: Math.PI/2, name: "right_fence"},
+        {position: {x: 0, y: 0, z: 0}, rotation_y: Math.PI, name: "lower_fence"},
+        {position: {x: 0, y: 0, z: 0}, rotation_y: -Math.PI/2, name: "left_fence"},
+    ]
+
+    for (const fence of fences) {
+        loadFenceGroup(fence.position, fence.rotation_y, fence.name)
+    }
+}
