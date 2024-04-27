@@ -158,10 +158,10 @@ const scene = {
         // Create the Car Model
         // ************************** //
         loadGround();
-        // loadBall();
-        loadCar();
-        loadNameText();
         loadFence();
+        loadBall();
+        loadCar();
+        // loadNameText();
 
         // ************************** //
         // Create an empty rectangle
@@ -364,8 +364,8 @@ function loadCar() {
     // Build the car chassis
     const chassisShape = new CANNON.Box(new CANNON.Vec3(0.71, 0.20, 0.4))
     const chassisBody = new CANNON.Body({ mass: 100 })
-    chassisBody.addShape(chassisShape)
     chassisBody.position.set(0, 4, -5)
+    chassisBody.addShape(chassisShape)
 
     // Create the vehicle
     const vehicle = new CANNON.RaycastVehicle({
@@ -471,7 +471,6 @@ function loadCar() {
             mass: 0,
             material: wheelMaterial,
         })
-        console.log(wheelBody)
         wheelBody.type = CANNON.Body.KINEMATIC
         wheelBody.collisionFilterGroup = 0 // turn off collisions
         const quaternion = new CANNON.Quaternion().setFromEuler(-Math.PI / 2, 0, 0)
@@ -717,7 +716,7 @@ function loadNameText() {
 
 
 
-function getPhysicsWorldId(visual_world_name) {
+export function getPhysicsWorldId(visual_world_name) {
     return parseInt(visual_world_name.split("_").pop())
 }
 

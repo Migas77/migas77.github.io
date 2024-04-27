@@ -1,6 +1,6 @@
 import * as THREE from "https://threejs.org/build/three.module.js";
 import * as CANNON from 'https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/+esm'
-import { sceneElements } from "../main.js";
+import { sceneElements, getPhysicsWorldId } from "../main.js";
 
 function loadFenceItem(position, rotation_y) {
     const fenceItem = new THREE.Group();
@@ -46,30 +46,47 @@ function loadFenceItem(position, rotation_y) {
     return fenceItem
 }
 
-function loadFenceGroup(position, rotation_y, name) {
+function loadFenceGroup(position_x_z, rotation_y, name) {
     const fenceGroup = new THREE.Group();
-    for (let i = 0; i < 26; i++) {
+    for (let i = 0; i < 24; i++) {
         let fenceItem = loadFenceItem({x: 1.68*i, y:0, z:0}, 0)
-        console.log(fenceItem)
         fenceGroup.add(fenceItem)
     }
 
-    fenceGroup.position.set(position.x, position.y, position.z)
-    new THREE.Box3().setFromObject(fenceGroup).getCenter(fenceGroup.position).multiplyScalar(-1)
+    fenceGroup.position.set(position_x_z.x, 0, position_x_z.z)
+    fenceGroup.rotateY(rotation_y)
+    new THREE.Box3().setFromObject(fenceGroup).getCenter(fenceGroup.position).multiplyScalar(-1) // center
     fenceGroup.translateY(0.56)
     fenceGroup.name = name
     sceneElements.sceneGraph.add(fenceGroup)
+
+    // Physic Representation of the wall of fence items
+    const offset = 0.1
+    if (position_x_z.x !== 0)
+        position_x_z.x = position_x_z.x > 0 ? position_x_z.x - offset : position_x_z.x + offset
+    if (position_x_z.z !== 0)
+        position_x_z.z = position_x_z.z > 0 ? position_x_z.z - offset : position_x_z.z + offset
+    const groundMaterial = sceneElements.world.bodies[getPhysicsWorldId("ground_0")].material
+    const fenceBody = new CANNON.Body({
+        type: CANNON.Body.STATIC,
+        material: groundMaterial
+    })
+    fenceBody.addShape(new CANNON.Plane())
+    fenceBody.position.set(-position_x_z.x, 0, -position_x_z.z)
+    fenceBody.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), rotation_y)
+    sceneElements.world.addBody(fenceBody) // when I uncomment this line the car starts flying
 }
 
 export function loadFence() {
+    const side_size = 20.3
     const fences = [
-        {position: {x: 0, y: 0, z: 20}, rotation_y: 0, name: "upper_fence"},
-        {position: {x: 20, y: 0, z: 0}, rotation_y: Math.PI/2, name: "right_fence"},
-        {position: {x: 0, y: 0, z: 0}, rotation_y: Math.PI, name: "lower_fence"},
-        {position: {x: 0, y: 0, z: 0}, rotation_y: -Math.PI/2, name: "left_fence"},
+        {position_x_z: {x: 0, z: side_size}, rotation_y: 0, name: "upper_fence"},
+        {position_x_z: {x: side_size, z: 0}, rotation_y: Math.PI/2, name: "right_fence"},
+        {position_x_z: {x: 0, z: -side_size}, rotation_y: Math.PI, name: "lower_fence"},
+        {position_x_z: {x: -side_size, z: 0}, rotation_y: -Math.PI/2, name: "left_fence"},
     ]
 
     for (const fence of fences) {
-        loadFenceGroup(fence.position, fence.rotation_y, fence.name)
+        loadFenceGroup(fence.position_x_z, fence.rotation_y, fence.name)
     }
 }
