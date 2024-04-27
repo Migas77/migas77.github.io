@@ -17,7 +17,9 @@
             "three/addons/": "https://threejs.org/examples/jsm/"
           }
         }
-      </script>
+    </script>
+
+    <script type="module" src="main.js"
 
 
     <script type="module">
@@ -570,7 +572,7 @@
                     {
                         "body": new CANNON.Body({
                             mass: letter_mass,
-                            shape: new CANNON.Box(new CANNON.Vec3(0.4, 0.1, 0.1))
+                            shape: new CANNON.Box(new CANNON.Vec3(0.46, 0.5, 0.1))
                         }),
                         "letter": "M",
                         "x": 0,
@@ -717,7 +719,8 @@
                     textMesh.name = "name"
                     const center = new THREE.Vector3()
                     textGeometry.center()
-                    textBody.position.set(0,0.08,0)
+                    textMesh.translateY(0.49)
+                    textBody.position.set(0,1,0)
                     sceneElements.world.addBody(textBody)
                     sceneElements.sceneGraph.add(textMesh)
                     
