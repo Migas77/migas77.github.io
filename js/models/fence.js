@@ -1,6 +1,6 @@
 import * as THREE from "https://threejs.org/build/three.module.js";
 import * as CANNON from 'https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/+esm'
-import { sceneElements, getPhysicsWorldId } from "../main.js";
+import { sceneElements, getPhysicsWorldId } from "../sceneElements.js";
 
 function loadFenceItem(position, rotation_y) {
     const fenceItem = new THREE.Group();
