@@ -11,6 +11,7 @@ import { loadGround } from "./models/ground.js";
 import { loadBall } from "./models/ball.js";
 import { loadCar } from "./models/car.js";
 import { loadNameText } from "./models/3dletters.js";
+import { loadButton } from "./models/button.js";
 
 var debugcannon;
 
@@ -50,8 +51,17 @@ const helper = {
         // ************************** //
         // Add ambient light
         // ************************** //
-        const ambientLight = new THREE.AmbientLight('rgb(255, 255, 255)');
+        const ambientLight = new THREE.AmbientLight('rgb(255, 255, 255)', 0.2);
         sceneElements.sceneGraph.add(ambientLight);
+
+        // const dirLight = new THREE.DirectionalLight( 0xffffff, 1 );
+        // dirLight.position.set(0, 10, 0)
+        // dirLight.castShadow = true
+        // dirLight.shadow.mapSize.width = 2048
+        // dirLight.shadow.mapSize.height = 2048
+        // dirLight.name = "directional_light"
+        // sceneElements.sceneGraph.add(dirLight)
+
 
         // ***************************** //
         // Add spotlight (with shadows)
@@ -135,22 +145,6 @@ const scene = {
         sceneGraph.add(axes);
 
         // ************************** //
-        // Create a cube
-        // ************************** //
-        const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-        const cubeMaterial = new THREE.MeshPhongMaterial({ color: 'rgb(255,0,0)' });
-        const cubeObject = new THREE.Mesh(cubeGeometry, cubeMaterial);
-        sceneGraph.add(cubeObject);
-        // Cube center is at (0,0,0)
-        // Set position of the cube
-        // The base of the cube will be on the plane
-        cubeObject.translateY(10);
-        // Set shadow property
-        cubeObject.castShadow = true;
-        cubeObject.receiveShadow = true;
-        cubeObject.name = "cube";
-
-        // ************************** //
         // Create the Car Model
         // ************************** //
         loadGround();
@@ -158,30 +152,9 @@ const scene = {
         loadBall(gltfLoader);
         loadCar(gltfLoader);
         loadNameText(fontLoader);
+        loadButton()
 
-        // ************************** //
-        // Create an empty rectangle
-        // ************************** //
-        const empty_rectangle = new THREE.Group()
-        const points = [
-            new THREE.Vector3( -1, 0, 1),
-            new THREE.Vector3( 1, 0, 1),
-            new THREE.Vector3( 1, 0, -1),
-            new THREE.Vector3( -1, 0, -1),
-            new THREE.Vector3( -1, 0, 1,)
-        ];
-        const material = new THREE.LineBasicMaterial( {
-            color: 0x0000ff ,
-            linewidth: 10,    // Line thickness
-            opacity: 0.5,    // Line opacity
-            transparent: true // Enable transparency
-        } );
-        const geometry = new THREE.BufferGeometry().setFromPoints( points );
-        const line = new THREE.Line( geometry, material );
-        empty_rectangle.add(line);
-        line.name = "empty_rectangle"
-        empty_rectangle.name = "empty_rectangle"
-        sceneElements.sceneGraph.add(line)
+
     }
 };
 
@@ -201,29 +174,20 @@ const accelaratingForce = 10
 const brakeForce = 1000000
 // ************************** //
 function computeFrame(time) {
-    const empty_rectangle = sceneElements.sceneGraph.getObjectByName("empty_rectangle");
-
-
-    sceneElements.raycaster.setFromCamera( sceneElements.pointer, sceneElements.camera);
-    const cube = sceneElements.sceneGraph.getObjectByName("cube");
-
-    sceneElements.raycaster.set(cube.position, new THREE.Vector3(0, 1, 0));
-    const intersects2 = sceneElements.raycaster.intersectObject( empty_rectangle );
-    if (intersects2.length > 0){
-        // console.log("cube intersecting empty_rectangle")
-        if (keyEnter){
-            // console.log("key enter pressed")
-            // empty_rectangle.children[0].material.color.setHex( 0x0000ff );
+    sceneElements.raycaster.setFromCamera( sceneElements.pointer, sceneElements.camera );
+    const button = sceneElements.sceneGraph.getObjectByName("button")
+    if (button !== undefined){
+        const intersects = sceneElements.raycaster.intersectObject(button);
+        if (intersects.length > 0){
+            console.log("intersecting")
         }
-    } else {
-        // empty_rectangle.children[0].material.color.setHex( 0x000000 );
     }
 
     handleCarMovement()
 
 
 
-    if (debugcannon != undefined){
+    if (debugcannon !== undefined){
         debugcannon.update()
     }
     sceneElements.controls.update(); // required if controls.enableDamping is set to true
@@ -268,11 +232,11 @@ function handleCarMovement() {
         sceneElements.vehicle.setSteeringValue(-maxSteerVal, 1)
     }
 
-    if (isCarBeingMoved == true){
+    if (isCarBeingMoved === true){
 
     }
 
-    if (trackingVehicle == true){
+    if (trackingVehicle === true){
         const camera_position = sceneElements.camera.position
         const vehicle_position_cannon = sceneElements.vehicle.chassisBody.position
         const vehicle_position = new THREE.Vector3(vehicle_position_cannon.x, vehicle_position_cannon.y, vehicle_position_cannon.z)

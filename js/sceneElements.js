@@ -10,7 +10,7 @@ export const sceneElements = {
     world: null,        // physics world
     raycaster: null,
     pointer: null,
-    vehicle: null
+    vehicle: null,
 };
 
 

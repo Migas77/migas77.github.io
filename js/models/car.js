@@ -18,6 +18,7 @@ export function loadCar(gltfLoader) {
     const chassisShape = new CANNON.Box(new CANNON.Vec3(0.71, 0.20, 0.4))
     const chassisBody = new CANNON.Body({ mass: 100 })
     chassisBody.position.set(0, 4, -5)
+    chassisBody.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), Math.PI/2)
     chassisBody.addShape(chassisShape)
 
     // Create the vehicle
@@ -48,6 +49,12 @@ export function loadCar(gltfLoader) {
         gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
         gltf.scene.name = "chassis_2"
         chassisVisual = gltf.scene
+        gltf.scene.traverse(function (node) {
+            if (node.isMesh){
+                node.castShadow = true
+                node.receiveShadow = true
+            }
+        })
         sceneElements.sceneGraph.add(gltf.scene)
     }, undefined, function ( error ) {
         console.error( `Error loading model chassis: ${error}`);
@@ -59,6 +66,12 @@ export function loadCar(gltfLoader) {
         gltf.scene.translateX(frontX)
         gltf.scene.translateZ(-frontZ)
         gltf.scene.name = "wheel_3"
+        gltf.scene.traverse(function (node) {
+            if (node.isMesh){
+                node.castShadow = true
+                node.receiveShadow = true
+            }
+        })
         sceneElements.sceneGraph.add(gltf.scene)
     }, undefined, function ( error ) {
         console.error( `Front Right Wheel - Error loading model rocket_league_octane_wheel_fl.glb:\n${error}`);
@@ -75,6 +88,12 @@ export function loadCar(gltfLoader) {
         gltf.scene.translateZ(frontZ)
         gltf.scene.rotateY(Math.PI)
         gltf.scene.name = "wheel_4"
+        gltf.scene.traverse(function (node) {
+            if (node.isMesh){
+                node.castShadow = true
+                node.receiveShadow = true
+            }
+        })
         sceneElements.sceneGraph.add(gltf.scene)
     }, undefined, function ( error ) {
         console.error( `Front Left Wheel - Error loading model rocket_league_octane_wheel_fl.glb:\n${error}`);
@@ -88,6 +107,12 @@ export function loadCar(gltfLoader) {
         gltf.scene.translateX(backX)
         gltf.scene.translateZ(-backZ)
         gltf.scene.name = "wheel_5"
+        gltf.scene.traverse(function (node) {
+            if (node.isMesh){
+                node.castShadow = true
+                node.receiveShadow = true
+            }
+        })
         sceneElements.sceneGraph.add(gltf.scene)
     }, undefined, function ( error ) {
         console.error( `Back Right Wheel - Error loading model rocket_league_octane_wheel_bl.glb:\n${error}`);
@@ -104,6 +129,12 @@ export function loadCar(gltfLoader) {
         gltf.scene.translateZ(backZ)
         gltf.scene.rotateY(Math.PI)
         gltf.scene.name = "wheel_6"
+        gltf.scene.traverse(function (node) {
+            if (node.isMesh){
+                node.castShadow = true
+                node.receiveShadow = true
+            }
+        })
         sceneElements.sceneGraph.add(gltf.scene)
     }, undefined, function ( error ) {
         console.error( `Back Left Wheel - Error loading model rocket_league_octane_wheel_bl.glb:\n${error}`);
@@ -140,6 +171,9 @@ export function loadCar(gltfLoader) {
         contactEquationStiffness: 10000000,
     })
     sceneElements.world.addContactMaterial(wheel_ground)
+
+    // shadow
+
 
     // Update the wheel bodies + car
     sceneElements.world.addEventListener('postStep', () => {

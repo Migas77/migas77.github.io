@@ -21,6 +21,12 @@ export function loadBall(gltfLoader) {
         gltf.scene.scale.set(scaleFactor,scaleFactor,scaleFactor)
         gltf.scene.name = "ball_1"
         sphereMesh = gltf.scene
+        gltf.scene.traverse(function (node) {
+            if (node.isMesh){
+                node.castShadow = true
+                node.receiveShadow = true
+            }
+        })
         sceneElements.sceneGraph.add(gltf.scene)
     }, undefined, function ( error ) {
         console.error( `loadBall() - Error loading model rocket_league_ball.glb:\n${error}`);
