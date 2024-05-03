@@ -152,9 +152,9 @@ const scene = {
         loadFence();
         // loadBall(gltfLoader);
         loadCar(gltfLoader);
-        // loadNameText(fontLoader);
+        loadNameText(fontLoader);
         // loadButton()
-        loadLightPole()
+        // loadLightPole()
 
 
     }

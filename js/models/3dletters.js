@@ -27,175 +27,68 @@ export function loadNameText(fontLoader) {
             bevelSegments: 5
         }
 
-        const letter_mass = 10
 
         const models = [
-            {
-                "body": new CANNON.Body({
-                    mass: letter_mass,
-                    shape: new CANNON.Box(new CANNON.Vec3(0.46, 0.5, 0.1))
-                }),
-                "letter": "M",
-                "x": 0,
-            },
-            {
-                "body": new CANNON.Body({
-                    mass: letter_mass,
-                    shape: new CANNON.Box(new CANNON.Vec3(0.1, 0.1, 0.1))
-                }),
-                "letter": "I",
-                "x": 1,
-            },
-            {
-                "body": new CANNON.Body({
-                    mass: letter_mass,
-                    shape: new CANNON.Box(new CANNON.Vec3(0.1, 0.1, 0.1))
-                }),
-                "letter": "G",
-                "x": 2,
-            },
-            {
-                "body": new CANNON.Body({
-                    mass: letter_mass,
-                    shape: new CANNON.Box(new CANNON.Vec3(0.1, 0.1, 0.1))
-                }),
-                "letter": "U",
-                "x": 3,
-            },
-            {
-                "body": new CANNON.Body({
-                    mass: letter_mass,
-                    shape: new CANNON.Box(new CANNON.Vec3(0.1, 0.1, 0.1))
-                }),
-                "letter": "E",
-                "x": 4,
-            },
-            {
-                "body": new CANNON.Body({
-                    mass: letter_mass,
-                    shape: new CANNON.Box(new CANNON.Vec3(0.1, 0.1, 0.1))
-                }),
-                "letter": "L",
-                "x": 5,
-            },
-            {
-                "body": null,
-                "letter": " ",
-                "x": null,
-            },
-            {
-                "body": new CANNON.Body({
-                    mass: letter_mass,
-                    shape: new CANNON.Box(new CANNON.Vec3(0.1, 0.1, 0.1))
-                }),
-                "letter": "F",
-                "x": 7,
-            },
-            {
-                "body": new CANNON.Body({
-                    mass: letter_mass,
-                    shape: new CANNON.Box(new CANNON.Vec3(0.1, 0.1, 0.1))
-                }),
-                "letter": "I",
-                "x": 8,
-            },
-            {
-                "body": new CANNON.Body({
-                    mass: letter_mass,
-                    shape: new CANNON.Box(new CANNON.Vec3(0.1, 0.1, 0.1))
-                }),
-                "letter": "G",
-                "x": 9,
-            },
-            {
-                "body": new CANNON.Body({
-                    mass: letter_mass,
-                    shape: new CANNON.Box(new CANNON.Vec3(0.1, 0.1, 0.1))
-                }),
-                "letter": "U",
-                "x": 10,
-            },
-            {
-                "body": new CANNON.Body({
-                    mass: letter_mass,
-                    shape: new CANNON.Box(new CANNON.Vec3(0.1, 0.1, 0.1))
-                }),
-                "letter": "E",
-                "x": 11,
-            },
-            {
-                "body": new CANNON.Body({
-                    mass: letter_mass,
-                    shape: new CANNON.Box(new CANNON.Vec3(0.1, 0.1, 0.1))
-                }),
-                "letter": "I",
-                "x": 12,
-            },
-            {
-                "body": new CANNON.Body({
-                    mass: letter_mass,
-                    shape: new CANNON.Box(new CANNON.Vec3(0.1, 0.1, 0.1))
-                }),
-                "letter": "R",
-                "x": 13,
-            },
-            {
-                "body": new CANNON.Body({
-                    mass: letter_mass,
-                    shape: new CANNON.Box(new CANNON.Vec3(0.1, 0.1, 0.1))
-                }),
-                "letter": "E",
-                "x": 14,
-            },
-            {
-                "body": new CANNON.Body({
-                    mass: letter_mass,
-                    shape: new CANNON.Box(new CANNON.Vec3(0.1, 0.1, 0.1))
-                }),
-                "letter": "D",
-                "x": 15,
-            },
-            {
-                "body": new CANNON.Body({
-                    mass: letter_mass,
-                    shape: new CANNON.Box(new CANNON.Vec3(0.1, 0.1, 0.1))
-                }),
-                "letter": "O",
-                "x": 16,
-            }
+            getLetterDict(0.461, 0.49, 0.13, "M", 0),
+            getLetterDict(0.135, 0.49, 0.13, "I", 1),
+            getLetterDict(0.447, 0.51, 0.13, "G", 2),
+            getLetterDict(0.4, 0.50, 0.13, "U", 3),
+            getLetterDict(0.38, 0.49, 0.13, "E", 4),
+            getLetterDict(0.34, 0.49, 0.13, "L", 5),
+            getLetterDict(0.46, 0.49, 0.13, "", 6),
+            getLetterDict(0.36, 0.49, 0.13, "F", 7),
+            getLetterDict(0.135, 0.49, 0.13, "I", 8),
+            getLetterDict(0.447, 0.51, 0.13, "G", 9),
+            getLetterDict(0.4, 0.50, 0.13, "U", 10),
+            getLetterDict(0.38, 0.49, 0.13, "E", 11),
+            getLetterDict(0.135, 0.49, 0.13, "I", 12),
+            getLetterDict(0.40, 0.49, 0.13, "R", 13),
+            getLetterDict(0.38, 0.49, 0.13, "E", 14),
+            getLetterDict(0.41, 0.49, 0.13, "D", 15),
+            getLetterDict(0.46, 0.51, 0.13, "O", 16),
         ]
 
         for (let index = 0; index < models.length; index++) {
             let dict = models[index]
             let textBody = dict.body
-            if (textBody == null)
-                continue
-            if (dict.letter != 'M')
+            let letter = dict.letter
+            if (letter === "")
                 continue
 
 
-            const textGeometry = new TextGeometry( dict.letter,  textOptions);
+            const textGeometry = new TextGeometry( letter,  textOptions);
             const textMesh = new THREE.Mesh( textGeometry, materials );
             textMesh.scale.set(0.01, 0.01, 0.01)
             textMesh.name = "name"
-            const center = new THREE.Vector3()
             textGeometry.center()
             textMesh.translateY(0.49)
-            textBody.position.set(0,1,0)
+            textBody.position.set(dict.x,1,0)
             sceneElements.world.addBody(textBody)
             sceneElements.sceneGraph.add(textMesh)
 
             // Link visual and physics world
-            /* sceneElements.world.addEventListener('postStep', () => {
+            sceneElements.world.addEventListener('postStep', () => {
                 if (textMesh != undefined){
                     textMesh.position.copy(textBody.position)
                     textMesh.quaternion.copy(textBody.quaternion)
                 }
-            }) */
+            })
         }
 
 
     }, undefined, function ( error ) {
         console.error( `Error Loading Font:\n${error}`);
     } );
+}
+
+const letter_mass = 10
+function getLetterDict(hitbox_x, hitbox_y, hitbox_z, letter, position_x) {
+    return {
+        "body": new CANNON.Body({
+            mass: letter_mass,
+            shape: new CANNON.Box(new CANNON.Vec3(hitbox_x, hitbox_y, hitbox_z))
+        }),
+        "letter": letter,
+        "x": position_x,
+    }
 }
