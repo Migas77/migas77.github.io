@@ -12,6 +12,7 @@ import { loadBall } from "./models/ball.js";
 import { loadCar } from "./models/car.js";
 import { loadNameText } from "./models/3dletters.js";
 import { loadButton } from "./models/button.js";
+import {loadLightPole} from "./models/lightpole.js";
 
 var debugcannon;
 
@@ -68,7 +69,7 @@ const helper = {
         // ***************************** //
         const spotLight1 = new THREE.SpotLight('rgb(255, 255, 255)', 40);
         spotLight1.decay = 1;
-        spotLight1.position.set(-5, 8, 0);
+        spotLight1.position.set(0, 8, 5);
         sceneElements.sceneGraph.add(spotLight1);
 
         // Setup shadow properties for the spotlight
@@ -149,10 +150,11 @@ const scene = {
         // ************************** //
         loadGround();
         loadFence();
-        loadBall(gltfLoader);
+        // loadBall(gltfLoader);
         loadCar(gltfLoader);
-        loadNameText(fontLoader);
-        loadButton()
+        // loadNameText(fontLoader);
+        // loadButton()
+        loadLightPole()
 
 
     }

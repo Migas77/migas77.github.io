@@ -12,25 +12,25 @@ function loadFenceItem(position, rotation_y) {
     const fenceFrontZ = 0.1
 
     const fenceSupportGeometry1 = new THREE.BoxGeometry( fenceSupportXZ, fenceSupportY, fenceSupportXZ );
-    const fenceSupportMaterial1 = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+    const fenceSupportMaterial1 = new THREE.MeshPhongMaterial( {color: 0xffff00} );
     const fenceSupport1 = new THREE.Mesh( fenceSupportGeometry1, fenceSupportMaterial1 );
     fenceSupport1.translateY(0.5 * fenceSupportY)
 
     const fenceSupportGeometry2 = new THREE.BoxGeometry( fenceSupportXZ, fenceSupportY, fenceSupportXZ );
-    const fenceSupportMaterial2 = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+    const fenceSupportMaterial2 = new THREE.MeshPhongMaterial( {color: 0xffff00} );
     const fenceSupport2 = new THREE.Mesh( fenceSupportGeometry2, fenceSupportMaterial2 );
     fenceSupport2.translateX(1.35)
     fenceSupport2.translateY(0.5 * fenceSupportY)
 
     const fenceFrontGeometry1 = new THREE.BoxGeometry( fenceFrontX, fenceFrontY, fenceFrontZ );
-    const fenceFrontMaterial1 = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+    const fenceFrontMaterial1 = new THREE.MeshPhongMaterial( {color: 0xffff00} );
     const fenceFront1 = new THREE.Mesh( fenceFrontGeometry1, fenceFrontMaterial1 );
     fenceFront1.translateX(0.675)
     fenceFront1.translateY(0.4)
     fenceFront1.translateZ(fenceSupportXZ)
 
     const fenceFrontGeometry2 = new THREE.BoxGeometry( fenceFrontX, fenceFrontY, fenceFrontZ );
-    const fenceFrontMaterial2 = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+    const fenceFrontMaterial2 = new THREE.MeshPhongMaterial( {color: 0xffff00} );
     const fenceFront2 = new THREE.Mesh( fenceFrontGeometry2, fenceFrontMaterial2 );
     fenceFront2.translateX(0.675)
     fenceFront2.translateY(0.84)
