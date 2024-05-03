@@ -4,7 +4,6 @@ import cannonEsDebugger from 'https://cdn.jsdelivr.net/npm/cannon-es-debugger@1.
 import { MapControls } from 'three/addons/controls/MapControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
-
 import { sceneElements, getPhysicsWorldId } from "./sceneElements.js";
 import { loadFence } from "./models/fence.js";
 import { loadGround } from "./models/ground.js";
@@ -12,7 +11,8 @@ import { loadBall } from "./models/ball.js";
 import { loadCar } from "./models/car.js";
 import { loadNameText } from "./models/3dletters.js";
 import { loadButton } from "./models/button.js";
-import {loadLightPole} from "./models/lightpole.js";
+import { loadLightPole } from "./models/lightpole.js";
+import { loadRoadSign } from "./models/road_sign.js";
 
 var debugcannon;
 
@@ -152,9 +152,13 @@ const scene = {
         loadFence();
         // loadBall(gltfLoader);
         loadCar(gltfLoader);
-        loadNameText(fontLoader);
+        // loadNameText(fontLoader);
         // loadButton()
         // loadLightPole()
+        loadRoadSign(fontLoader, "PROJECTS", - 2, 0, 0, false)
+        loadRoadSign(fontLoader, "PLAYGROUND", 2, 0, 0, true)
+        loadRoadSign(fontLoader, "INFORMATION", 0, 2, Math.PI/2, false)
+
 
 
     }
