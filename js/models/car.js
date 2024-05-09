@@ -30,7 +30,8 @@ export function loadCar(gltfLoader) {
         radius: 0,
         directionLocal: new CANNON.Vec3(0, -1, 0),
         suspensionStiffness: 30,
-        suspensionRestLength: 0,
+        suspensionRestLength: 0.3,
+        maxSuspensionTravel: 0.3,
         frictionSlip: 1.4,
         dampingRelaxation: 2.3,
         dampingCompression: 4.4,
@@ -38,7 +39,6 @@ export function loadCar(gltfLoader) {
         rollInfluence: 0.01,
         axleLocal: new CANNON.Vec3(0, 0, 1),
         chassisConnectionPointLocal: new CANNON.Vec3(-1, 0, 1),
-        maxSuspensionTravel: 0.3,
         customSlidingRotationalSpeed: -30,
         useCustomSlidingRotationalSpeed: true,
     }
@@ -168,7 +168,7 @@ export function loadCar(gltfLoader) {
     const wheel_ground = new CANNON.ContactMaterial(wheelMaterial, groundMaterial, {
         friction: 0.3,
         restitution: 0,
-        contactEquationStiffness: 10000000,
+        contactEquationStiffness: 1000,
     })
     sceneElements.world.addContactMaterial(wheel_ground)
 

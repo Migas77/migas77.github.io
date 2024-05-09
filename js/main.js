@@ -15,6 +15,8 @@ import { loadButton } from "./models/button.js";
 import { loadLightPole } from "./models/lightpole.js";
 import { loadRoadSign } from "./models/road_sign.js";
 import { loadSvg } from "./models/mySvgLoader.js";
+import {loadFramePainting} from "./models/paiting.js";
+import {loadStatue} from "./models/statue.js";
 
 var debugcannon;
 
@@ -161,8 +163,15 @@ const scene = {
         // loadRoadSign(fontLoader, "PROJECTS", - 2, 0, 0, false)
         // loadRoadSign(fontLoader, "PLAYGROUND", 2, 0, 0, true)
         // loadRoadSign(fontLoader, "INFORMATION", 0, 2, Math.PI/2, false)
-        loadSvg(svgLoader, "1801287.svg")
-
+        // loadSvg(svgLoader, "1801287.svg")
+        loadFramePainting()
+        loadStatue(
+            gltfLoader,
+            "heavy_infantry_mandalorian_funko_pop.glb",
+            {x: 2, y: 0, z: 2},
+            {x: 0.12, y:-0.22, z:0},
+            -0.6
+        )
 
     }
 };
@@ -179,6 +188,12 @@ var trackingVehicle = true;
 var isCarBeingMoved = false;
 const maxSteerVal = 0.5
 const maxForce = 100
+var carForward = new CANNON.Vec3()
+var carAngle = 0
+var oldPosition = new CANNON.Vec3(0, 4, -5)
+var carSpeed = 0
+var forwardSpeed = 0;
+var goingForward = false;
 const accelaratingForce = 10
 const brakeForce = 1000000
 // ************************** //
@@ -215,10 +230,6 @@ function computeFrame(time) {
 // ************************** //
 function handleCarMovement() {
 
-    if (keyEnter) {
-        console.log(sceneElements.vehicle.wheelInfos[3])
-    }
-
     if (keyArrowUp) {
         sceneElements.vehicle.applyEngineForce(-maxForce, 2)
         sceneElements.vehicle.applyEngineForce(-maxForce, 3)
@@ -228,8 +239,18 @@ function handleCarMovement() {
         sceneElements.vehicle.applyEngineForce(maxForce, 3)
     }
 
-    if (!keyArrowUp && !keyArrowDown){
-    }
+    let positionDelta = new CANNON.Vec3()
+    positionDelta = positionDelta.copy(sceneElements.vehicle.chassisBody.position)
+    positionDelta = positionDelta.vsub(oldPosition)
+
+    oldPosition.copy(sceneElements.vehicle.chassisBody.position)
+    carSpeed = positionDelta.length()
+
+    const localForward = new CANNON.Vec3(1, 0, 0)
+    sceneElements.vehicle.chassisBody.vectorToWorldFrame(localForward, carForward)
+
+    forwardSpeed = carForward.dot(positionDelta)
+    goingForward = forwardSpeed > 0
 
     if (keyArrowLeft) {
         sceneElements.vehicle.setSteeringValue(maxSteerVal, 0)
@@ -239,6 +260,21 @@ function handleCarMovement() {
     if (keyArrowRight){
         sceneElements.vehicle.setSteeringValue(-maxSteerVal, 0)
         sceneElements.vehicle.setSteeringValue(-maxSteerVal, 1)
+    }
+
+    if (!keyArrowUp && !keyArrowDown){
+        // Update speed
+
+        let oppositeForce = carForward.clone()
+        if (goingForward)
+            oppositeForce = oppositeForce.negate()
+        oppositeForce.scale(sceneElements.vehicle.chassisBody.velocity.length() * 0.1)
+        if (keyEnter){
+            console.log("goingForward", goingForward)
+            console.log("carForward", carForward)
+            console.log("oppositeForce", oppositeForce)
+        }
+        sceneElements.vehicle.chassisBody.applyImpulse(oppositeForce, sceneElements.vehicle.chassisBody.position)
     }
 
     if (isCarBeingMoved === true){
