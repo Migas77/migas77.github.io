@@ -1,11 +1,12 @@
 import * as THREE from "https://threejs.org/build/three.module.js";
 import * as CANNON from 'https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/+esm'
+import { CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 import {sceneElements} from "../sceneElements.js";
 
 // ************************** //
 // 1. loadButton({x: , z:, width: , height:, offset}) - Create a button
 // ************************** //
-export function loadButton() {
+export function loadButton(position, name) {
 
     const width = 3;
     const height = 2;
@@ -48,7 +49,6 @@ export function loadButton() {
     rectangleUpShape.lineTo(x, y_plus_height)
     rectangleUpShape.lineTo(x_plus_width, y_plus_height)
     
-
     // visible button which is just a border, so it can't be used for intersection
     const visible_button_geometry = new THREE.ShapeGeometry([rectangleDownShape, rectangleLeftShape, rectangleRightShape, rectangleUpShape]);
     const visible_button_material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
@@ -67,7 +67,43 @@ export function loadButton() {
     const group_visible_invisible_button = new THREE.Object3D()
     group_visible_invisible_button.add(visible_button_mesh)
     group_visible_invisible_button.add(invisible_button_mesh)
-    group_visible_invisible_button.name = "button"
+    group_visible_invisible_button.name = name
+    group_visible_invisible_button.position.set(position.x, position.y, position.z)
+
+    const labelDiv = document.createElement("div")
+    labelDiv.className = "Redirect" + name
+    const labelText = document.createElement("p")
+    labelText.className = "labelRedirect"
+    labelText.textContent = "Redirect"
+    labelDiv.insertBefore(labelText, labelDiv.firstChild)
+    const btnLabel = new CSS2DObject(labelDiv)
+    btnLabel.position.set(0, 0, 0)
+    group_visible_invisible_button.add(btnLabel)
+
+
+
+    document.addEventListener('pointermove', function onPointerMove( event ) {
+        // pointer x and y already updated on pointermove event listener on main.js
+        sceneElements.raycaster.setFromCamera( sceneElements.pointer, sceneElements.camera );
+
+        const intersects = sceneElements.raycaster.intersectObject(group_visible_invisible_button);
+        if (intersects.length > 0){
+            document.body.style.cursor = "pointer"
+            const redirectDiv = document.querySelector(".Redirect" + name)
+            if (redirectDiv !== undefined){
+                redirectDiv.style.opacity = 1
+                redirectDiv.classList.add("hover")
+            }
+        } else {
+            document.body.style.cursor = "default"
+            const redirectDiv = document.querySelector(".Redirect" + name)
+            if (redirectDiv !== undefined){
+                redirectDiv.style.opacity = 0
+                redirectDiv.classList.add("hover")
+            }
+
+        }
+    })
 
     sceneElements.sceneGraph.add(group_visible_invisible_button)
 }

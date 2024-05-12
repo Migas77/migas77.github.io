@@ -5,6 +5,7 @@
 // ************************** //
 export const sceneElements = {
     renderer: null,
+    labelRenderer: null,
     camera: null,
     sceneGraph: null,   // visual world
     world: null,        // physics world

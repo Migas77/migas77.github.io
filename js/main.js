@@ -4,7 +4,7 @@ import cannonEsDebugger from 'https://cdn.jsdelivr.net/npm/cannon-es-debugger@1.
 import { MapControls } from 'three/addons/controls/MapControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
-import { SVGLoader } from 'three/addons/loaders/SVGLoader.js';
+import { CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js';
 import { sceneElements, getPhysicsWorldId } from "./sceneElements.js";
 import { loadFence } from "./models/fence.js";
 import { loadGround } from "./models/ground.js";
@@ -25,7 +25,6 @@ var debugcannon;
 
 const gltfLoader = new GLTFLoader();
 const fontLoader = new FontLoader();
-const svgLoader = new SVGLoader();
 // Camera Positions
 const [cameraOffsetX, cameraOffsetY, cameraOffsetZ] = [8, 6, 8]
 
@@ -105,10 +104,21 @@ const helper = {
         const htmlElement = document.querySelector("#Tag3DScene");
         htmlElement.appendChild(renderer.domElement);
 
+
+        // **************************************** //
+        // Add label rendered
+        // **************************************** //
+        sceneElements.labelRenderer = new CSS2DRenderer()
+        sceneElements.labelRenderer.setSize( window.innerWidth, window.innerHeight );
+        sceneElements.labelRenderer.domElement.style.position = 'absolute';
+        sceneElements.labelRenderer.domElement.style.top = '0px';
+        document.body.appendChild( sceneElements.labelRenderer.domElement );
+
+
         // ************************** //
         // Control for the camera
         // ************************** //
-        const controls = new MapControls( camera, renderer.domElement );
+        const controls = new MapControls( camera, sceneElements.labelRenderer.domElement );
         sceneElements.controls = controls
         // how far can you dolly in and out
         // controls.minDistance = 10.0
@@ -137,6 +147,7 @@ const helper = {
 
     render: function (sceneElements) {
         sceneElements.renderer.render(sceneElements.sceneGraph, sceneElements.camera);
+        sceneElements.labelRenderer.render(sceneElements.sceneGraph, sceneElements.camera)
     },
 };
 
@@ -162,13 +173,12 @@ const scene = {
         loadCar(gltfLoader);
         loadTile(0.7, {x: 5, z: 5})
         // loadNameText(fontLoader);
-        // loadButton()
         // loadLightPole()
         // loadRoadSign(fontLoader, "PROJECTS", - 2, 0, 0, false)
         // loadRoadSign(fontLoader, "PLAYGROUND", 2, 0, 0, true)
         // loadRoadSign(fontLoader, "INFORMATION", 0, 2, Math.PI/2, false)
         // loadImage("images/GITHUB.png", 5, 5, {x:0, y:0.01, z:0}, -Math.PI/2)
-        loadPainting(gltfLoader, "images/sub19_subida.jpeg", {x: 0, y: 2, z: 0})
+        // loadPainting(gltfLoader, "images/sub19_subida.jpeg", {x: 0, y: 2, z: 0})
         // loadStatue(
         //     gltfLoader,
         //     "heavy_infantry_mandalorian_funko_pop.glb",
@@ -176,6 +186,7 @@ const scene = {
         //     {x: 0.12, y:-0.22, z:0},
         //     -0.6
         // )
+        loadButton({x: 0, y: 0, z: 0}, "button1")
 
     }
 };
@@ -202,14 +213,6 @@ const accelaratingForce = 10
 const brakeForce = 1000000
 // ************************** //
 function computeFrame(time) {
-    sceneElements.raycaster.setFromCamera( sceneElements.pointer, sceneElements.camera );
-    const button = sceneElements.sceneGraph.getObjectByName("button")
-    if (button !== undefined){
-        const intersects = sceneElements.raycaster.intersectObject(button);
-        if (intersects.length > 0){
-            console.log("intersecting")
-        }
-    }
 
     handleCarMovement()
 
@@ -310,6 +313,7 @@ function resizeWindow(eventParam) {
     sceneElements.camera.updateProjectionMatrix();
 
     sceneElements.renderer.setSize(width, height);
+    sceneElements.labelRenderer.setSize(width, height);
 
     // Comment when doing animation
     // computeFrame(sceneElements);
@@ -389,6 +393,7 @@ document.addEventListener("mousedown", function onDocumentClick(event){
 });
 
 document.addEventListener( 'pointermove', function onPointerMove( event ) {
+    // this runs before pointermove event listener on button.js
     sceneElements.pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
     sceneElements.pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 });

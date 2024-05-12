@@ -1,4 +1,19 @@
-
-body { 
+body {
 	margin: 0px;
 }
+
+
+.labelRedirect{
+	margin-top: -100%;
+	padding: .8rem 2rem;
+	border-radius: 30px;
+	background: #C4302B;
+	color: #FFFFFF;
+	font-size: 1.25rem;
+	letter-spacing: 1px;
+}
+
+.hover {
+	transition:opacity 0.2s ease-in-out;
+}
+
