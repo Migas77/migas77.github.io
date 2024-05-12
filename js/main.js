@@ -17,6 +17,7 @@ import { loadRoadSign } from "./models/road_sign.js";
 import { loadFramePainting } from "./models/paiting.js";
 import { loadStatue } from "./models/statue.js";
 import {loadImage} from "./models/myImageLoader.js";
+import {loadTile} from "./models/tile.js";
 
 var debugcannon;
 
@@ -159,21 +160,22 @@ const scene = {
         loadFence();
         // loadBall(gltfLoader);
         loadCar(gltfLoader);
+        loadTile(0.7, {x: 5, z: 5})
         // loadNameText(fontLoader);
         // loadButton()
         // loadLightPole()
         // loadRoadSign(fontLoader, "PROJECTS", - 2, 0, 0, false)
         // loadRoadSign(fontLoader, "PLAYGROUND", 2, 0, 0, true)
         // loadRoadSign(fontLoader, "INFORMATION", 0, 2, Math.PI/2, false)
-        loadImage("images/GITHUB.png", 5, {x:0, y:0.01, z:0}, -Math.PI/2)
-        loadFramePainting()
-        loadStatue(
-            gltfLoader,
-            "heavy_infantry_mandalorian_funko_pop.glb",
-            {x: 2, y: 0, z: 2},
-            {x: 0.12, y:-0.22, z:0},
-            -0.6
-        )
+        // loadImage("images/GITHUB.png", 5, {x:0, y:0.01, z:0}, -Math.PI/2)
+        // loadFramePainting()
+        // loadStatue(
+        //     gltfLoader,
+        //     "heavy_infantry_mandalorian_funko_pop.glb",
+        //     {x: 2, y: 0, z: 2},
+        //     {x: 0.12, y:-0.22, z:0},
+        //     -0.6
+        // )
 
     }
 };
