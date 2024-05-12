@@ -186,7 +186,7 @@ const scene = {
         //     {x: 0.12, y:-0.22, z:0},
         //     -0.6
         // )
-        loadButton({x: 0, y: 0, z: 0}, "button1")
+        loadButton({x: 0, y: 0, z: 0}, "button1", "https://www.jb.pt/2022/04/juniores-do-anadia-sobem-a-1-a-divisao-nacional-26-anos-depois/")
 
     }
 };
@@ -390,12 +390,6 @@ document.addEventListener('keyup', function onDocumentKeyUp(event) {
 document.addEventListener("mousedown", function onDocumentClick(event){
     // Dragging/moving the camera -> stop tracking the vehicle
     trackingVehicle = false
-});
-
-document.addEventListener( 'pointermove', function onPointerMove( event ) {
-    // this runs before pointermove event listener on button.js
-    sceneElements.pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-    sceneElements.pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 });
 
 // ************************** //

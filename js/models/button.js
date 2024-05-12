@@ -6,7 +6,7 @@ import {sceneElements} from "../sceneElements.js";
 // ************************** //
 // 1. loadButton({x: , z:, width: , height:, offset}) - Create a button
 // ************************** //
-export function loadButton(position, name) {
+export function loadButton(position, name, url_to_open) {
 
     const width = 3;
     const height = 2;
@@ -81,9 +81,9 @@ export function loadButton(position, name) {
     group_visible_invisible_button.add(btnLabel)
 
 
-
     document.addEventListener('pointermove', function onPointerMove( event ) {
-        // pointer x and y already updated on pointermove event listener on main.js
+        sceneElements.pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+        sceneElements.pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
         sceneElements.raycaster.setFromCamera( sceneElements.pointer, sceneElements.camera );
 
         const intersects = sceneElements.raycaster.intersectObject(group_visible_invisible_button);
@@ -91,17 +91,30 @@ export function loadButton(position, name) {
             document.body.style.cursor = "pointer"
             const redirectDiv = document.querySelector(".Redirect" + name)
             if (redirectDiv !== undefined){
-                redirectDiv.style.opacity = 1
+                redirectDiv.style.opacity = "1"
                 redirectDiv.classList.add("hover")
             }
         } else {
             document.body.style.cursor = "default"
             const redirectDiv = document.querySelector(".Redirect" + name)
             if (redirectDiv !== undefined){
-                redirectDiv.style.opacity = 0
+                redirectDiv.style.opacity = "0"
                 redirectDiv.classList.add("hover")
             }
 
+        }
+    })
+
+    document.addEventListener('click', function onClick(event) {
+        sceneElements.pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+        sceneElements.pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+        sceneElements.raycaster.setFromCamera( sceneElements.pointer, sceneElements.camera );
+        const intersects = sceneElements.raycaster.intersectObject(group_visible_invisible_button);
+        if (intersects.length > 0){
+            const redirectDiv = document.querySelector(".Redirect" + name)
+            if (redirectDiv !== undefined){
+                window.open(url_to_open)
+            }
         }
     })
 
