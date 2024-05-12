@@ -55,14 +55,12 @@ export function loadButton(position_x_z, name, url_to_open) {
     const visible_button_mesh = new THREE.Mesh(visible_button_geometry, visible_button_material);
     visible_button_geometry.center()
     visible_button_mesh.rotateX(- Math.PI/2)
-    visible_button_mesh.position.y = 0.01
 
     // invisible button for intersection
     const invisible_button_geometry = new THREE.PlaneGeometry(width, height);
     const invisible_button_material = new THREE.MeshBasicMaterial({ transparent: true , opacity: 0})
     const invisible_button_mesh = new THREE.Mesh(invisible_button_geometry, invisible_button_material);
     invisible_button_mesh.rotateX(- Math.PI/2)
-    invisible_button_mesh.position.y = 0.01
 
     const group_visible_invisible_button = new THREE.Object3D()
     group_visible_invisible_button.add(visible_button_mesh)
@@ -79,6 +77,9 @@ export function loadButton(position_x_z, name, url_to_open) {
     const btnLabel = new CSS2DObject(labelDiv)
     btnLabel.position.set(0, 0, 0)
     group_visible_invisible_button.add(btnLabel)
+
+    buttons.push(group_visible_invisible_button)
+    sceneElements.sceneGraph.add(group_visible_invisible_button)
 
 
     document.addEventListener('pointermove', function onPointerMove( event ) {
@@ -120,30 +121,14 @@ export function loadButton(position_x_z, name, url_to_open) {
             }
         }
     })
-
-    buttons.push(group_visible_invisible_button)
-    sceneElements.sceneGraph.add(group_visible_invisible_button)
 }
 
 
-const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-const cubeMaterial = new THREE.MeshPhongMaterial({ color: 'rgb(255,0,0)' });
-const cubeObject = new THREE.Mesh(cubeGeometry, cubeMaterial);
-cubeObject.position.set(1.5, 0.5, 1.5)
-var bool = true
 export function intersectCarAndButtons() {
-
-    if (bool){
-        sceneElements.sceneGraph.add(cubeObject)
-        bool = false
-        for (const button of buttons){
-            console.log("button.position", button.position)
-        }
-    }
 
     const chassis = sceneElements.sceneGraph.getObjectByName("chassis_2")
     if (chassis !== undefined){
-        sceneElements.raycaster.set(cubeObject.position, new THREE.Vector3(0, 1, 0))
+        sceneElements.raycaster.set(sceneElements.vehicle.chassisBody.position, new THREE.Vector3(0, -1, 0))
         for (const button of buttons){
             const intersects = sceneElements.raycaster.intersectObject(button);
             if (intersects.length > 0){
@@ -163,4 +148,5 @@ export function intersectCarAndButtons() {
             }
         }
     }
+
 }
