@@ -11,7 +11,7 @@ import { loadGround } from "./models/ground.js";
 import { loadBall } from "./models/ball.js";
 import { loadCar } from "./models/car.js";
 import { loadNameText } from "./models/3dletters.js";
-import { loadButton } from "./models/button.js";
+import {intersectCarAndButtons, loadButton} from "./models/button.js";
 import { loadLightPole } from "./models/lightpole.js";
 import { loadRoadSign } from "./models/road_sign.js";
 import { loadPainting } from "./models/paiting.js";
@@ -189,6 +189,7 @@ const scene = {
         loadButton({x: 2, z: 2}, "button1", "https://www.jb.pt/2022/04/juniores-do-anadia-sobem-a-1-a-divisao-nacional-26-anos-depois/")
         loadButton({x: 10, z: 10}, "button2", "https://www.google.pt")
 
+
     }
 };
 
@@ -216,8 +217,7 @@ const brakeForce = 1000000
 function computeFrame(time) {
 
     handleCarMovement()
-
-
+    intersectCarAndButtons()
 
     if (debugcannon !== undefined){
         debugcannon.update()

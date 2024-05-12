@@ -18,6 +18,7 @@ const x_plus_offset = x + offset
 const y_plus_offset = y + offset
 const x_plus_width_minus_offset = x + width - offset
 const y_plus_height_minus_offset = y + height - offset
+const buttons = []
 export function loadButton(position_x_z, name, url_to_open) {
 
     const rectangleDownShape = new THREE.Shape();
@@ -120,5 +121,46 @@ export function loadButton(position_x_z, name, url_to_open) {
         }
     })
 
+    buttons.push(group_visible_invisible_button)
     sceneElements.sceneGraph.add(group_visible_invisible_button)
+}
+
+
+const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+const cubeMaterial = new THREE.MeshPhongMaterial({ color: 'rgb(255,0,0)' });
+const cubeObject = new THREE.Mesh(cubeGeometry, cubeMaterial);
+cubeObject.position.set(1.5, 0.5, 1.5)
+var bool = true
+export function intersectCarAndButtons() {
+
+    if (bool){
+        sceneElements.sceneGraph.add(cubeObject)
+        bool = false
+        for (const button of buttons){
+            console.log("button.position", button.position)
+        }
+    }
+
+    const chassis = sceneElements.sceneGraph.getObjectByName("chassis_2")
+    if (chassis !== undefined){
+        sceneElements.raycaster.set(cubeObject.position, new THREE.Vector3(0, 1, 0))
+        for (const button of buttons){
+            const intersects = sceneElements.raycaster.intersectObject(button);
+            if (intersects.length > 0){
+                console.log("intersects")
+                const redirectDiv = document.querySelector(".Redirect" + name)
+                if (redirectDiv !== null){
+                    redirectDiv.style.opacity = "1"
+                    redirectDiv.classList.add("hover")
+                }
+            } else {
+                const redirectDiv = document.querySelector(".Redirect" + name)
+                if (redirectDiv !== null){
+                    redirectDiv.style.opacity = "0"
+                    redirectDiv.classList.remove("hover")
+                }
+
+            }
+        }
+    }
 }
