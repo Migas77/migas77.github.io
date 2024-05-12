@@ -4,9 +4,9 @@ import { CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 import {sceneElements} from "../sceneElements.js";
 
 // ************************** //
-// 1. loadButton({x: , z:, width: , height:, offset}) - Create a button
+// 1. loadButton({x: , z: }, width: , height:, offset}) - Create a button
 // ************************** //
-export function loadButton(position, name, url_to_open) {
+export function loadButton(position_x_z, name, url_to_open) {
 
     const width = 3;
     const height = 2;
@@ -68,7 +68,7 @@ export function loadButton(position, name, url_to_open) {
     group_visible_invisible_button.add(visible_button_mesh)
     group_visible_invisible_button.add(invisible_button_mesh)
     group_visible_invisible_button.name = name
-    group_visible_invisible_button.position.set(position.x, position.y, position.z)
+    group_visible_invisible_button.position.set(position_x_z.x, 0.01, position_x_z.z)
 
     const labelDiv = document.createElement("div")
     labelDiv.className = "Redirect" + name

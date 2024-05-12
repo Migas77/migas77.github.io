@@ -186,7 +186,7 @@ const scene = {
         //     {x: 0.12, y:-0.22, z:0},
         //     -0.6
         // )
-        loadButton({x: 0, y: 0, z: 0}, "button1", "https://www.jb.pt/2022/04/juniores-do-anadia-sobem-a-1-a-divisao-nacional-26-anos-depois/")
+        loadButton({x: 2, z: 2}, "button1", "https://www.jb.pt/2022/04/juniores-do-anadia-sobem-a-1-a-divisao-nacional-26-anos-depois/")
 
     }
 };
