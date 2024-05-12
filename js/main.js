@@ -14,13 +14,14 @@ import { loadNameText } from "./models/3dletters.js";
 import { loadButton } from "./models/button.js";
 import { loadLightPole } from "./models/lightpole.js";
 import { loadRoadSign } from "./models/road_sign.js";
-import { loadSvg } from "./models/mySvgLoader.js";
-import {loadFramePainting} from "./models/paiting.js";
-import {loadStatue} from "./models/statue.js";
+import { loadFramePainting } from "./models/paiting.js";
+import { loadStatue } from "./models/statue.js";
+import {loadImage} from "./models/myImageLoader.js";
 
 var debugcannon;
 
 // loaders
+
 const gltfLoader = new GLTFLoader();
 const fontLoader = new FontLoader();
 const svgLoader = new SVGLoader();
@@ -60,12 +61,13 @@ const helper = {
         const ambientLight = new THREE.AmbientLight('rgb(255, 255, 255)', 0.2);
         sceneElements.sceneGraph.add(ambientLight);
 
-        // const dirLight = new THREE.DirectionalLight( 0xffffff, 1 );
-        // dirLight.position.set(0, 10, 0)
-        // dirLight.castShadow = true
-        // dirLight.shadow.mapSize.width = 2048
-        // dirLight.shadow.mapSize.height = 2048
-        // dirLight.name = "directional_light"
+        const dirLight = new THREE.DirectionalLight( 'rgb(255, 255, 255)', 2);
+        dirLight.position.set(0, 10, 0)
+        dirLight.castShadow = true
+        dirLight.decay = 1
+        dirLight.shadow.mapSize.width = 2048
+        dirLight.shadow.mapSize.height = 2048
+        dirLight.name = "directional_light"
         // sceneElements.sceneGraph.add(dirLight)
 
 
@@ -163,7 +165,7 @@ const scene = {
         // loadRoadSign(fontLoader, "PROJECTS", - 2, 0, 0, false)
         // loadRoadSign(fontLoader, "PLAYGROUND", 2, 0, 0, true)
         // loadRoadSign(fontLoader, "INFORMATION", 0, 2, Math.PI/2, false)
-        // loadSvg(svgLoader, "1801287.svg")
+        loadImage("images/GITHUB.png", 5, {x:0, y:0.01, z:0}, -Math.PI/2)
         loadFramePainting()
         loadStatue(
             gltfLoader,
