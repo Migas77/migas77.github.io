@@ -6,20 +6,19 @@ import {sceneElements} from "../sceneElements.js";
 // ************************** //
 // 1. loadButton({x: , z: }, width: , height:, offset}) - Create a button
 // ************************** //
+
+const width = 3;
+const height = 2;
+const offset = 0.1
+const x = 0;
+const y = 0;
+const x_plus_width = x + width
+const y_plus_height = y + height
+const x_plus_offset = x + offset
+const y_plus_offset = y + offset
+const x_plus_width_minus_offset = x + width - offset
+const y_plus_height_minus_offset = y + height - offset
 export function loadButton(position_x_z, name, url_to_open) {
-
-    const width = 3;
-    const height = 2;
-    const offset = 0.1
-    const x = 0;
-    const y = 0;
-
-    const x_plus_width = x + width
-    const y_plus_height = y + height
-    const x_plus_offset = x + offset
-    const y_plus_offset = y + offset
-    const x_plus_width_minus_offset = x + width - offset
-    const y_plus_height_minus_offset = y + height - offset
 
     const rectangleDownShape = new THREE.Shape();
     rectangleDownShape.moveTo(x, y);
@@ -90,16 +89,19 @@ export function loadButton(position_x_z, name, url_to_open) {
         if (intersects.length > 0){
             document.body.style.cursor = "pointer"
             const redirectDiv = document.querySelector(".Redirect" + name)
-            if (redirectDiv !== undefined){
+            if (redirectDiv !== null){
                 redirectDiv.style.opacity = "1"
                 redirectDiv.classList.add("hover")
             }
         } else {
-            document.body.style.cursor = "default"
+            if (document.querySelectorAll(".hover").length === 0){
+                // can't be intersecting other buttons
+                document.body.style.cursor = "default"
+            }
             const redirectDiv = document.querySelector(".Redirect" + name)
-            if (redirectDiv !== undefined){
+            if (redirectDiv !== null){
                 redirectDiv.style.opacity = "0"
-                redirectDiv.classList.add("hover")
+                redirectDiv.classList.remove("hover")
             }
 
         }
