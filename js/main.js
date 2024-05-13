@@ -169,23 +169,23 @@ const scene = {
         // ************************** //
         loadGround();
         loadFence();
-        // loadBall(gltfLoader);
+        loadBall(gltfLoader);
         loadCar(gltfLoader);
         loadTile(0.7, {x: 5, z: 5})
-        // loadNameText(fontLoader);
-        // loadLightPole()
-        // loadRoadSign(fontLoader, "PROJECTS", - 2, 0, 0, false)
-        // loadRoadSign(fontLoader, "PLAYGROUND", 2, 0, 0, true)
-        // loadRoadSign(fontLoader, "INFORMATION", 0, 2, Math.PI/2, false)
-        // loadImage("images/GITHUB.png", 5, 5, {x:0, y:0.01, z:0}, -Math.PI/2)
-        // loadPainting(gltfLoader, "images/sub19_subida.jpeg", {x: 0, y: 2, z: 0})
-        // loadStatue(
-        //     gltfLoader,
-        //     "heavy_infantry_mandalorian_funko_pop.glb",
-        //     {x: 2, y: 0, z: 2},
-        //     {x: 0.12, y:-0.22, z:0},
-        //     -0.6
-        // )
+        loadNameText(fontLoader);
+        loadLightPole()
+        loadRoadSign(fontLoader, "PROJECTS", - 2, 0, 0, false)
+        loadRoadSign(fontLoader, "PLAYGROUND", 2, 0, 0, true)
+        loadRoadSign(fontLoader, "INFORMATION", 0, 2, Math.PI/2, false)
+        loadImage("images/GITHUB.png", 5, 5, {x:0, y:0.01, z:0}, -Math.PI/2)
+        loadPainting(gltfLoader, "images/sub19_subida.jpeg", {x: 0, y: 2, z: 0})
+        loadStatue(
+            gltfLoader,
+            "glb/heavy_infantry_mandalorian_funko_pop.glb",
+            {x: 2, y: 0, z: 2},
+            {x: 0.12, y:-0.22, z:0},
+            -0.6
+        )
         loadButton({x: 2, z: 2}, "button1", "https://www.jb.pt/2022/04/juniores-do-anadia-sobem-a-1-a-divisao-nacional-26-anos-depois/")
         loadButton({x: 10, z: 10}, "button2", "https://www.google.pt")
         loadButton({x: 15, z: 15}, "button3", "https://www.record.pt")

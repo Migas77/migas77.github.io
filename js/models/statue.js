@@ -22,7 +22,7 @@ export function loadStatue(gltfLoader, filename, position, offset, rotation_y) {
     bottom.receiveShadow = true
     baseGroup.add(bottom)
 
-    const filepath = "js/glb/" + filename
+    const filepath = filename
     const scaleFactor = 20
     gltfLoader.load( filepath, function ( gltf ) {
         gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
