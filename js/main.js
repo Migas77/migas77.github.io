@@ -225,9 +225,7 @@ const scene = {
         // loadLightPole()
         // loadImage("images/GITHUB.png", 5, 5, {x:0, y:0.01, z:0}, -Math.PI/2)
         // loadPainting(gltfLoader, "images/sub19_subida.jpeg", {x: 0, y: 2, z: 0})
-        // loadButton({x: 2, z: 2}, "button1", "https://www.jb.pt/2022/04/juniores-do-anadia-sobem-a-1-a-divisao-nacional-26-anos-depois/")
-        // loadButton({x: 10, z: 10}, "button2", "https://www.google.pt")
-        // loadButton({x: 15, z: 15}, "button3", "https://www.record.pt")
+        loadButton(2, 2, {x: 8, z: 6}, "Github", "https://github.com/Migas77")
 
 
     }
