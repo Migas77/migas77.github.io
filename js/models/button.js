@@ -70,6 +70,7 @@ export function loadButton(position_x_z, name, url_to_open) {
 
     const labelDiv = document.createElement("div")
     labelDiv.className = "Redirect" + name
+    labelDiv.style.opacity = "0"
     const labelText = document.createElement("p")
     labelText.className = "labelRedirect"
     labelText.textContent = "Redirect"
@@ -118,7 +119,7 @@ export function loadButton(position_x_z, name, url_to_open) {
         sceneElements.raycaster.setFromCamera( sceneElements.pointer, sceneElements.camera );
         const intersects = sceneElements.raycaster.intersectObject(group_visible_invisible_button);
         if (intersects.length > 0){
-            const redirectDiv = document.querySelector(".Redirect" + name)
+            const redirectDiv = document.querySelector(".Redirect" + name + ".hover")
             if (redirectDiv !== null){
                 window.open(redirectDiv.children[0].children[0].href)
             }
@@ -128,8 +129,12 @@ export function loadButton(position_x_z, name, url_to_open) {
     document.addEventListener('keydown', function onCarMoving(event){
         // if car is moving then don't point and cancel hover effect
         document.body.style.cursor = "default"
+        for (const element of document.querySelectorAll(".Redirect" + name + ".hover")){
+            element.style.opacity = "0"
+            element.classList.remove("hover")
+        }
         if (event.key === 'Enter'){
-            const redirectDiv = document.querySelector(".Redirect" + name + ".hover")
+            const redirectDiv = document.querySelector(".Redirect" + name + ".parked")
             if (redirectDiv !== null){
                 window.open(redirectDiv.children[0].children[0].href)
             }
@@ -149,14 +154,14 @@ export function intersectCarAndButtons() {
                     const redirectDiv = document.querySelector(".Redirect" + button.name)
                     if (redirectDiv !== null){
                         redirectDiv.style.opacity = "1"
-                        redirectDiv.classList.add("hover")
+                        redirectDiv.classList.add("parked")
                     }
                     return
                 } else {
-                    const redirectDiv = document.querySelector(".Redirect" + button.name)
+                    const redirectDiv = document.querySelector(".Redirect" + button.name + ".parked")
                     if (redirectDiv !== null){
                         redirectDiv.style.opacity = "0"
-                        redirectDiv.classList.remove("hover")
+                        redirectDiv.classList.remove("parked")
                     }
 
                 }

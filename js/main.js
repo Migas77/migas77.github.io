@@ -281,11 +281,6 @@ function handleCarMovement() {
         if (goingForward)
             oppositeForce = oppositeForce.negate()
         oppositeForce.scale(sceneElements.vehicle.chassisBody.velocity.length() * 0.1)
-        if (keyEnter){
-            console.log("goingForward", goingForward)
-            console.log("carForward", carForward)
-            console.log("oppositeForce", oppositeForce)
-        }
         sceneElements.vehicle.chassisBody.applyImpulse(oppositeForce, sceneElements.vehicle.chassisBody.position)
     }
 

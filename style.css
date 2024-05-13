@@ -21,3 +21,11 @@ body {
 	transition:opacity 0.2s ease-in-out;
 }
 
+.parked {
+	transition:opacity 0.2s ease-in-out;
+}
+
+:not(.parked){
+	transition:opacity 0.2s ease-in-out;
+}
+
