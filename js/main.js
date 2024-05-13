@@ -26,7 +26,7 @@ var debugcannon;
 const gltfLoader = new GLTFLoader();
 const fontLoader = new FontLoader();
 // Camera Positions
-const [cameraOffsetX, cameraOffsetY, cameraOffsetZ] = [8, 6, 8]
+const [cameraOffsetX, cameraOffsetY, cameraOffsetZ] = [8, 6.7, 8]
 
 
 
@@ -165,30 +165,69 @@ const scene = {
         sceneGraph.add(axes);
 
         // ************************** //
-        // Create the Car Model
+        // Load Models
         // ************************** //
-        loadGround();
+        loadGround(); // HAS TO BE THE FIRST ONE
         loadFence();
-        loadBall(gltfLoader);
-        loadCar(gltfLoader);
-        loadTile(0.7, {x: 5, z: 5})
-        loadNameText(fontLoader);
-        loadLightPole()
-        loadRoadSign(fontLoader, "PROJECTS", - 2, 0, 0, false)
-        loadRoadSign(fontLoader, "PLAYGROUND", 2, 0, 0, true)
-        loadRoadSign(fontLoader, "INFORMATION", 0, 2, Math.PI/2, false)
-        loadImage("images/GITHUB.png", 5, 5, {x:0, y:0.01, z:0}, -Math.PI/2)
-        loadPainting(gltfLoader, "images/sub19_subida.jpeg", {x: 0, y: 2, z: 0})
+        loadCar(gltfLoader, {x: 0, y: 4, z: -13.5});
+        // loadBall(gltfLoader);
+        loadTile(0.5, {x: -0.4, z: -12})
+        loadTile(0.5, {x: 0.2, z: -11})
+        loadTile(0.5, {x: -0.2, z: -10})
+        loadTile(0.5, {x: 0.4, z: -9})
+        loadNameText(fontLoader, {x: -5.5, z: -8});
+        loadTile(0.5, {x: -0.1, z: -7})
+        loadTile(0.5, {x: 0.2, z: -6.2})
+        loadTile(0.5, {x: 0, z: -5})
+        loadTile(0.5, {x: -0.3, z: -4.2})
+        loadTile(0.5, {x: 0.4, z: -3.3})
+        loadTile(0.5, {x: 0.1, z: -2.5})
+        loadTile(0.5, {x: -0.3, z: -1.8})
+        loadTile(0.5, {x: 0, z: -1})
+        // loadLightPole()
+        // loadRoadSign(fontLoader, "PROJECTS", - 2, 0, 0, false)
+        // loadRoadSign(fontLoader, "PLAYGROUND", 2, 0, 0, true)
+        // loadRoadSign(fontLoader, "INFORMATION", 0, 2, Math.PI/2, false)
+        // loadImage("images/GITHUB.png", 5, 5, {x:0, y:0.01, z:0}, -Math.PI/2)
+        // loadPainting(gltfLoader, "images/sub19_subida.jpeg", {x: 0, y: 2, z: 0})
         loadStatue(
             gltfLoader,
             "glb/heavy_infantry_mandalorian_funko_pop.glb",
-            {x: 2, y: 0, z: 2},
+            {x: 0, y: 0, z: 2},
             {x: 0.12, y:-0.22, z:0},
             -0.6
         )
-        loadButton({x: 2, z: 2}, "button1", "https://www.jb.pt/2022/04/juniores-do-anadia-sobem-a-1-a-divisao-nacional-26-anos-depois/")
-        loadButton({x: 10, z: 10}, "button2", "https://www.google.pt")
-        loadButton({x: 15, z: 15}, "button3", "https://www.record.pt")
+        loadStatue(
+            gltfLoader,
+            "glb/heavy_infantry_mandalorian_funko_pop.glb",
+            {x: 5.5, y: 0, z: 7.5},
+            {x: 0.12, y:-0.22, z:0},
+            -0.6
+        )
+        loadStatue(
+            gltfLoader,
+            "glb/heavy_infantry_mandalorian_funko_pop.glb",
+            {x: -5.5, y: 0, z: -3.5},
+            {x: 0.12, y:-0.22, z:0},
+            -0.6
+        )
+        loadStatue(
+            gltfLoader,
+            "glb/heavy_infantry_mandalorian_funko_pop.glb",
+            {x: 5.5, y: 0, z: -3.5},
+            {x: 0.12, y:-0.22, z:0},
+            -0.6
+        )
+        loadStatue(
+            gltfLoader,
+            "glb/heavy_infantry_mandalorian_funko_pop.glb",
+            {x: -5.5, y: 0, z: 7.5},
+            {x: 0.12, y:-0.22, z:0},
+            -0.6
+        )
+        // loadButton({x: 2, z: 2}, "button1", "https://www.jb.pt/2022/04/juniores-do-anadia-sobem-a-1-a-divisao-nacional-26-anos-depois/")
+        // loadButton({x: 10, z: 10}, "button2", "https://www.google.pt")
+        // loadButton({x: 15, z: 15}, "button3", "https://www.record.pt")
 
 
     }

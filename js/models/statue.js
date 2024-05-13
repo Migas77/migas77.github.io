@@ -2,7 +2,7 @@ import * as THREE from "https://threejs.org/build/three.module.js";
 import * as CANNON from 'https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/+esm'
 import { sceneElements } from "../sceneElements.js";
 
-export function loadStatue(gltfLoader, filename, position, offset, rotation_y) {
+export function loadStatue(gltfLoader, filename, position_x_z, offset, rotation_y) {
     const baseGroup = new THREE.Group()
     const material = new THREE.MeshPhongMaterial( {color: 0xffff00} );
     const top_measures = {width: 2.8, height: 0.1}
@@ -47,7 +47,7 @@ export function loadStatue(gltfLoader, filename, position, offset, rotation_y) {
         console.error( `Error loading statue model ${filepath}:\n${error}`);
     } );
 
-    baseGroup.position.set(position.x, position.y, position.z)
+    baseGroup.position.set(position_x_z.x, 0, position_x_z.z)
     sceneElements.sceneGraph.add(baseGroup)
 }
 

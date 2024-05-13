@@ -6,7 +6,7 @@ import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 // ************************** //
 // 1. loadNameText(fontLoader) - Load, add to the scene and world the 3D representation of my name at the position (0, 0, 0)
 // ************************** //
-export function loadNameText(fontLoader) {
+export function loadNameText(fontLoader, position_x_z) {
 
     fontLoader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
 
@@ -36,16 +36,16 @@ export function loadNameText(fontLoader) {
             getLetterDict(0.38, 0.49, 0.13, "E", 4),
             getLetterDict(0.34, 0.49, 0.13, "L", 5),
             getLetterDict(0.46, 0.49, 0.13, "", 6),
-            getLetterDict(0.36, 0.49, 0.13, "F", 7),
-            getLetterDict(0.135, 0.49, 0.13, "I", 8),
-            getLetterDict(0.447, 0.51, 0.13, "G", 9),
-            getLetterDict(0.4, 0.50, 0.13, "U", 10),
-            getLetterDict(0.38, 0.49, 0.13, "E", 11),
-            getLetterDict(0.135, 0.49, 0.13, "I", 12),
-            getLetterDict(0.40, 0.49, 0.13, "R", 13),
-            getLetterDict(0.38, 0.49, 0.13, "E", 14),
-            getLetterDict(0.41, 0.49, 0.13, "D", 15),
-            getLetterDict(0.46, 0.51, 0.13, "O", 16),
+            getLetterDict(0.36, 0.49, 0.13, "F", 6),
+            getLetterDict(0.135, 0.49, 0.13, "I", 7),
+            getLetterDict(0.447, 0.51, 0.13, "G", 8),
+            getLetterDict(0.4, 0.50, 0.13, "U", 9),
+            getLetterDict(0.38, 0.49, 0.13, "E", 10),
+            getLetterDict(0.135, 0.49, 0.13, "I", 11),
+            getLetterDict(0.40, 0.49, 0.13, "R", 12),
+            getLetterDict(0.38, 0.49, 0.13, "E", 13),
+            getLetterDict(0.41, 0.49, 0.13, "D", 14),
+            getLetterDict(0.46, 0.51, 0.13, "O", 15),
         ]
 
         for (let index = 0; index < models.length; index++) {
@@ -62,7 +62,7 @@ export function loadNameText(fontLoader) {
             textMesh.name = "name"
             textGeometry.center()
             textMesh.translateY(0.49)
-            textBody.position.set(dict.x,1,0)
+            textBody.position.set(position_x_z.x + dict.x,1,position_x_z.z)
             sceneElements.world.addBody(textBody)
             sceneElements.sceneGraph.add(textMesh)
 

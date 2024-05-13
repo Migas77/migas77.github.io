@@ -5,7 +5,7 @@ import {getPhysicsWorldId, sceneElements} from "../sceneElements.js";
 // ************************** //
 // 1. loadCar(gltfLoader) - Load, add to the scene and world the Car Model at the position (0, 0, 0) facing the negative z axis
 // ************************** //
-export function loadCar(gltfLoader) {
+export function loadCar(gltfLoader, position) {
     const vehicleGroup = new THREE.Group()
     vehicleGroup.name = "vehicle_group"
     const frontX = -0.40;    // same for both wheels at the front
@@ -19,7 +19,7 @@ export function loadCar(gltfLoader) {
     // Build the car chassis
     const chassisShape = new CANNON.Box(new CANNON.Vec3(0.71, 0.20, 0.4))
     const chassisBody = new CANNON.Body({ mass: 100 })
-    chassisBody.position.set(0, 4, -5)
+    chassisBody.position.set(position.x, position.y, position.z)
     chassisBody.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), Math.PI/2)
     chassisBody.addShape(chassisShape)
 
