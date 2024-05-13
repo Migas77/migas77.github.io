@@ -170,7 +170,7 @@ const scene = {
         loadGround(); // HAS TO BE THE FIRST ONE
         loadFence();
         loadCar(gltfLoader, {x: 0, y: 2, z: -13.5});
-        // loadBall(gltfLoader);
+        loadBall(gltfLoader);
         loadTile(0.5, {x: -0.4, z: -12})
         loadTile(0.5, {x: 0.2, z: -11})
         loadTile(0.5, {x: -0.2, z: -10})
@@ -219,9 +219,9 @@ const scene = {
             {x: 0.12, y:-0.22, z:0},
             -0.6
         )
-        loadRoadSign(fontLoader, "PROJECTS", 5.5, 2, 0, true)
-        loadRoadSign(fontLoader, "PLAYGROUND", -5.5, 2, 0, false)
-        loadRoadSign(fontLoader, "INFORMATION", 0, 7.5, Math.PI/2, false)
+        loadRoadSign(fontLoader, "PROJECTS", 5.5, 2, 0, 0.06, true)
+        loadRoadSign(fontLoader, "PLAYGROUND", -5.5, 2, 0, 0.06, false)
+        loadRoadSign(fontLoader, "INFORMATION", 0, 7.5, Math.PI/2, 0.06, false)
         // loadLightPole()
         // loadImage("images/GITHUB.png", 5, 5, {x:0, y:0.01, z:0}, -Math.PI/2)
         // loadPainting(gltfLoader, "images/sub19_subida.jpeg", {x: 0, y: 2, z: 0})
