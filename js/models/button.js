@@ -125,21 +125,19 @@ export function loadButton(position_x_z, name, url_to_open) {
 
 
 export function intersectCarAndButtons() {
-
-    const chassis = sceneElements.sceneGraph.getObjectByName("chassis_2")
-    if (chassis !== undefined){
+    if (sceneElements.vehicle !== null){
         sceneElements.raycaster.set(sceneElements.vehicle.chassisBody.position, new THREE.Vector3(0, -1, 0))
         for (const button of buttons){
             const intersects = sceneElements.raycaster.intersectObject(button);
             if (intersects.length > 0){
                 console.log("intersects")
-                const redirectDiv = document.querySelector(".Redirect" + name)
+                const redirectDiv = document.querySelector(".Redirect" + button.name)
                 if (redirectDiv !== null){
                     redirectDiv.style.opacity = "1"
                     redirectDiv.classList.add("hover")
                 }
             } else {
-                const redirectDiv = document.querySelector(".Redirect" + name)
+                const redirectDiv = document.querySelector(".Redirect" + button.name)
                 if (redirectDiv !== null){
                     redirectDiv.style.opacity = "0"
                     redirectDiv.classList.remove("hover")
