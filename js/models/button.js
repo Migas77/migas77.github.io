@@ -125,26 +125,32 @@ export function loadButton(position_x_z, name, url_to_open) {
 
 
 export function intersectCarAndButtons() {
-    if (sceneElements.vehicle !== null){
-        sceneElements.raycaster.set(sceneElements.vehicle.chassisBody.position, new THREE.Vector3(0, -1, 0))
-        for (const button of buttons){
-            const intersects = sceneElements.raycaster.intersectObject(button);
-            if (intersects.length > 0){
-                console.log("intersects")
-                const redirectDiv = document.querySelector(".Redirect" + button.name)
-                if (redirectDiv !== null){
-                    redirectDiv.style.opacity = "1"
-                    redirectDiv.classList.add("hover")
-                }
-            } else {
-                const redirectDiv = document.querySelector(".Redirect" + button.name)
-                if (redirectDiv !== null){
-                    redirectDiv.style.opacity = "0"
-                    redirectDiv.classList.remove("hover")
-                }
+    if (document.querySelectorAll(".hover").length === 0){
 
+        // only necessar if the mouse isn't hovering the button
+        const vehicle_group = sceneElements.sceneGraph.getObjectByName("vehicle_group")
+        if (vehicle_group !== undefined && vehicle_group.children.length===5){
+            for (const children of vehicle_group.children){
+                sceneElements.raycaster.set(children.position, new THREE.Vector3(0, -1, 0))
+                for (const button of buttons){
+                    const intersects = sceneElements.raycaster.intersectObject(button);
+                    if (intersects.length > 0){
+                        const redirectDiv = document.querySelector(".Redirect" + button.name)
+                        if (redirectDiv !== null){
+                            redirectDiv.style.opacity = "1"
+                            redirectDiv.classList.add("hover")
+                        }
+                        return
+                    } else {
+                        const redirectDiv = document.querySelector(".Redirect" + button.name)
+                        if (redirectDiv !== null){
+                            redirectDiv.style.opacity = "0"
+                            redirectDiv.classList.remove("hover")
+                        }
+
+                    }
+                }
             }
         }
     }
-
 }

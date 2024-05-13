@@ -6,6 +6,8 @@ import {getPhysicsWorldId, sceneElements} from "../sceneElements.js";
 // 1. loadCar(gltfLoader) - Load, add to the scene and world the Car Model at the position (0, 0, 0) facing the negative z axis
 // ************************** //
 export function loadCar(gltfLoader) {
+    const vehicleGroup = new THREE.Group()
+    vehicleGroup.name = "vehicle_group"
     const frontX = -0.40;    // same for both wheels at the front
     const frontY = 0.02;     // same for both wheels at the front
     const frontZ =  0.30;    // symetric for both wheels at the front
@@ -55,7 +57,7 @@ export function loadCar(gltfLoader) {
                 node.receiveShadow = true
             }
         })
-        sceneElements.sceneGraph.add(gltf.scene)
+        vehicleGroup.add(gltf.scene)
     }, undefined, function ( error ) {
         console.error( `Error loading model chassis: ${error}`);
     } );
@@ -72,7 +74,7 @@ export function loadCar(gltfLoader) {
                 node.receiveShadow = true
             }
         })
-        sceneElements.sceneGraph.add(gltf.scene)
+        vehicleGroup.add(gltf.scene)
     }, undefined, function ( error ) {
         console.error( `Front Right Wheel - Error loading model rocket_league_octane_wheel_fl.glb:\n${error}`);
     } );
@@ -94,7 +96,7 @@ export function loadCar(gltfLoader) {
                 node.receiveShadow = true
             }
         })
-        sceneElements.sceneGraph.add(gltf.scene)
+        vehicleGroup.add(gltf.scene)
     }, undefined, function ( error ) {
         console.error( `Front Left Wheel - Error loading model rocket_league_octane_wheel_fl.glb:\n${error}`);
     } );
@@ -113,7 +115,7 @@ export function loadCar(gltfLoader) {
                 node.receiveShadow = true
             }
         })
-        sceneElements.sceneGraph.add(gltf.scene)
+        vehicleGroup.add(gltf.scene)
     }, undefined, function ( error ) {
         console.error( `Back Right Wheel - Error loading model rocket_league_octane_wheel_bl.glb:\n${error}`);
     } );
@@ -135,7 +137,7 @@ export function loadCar(gltfLoader) {
                 node.receiveShadow = true
             }
         })
-        sceneElements.sceneGraph.add(gltf.scene)
+        vehicleGroup.add(gltf.scene)
     }, undefined, function ( error ) {
         console.error( `Back Left Wheel - Error loading model rocket_league_octane_wheel_bl.glb:\n${error}`);
     } );
@@ -144,6 +146,7 @@ export function loadCar(gltfLoader) {
 
     vehicle.addToWorld(sceneElements.world)
     sceneElements.vehicle = vehicle
+    sceneElements.sceneGraph.add(vehicleGroup)
 
     // Add the wheel bodies
     const wheelBodies = []
