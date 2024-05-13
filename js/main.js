@@ -239,10 +239,12 @@ function computeFrame(time) {
 function handleCarMovement() {
 
     if (keyArrowUp) {
+
         sceneElements.vehicle.applyEngineForce(-maxForce, 2)
         sceneElements.vehicle.applyEngineForce(-maxForce, 3)
     }
     if (keyArrowDown) {
+
         sceneElements.vehicle.applyEngineForce(maxForce, 2)
         sceneElements.vehicle.applyEngineForce(maxForce, 3)
     }
@@ -261,11 +263,13 @@ function handleCarMovement() {
     goingForward = forwardSpeed > 0
 
     if (keyArrowLeft) {
+
         sceneElements.vehicle.setSteeringValue(maxSteerVal, 0)
         sceneElements.vehicle.setSteeringValue(maxSteerVal, 1)
     }
 
     if (keyArrowRight){
+
         sceneElements.vehicle.setSteeringValue(-maxSteerVal, 0)
         sceneElements.vehicle.setSteeringValue(-maxSteerVal, 1)
     }
@@ -333,6 +337,7 @@ document.addEventListener('keydown', function onDocumentKeyDown(event) {
             break;
         case 'w':
         case 'ArrowUp':
+
             keyArrowUp = true;
             trackingVehicle = true;
             isCarBeingMoved = true;

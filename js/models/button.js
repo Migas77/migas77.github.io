@@ -74,6 +74,9 @@ export function loadButton(position_x_z, name, url_to_open) {
     labelText.className = "labelRedirect"
     labelText.textContent = "Redirect"
     labelDiv.insertBefore(labelText, labelDiv.firstChild)
+    const labelLink = document.createElement("a")
+    labelLink.href = url_to_open
+    labelText.appendChild(labelLink)
     const btnLabel = new CSS2DObject(labelDiv)
     btnLabel.position.set(0, 0, 0)
     group_visible_invisible_button.add(btnLabel)
@@ -116,8 +119,19 @@ export function loadButton(position_x_z, name, url_to_open) {
         const intersects = sceneElements.raycaster.intersectObject(group_visible_invisible_button);
         if (intersects.length > 0){
             const redirectDiv = document.querySelector(".Redirect" + name)
-            if (redirectDiv !== undefined){
-                window.open(url_to_open)
+            if (redirectDiv !== null){
+                window.open(redirectDiv.children[0].children[0].href)
+            }
+        }
+    })
+
+    document.addEventListener('keydown', function onCarMoving(event){
+        // if car is moving then don't point and cancel hover effect
+        document.body.style.cursor = "default"
+        if (event.key === 'Enter'){
+            const redirectDiv = document.querySelector(".Redirect" + name + ".hover")
+            if (redirectDiv !== null){
+                window.open(redirectDiv.children[0].children[0].href)
             }
         }
     })
@@ -125,30 +139,26 @@ export function loadButton(position_x_z, name, url_to_open) {
 
 
 export function intersectCarAndButtons() {
-    if (document.querySelectorAll(".hover").length === 0){
-
-        // only necessar if the mouse isn't hovering the button
-        const vehicle_group = sceneElements.sceneGraph.getObjectByName("vehicle_group")
-        if (vehicle_group !== undefined && vehicle_group.children.length===5){
-            for (const children of vehicle_group.children){
-                sceneElements.raycaster.set(children.position, new THREE.Vector3(0, -1, 0))
-                for (const button of buttons){
-                    const intersects = sceneElements.raycaster.intersectObject(button);
-                    if (intersects.length > 0){
-                        const redirectDiv = document.querySelector(".Redirect" + button.name)
-                        if (redirectDiv !== null){
-                            redirectDiv.style.opacity = "1"
-                            redirectDiv.classList.add("hover")
-                        }
-                        return
-                    } else {
-                        const redirectDiv = document.querySelector(".Redirect" + button.name)
-                        if (redirectDiv !== null){
-                            redirectDiv.style.opacity = "0"
-                            redirectDiv.classList.remove("hover")
-                        }
-
+    const vehicle_group = sceneElements.sceneGraph.getObjectByName("vehicle_group")
+    if (vehicle_group !== undefined && vehicle_group.children.length===5){
+        for (const children of vehicle_group.children){
+            sceneElements.raycaster.set(children.position, new THREE.Vector3(0, -1, 0))
+            for (const button of buttons){
+                const intersects = sceneElements.raycaster.intersectObject(button);
+                if (intersects.length > 0){
+                    const redirectDiv = document.querySelector(".Redirect" + button.name)
+                    if (redirectDiv !== null){
+                        redirectDiv.style.opacity = "1"
+                        redirectDiv.classList.add("hover")
                     }
+                    return
+                } else {
+                    const redirectDiv = document.querySelector(".Redirect" + button.name)
+                    if (redirectDiv !== null){
+                        redirectDiv.style.opacity = "0"
+                        redirectDiv.classList.remove("hover")
+                    }
+
                 }
             }
         }
