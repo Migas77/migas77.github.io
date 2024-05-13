@@ -169,7 +169,7 @@ const scene = {
         // ************************** //
         loadGround(); // HAS TO BE THE FIRST ONE
         loadFence();
-        loadCar(gltfLoader, {x: 0, y: 4, z: -13.5});
+        loadCar(gltfLoader, {x: 0, y: 2, z: -13.5});
         // loadBall(gltfLoader);
         loadTile(0.5, {x: -0.4, z: -12})
         loadTile(0.5, {x: 0.2, z: -11})
@@ -184,47 +184,47 @@ const scene = {
         loadTile(0.5, {x: 0.1, z: -2.5})
         loadTile(0.5, {x: -0.3, z: -1.8})
         loadTile(0.5, {x: 0, z: -1})
+        loadStatue(
+            gltfLoader,
+            "glb/heavy_infantry_mandalorian_funko_pop.glb",
+            {x: 0, z: 2},
+            {x: 0.12, y:-0.22, z:0},
+            -0.6
+        )
+        loadStatue(
+            gltfLoader,
+            "glb/heavy_infantry_mandalorian_funko_pop.glb",
+            {x: 5.5, z: 7.5},
+            {x: 0.12, y:-0.22, z:0},
+            -0.6
+        )
+        loadStatue(
+            gltfLoader,
+            "glb/heavy_infantry_mandalorian_funko_pop.glb",
+            {x: -5.5, z: -3.5},
+            {x: 0.12, y:-0.22, z:0},
+            -0.6
+        )
+        loadStatue(
+            gltfLoader,
+            "glb/heavy_infantry_mandalorian_funko_pop.glb",
+            {x: 5.5, z: -3.5},
+            {x: 0.12, y:-0.22, z:0},
+            -0.6
+        )
+        loadStatue(
+            gltfLoader,
+            "glb/heavy_infantry_mandalorian_funko_pop.glb",
+            {x: -5.5, z: 7.5},
+            {x: 0.12, y:-0.22, z:0},
+            -0.6
+        )
+        loadRoadSign(fontLoader, "PROJECTS", 5.5, 2, 0, true)
+        loadRoadSign(fontLoader, "PLAYGROUND", -5.5, 2, 0, false)
+        loadRoadSign(fontLoader, "INFORMATION", 0, 7.5, Math.PI/2, false)
         // loadLightPole()
-        // loadRoadSign(fontLoader, "PROJECTS", - 2, 0, 0, false)
-        // loadRoadSign(fontLoader, "PLAYGROUND", 2, 0, 0, true)
-        // loadRoadSign(fontLoader, "INFORMATION", 0, 2, Math.PI/2, false)
         // loadImage("images/GITHUB.png", 5, 5, {x:0, y:0.01, z:0}, -Math.PI/2)
         // loadPainting(gltfLoader, "images/sub19_subida.jpeg", {x: 0, y: 2, z: 0})
-        loadStatue(
-            gltfLoader,
-            "glb/heavy_infantry_mandalorian_funko_pop.glb",
-            {x: 0, y: 0, z: 2},
-            {x: 0.12, y:-0.22, z:0},
-            -0.6
-        )
-        loadStatue(
-            gltfLoader,
-            "glb/heavy_infantry_mandalorian_funko_pop.glb",
-            {x: 5.5, y: 0, z: 7.5},
-            {x: 0.12, y:-0.22, z:0},
-            -0.6
-        )
-        loadStatue(
-            gltfLoader,
-            "glb/heavy_infantry_mandalorian_funko_pop.glb",
-            {x: -5.5, y: 0, z: -3.5},
-            {x: 0.12, y:-0.22, z:0},
-            -0.6
-        )
-        loadStatue(
-            gltfLoader,
-            "glb/heavy_infantry_mandalorian_funko_pop.glb",
-            {x: 5.5, y: 0, z: -3.5},
-            {x: 0.12, y:-0.22, z:0},
-            -0.6
-        )
-        loadStatue(
-            gltfLoader,
-            "glb/heavy_infantry_mandalorian_funko_pop.glb",
-            {x: -5.5, y: 0, z: 7.5},
-            {x: 0.12, y:-0.22, z:0},
-            -0.6
-        )
         // loadButton({x: 2, z: 2}, "button1", "https://www.jb.pt/2022/04/juniores-do-anadia-sobem-a-1-a-divisao-nacional-26-anos-depois/")
         // loadButton({x: 10, z: 10}, "button2", "https://www.google.pt")
         // loadButton({x: 15, z: 15}, "button3", "https://www.record.pt")

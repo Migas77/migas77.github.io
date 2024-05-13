@@ -11,7 +11,7 @@ export function loadRoadSign(fontLoader, message, position_x, position_z, rotati
     )
     sign.position.x = position_x
     sign.position.z = position_z
-
+    sign.rotateY(rotation_y)
 }
 
 function loadRoadSignAtOrigin(

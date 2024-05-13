@@ -1,6 +1,6 @@
 import * as THREE from "https://threejs.org/build/three.module.js";
 import * as CANNON from 'https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/+esm'
-import { sceneElements } from "../sceneElements.js";
+import {getPhysicsWorldId, sceneElements} from "../sceneElements.js";
 
 export function loadStatue(gltfLoader, filename, position_x_z, offset, rotation_y) {
     const baseGroup = new THREE.Group()
@@ -49,6 +49,22 @@ export function loadStatue(gltfLoader, filename, position_x_z, offset, rotation_
 
     baseGroup.position.set(position_x_z.x, 0, position_x_z.z)
     sceneElements.sceneGraph.add(baseGroup)
+
+
+    // physics world
+    const groundMaterial = sceneElements.world.bodies[getPhysicsWorldId("ground_0")].material
+    const bottomBoxShape = new CANNON.Box(new CANNON.Vec3(0.5 * bottom_measures.width, 0.5 * bottom_measures.height, 0.5 * bottom_measures.width))
+    const topBoxShape = new CANNON.Box(new CANNON.Vec3(0.5 * top_measures.width, 0.5 * top_measures.height, 0.5 * top_measures.width))
+    const statueBaseBody = new CANNON.Body({
+        type: CANNON.Body.STATIC,
+        material: groundMaterial
+    })
+    statueBaseBody.addShape(bottomBoxShape, new CANNON.Vec3(position_x_z.x, bottom_measures.height * 0.5, position_x_z.z))
+    statueBaseBody.addShape(topBoxShape, new CANNON.Vec3(position_x_z.x, bottom_measures.height + top_measures.height * 0.5, position_x_z.z))
+    sceneElements.world.addBody(statueBaseBody)
+
+    // No need to link visual and physics world
+    // because the statue won't move
 }
 
 function loadStatueModel(gltfLoader, filename) {

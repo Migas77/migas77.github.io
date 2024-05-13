@@ -19,7 +19,7 @@ export function loadTile(side, position_x_z){
 
     // physics world
     const groundMaterial = sceneElements.world.bodies[getPhysicsWorldId("ground_0")].material
-    const boxShape = new CANNON.Box(new CANNON.Vec3(0.5 * side, tile_height, 0.5 * side))
+    const boxShape = new CANNON.Box(new CANNON.Vec3(0.5 * side, 0.5 * tile_height, 0.5 * side))
     const boxBody = new CANNON.Body({
         type: CANNON.Body.STATIC,
         material: groundMaterial
