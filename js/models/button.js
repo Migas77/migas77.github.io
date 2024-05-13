@@ -6,7 +6,7 @@ import {sceneElements} from "../sceneElements.js";
 // ************************** //
 // 1. loadButton({x: , z: }, width: , height:, offset}) - Create a button
 // ************************** //
-
+// BUTTON NAMES HAVE TO BE DIFFERENT FOR THIS TO WORK WELL
 const width = 3;
 const height = 2;
 const offset = 0.1
@@ -91,8 +91,10 @@ export function loadButton(position_x_z, name, url_to_open) {
         sceneElements.pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
         sceneElements.raycaster.setFromCamera( sceneElements.pointer, sceneElements.camera );
 
+
         const intersects = sceneElements.raycaster.intersectObject(group_visible_invisible_button);
         if (intersects.length > 0){
+            console.log(group_visible_invisible_button)
             document.body.style.cursor = "pointer"
             const redirectDiv = document.querySelector(".Redirect" + name)
             if (redirectDiv !== null){
