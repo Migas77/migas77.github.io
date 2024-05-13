@@ -76,7 +76,7 @@ const helper = {
         // ***************************** //
         const spotLight1 = new THREE.SpotLight('rgb(255, 255, 255)', 40);
         spotLight1.decay = 1;
-        spotLight1.position.set(0, 8, 5);
+        spotLight1.position.set(0, 8, 20);
         sceneElements.sceneGraph.add(spotLight1);
 
         // Setup shadow properties for the spotlight
@@ -171,6 +171,7 @@ const scene = {
         loadFence();
         loadCar(gltfLoader, {x: 0, y: 2, z: -13.5});
         loadBall(gltfLoader);
+        // entrance tiles
         loadTile(0.5, {x: -0.4, z: -12})
         loadTile(0.5, {x: 0.2, z: -11})
         loadTile(0.5, {x: -0.2, z: -10})
@@ -221,12 +222,24 @@ const scene = {
         )
         loadRoadSign(fontLoader, "PROJECTS", 5.5, 2, 0, 0.06, true)
         loadRoadSign(fontLoader, "PLAYGROUND", -5.5, 2, 0, 0.06, false)
+
+        // information section
         loadRoadSign(fontLoader, "INFORMATION", 0, 7.5, Math.PI/2, 0.06, false)
+        loadTile(0.5, {x: -0.3, z: 8.2})
+        loadTile(0.5, {x: 0.2, z: 9.2})
+        loadTile(0.5, {x: -0.1, z: 10})
+        loadTile(0.5, {x: 0.5, z: 10.6})
+        loadTile(0.5, {x: 0, z: 11.3})
+        loadTile(0.5, {x: -0.4, z: 12})
+        loadTile(0.5, {x: -0.2, z: 12.8})
+        loadTile(0.5, {x: 0.1, z: 13.5})
+        loadTile(0.5, {x: -0.3, z: 14.2})
         // loadLightPole()
-        // loadImage("images/GITHUB.png", 5, 5, {x:0, y:0.01, z:0}, -Math.PI/2)
         // loadPainting(gltfLoader, "images/sub19_subida.jpeg", {x: 0, y: 2, z: 0})
         loadButton(2, 2, {x: 8, z: 6}, "Github", "https://github.com/Migas77")
-
+        loadImage("images/HISTORY_OF_MY_LIFE.png", 5, 5, {x:-0.8, y:0.01, z:16}, -Math.PI/2)
+        loadImage("images/HISTORY_OF_MY_LIFE_DETAILS.png", 5, 5, {x:1.6, y:0.02, z:17.1}, -Math.PI/2)
+        loadImage("images/GITHUB.png", 5, 5, {x:4, y:0.03, z:17.1}, -Math.PI/2)
 
     }
 };
