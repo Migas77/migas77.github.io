@@ -15,7 +15,7 @@ import {intersectCarAndButtons, loadButton} from "./models/button.js";
 import { loadLightPole } from "./models/lightpole.js";
 import { loadRoadSign } from "./models/road_sign.js";
 import { loadPainting } from "./models/paiting.js";
-import { loadStatue } from "./models/statue.js";
+import {loadAnimatedStatue, loadStatue, mixer} from "./models/statue.js";
 import {loadImage} from "./models/myImageLoader.js";
 import {loadTile} from "./models/tile.js";
 
@@ -27,6 +27,7 @@ const gltfLoader = new GLTFLoader();
 const fontLoader = new FontLoader();
 // Camera Positions
 const [cameraOffsetX, cameraOffsetY, cameraOffsetZ] = [8, 6.7, 8]
+const clock = new THREE.Clock()
 
 
 
@@ -219,9 +220,9 @@ const scene = {
             {x: 0.12, y:-0.22, z:0},
             -0.6
         )
-        loadStatue(
+        loadAnimatedStatue(
             gltfLoader,
-            "glb/heavy_infantry_mandalorian_funko_pop.glb",
+            "glb/bb8_animated_star_wars-v1.glb",
             {x: 5.5, z: -3.5},
             {x: 0.12, y:-0.22, z:0},
             -0.6
@@ -298,6 +299,10 @@ function computeFrame(time) {
 
     handleCarMovement()
     intersectCarAndButtons()
+    if (mixer !== undefined){
+        console.log("updating")
+        mixer.update(clock.getDelta())
+    }
 
     if (debugcannon !== undefined){
         debugcannon.update()
