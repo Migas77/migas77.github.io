@@ -2,6 +2,7 @@ import * as THREE from "https://threejs.org/build/three.module.js";
 import * as CANNON from 'https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/+esm'
 import { CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 import {sceneElements} from "../sceneElements.js";
+import {open_link} from "../utils.js";
 
 // ************************** //
 // 1. loadButton({x: , z: }, width: , height:, offset}) - Create a button
@@ -123,7 +124,7 @@ export function loadButton(width, height, position_x_z, name, url_to_open) {
         if (intersects.length > 0){
             const redirectDiv = document.querySelector(".Redirect" + name + ".hover")
             if (redirectDiv !== null){
-                window.open(redirectDiv.children[0].children[0].href)
+                open_link(redirectDiv.children[0].children[0].href)
             }
         }
     })
@@ -138,7 +139,7 @@ export function loadButton(width, height, position_x_z, name, url_to_open) {
         if (event.key === 'Enter'){
             const redirectDiv = document.querySelector(".Redirect" + name + ".parked")
             if (redirectDiv !== null){
-                window.open(redirectDiv.children[0].children[0].href)
+                open_link(redirectDiv.children[0].children[0].href)
             }
         }
     })

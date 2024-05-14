@@ -7,12 +7,13 @@ side: 1
 position_x_z: {x: 0, z: 0}
 */
 const tile_height = 0.02
-export function loadTile(side, position_x_z){
+export function loadTile(side, position_x_z, rotation_y){
     // visual world
     const geometry = new THREE.BoxGeometry( side, tile_height, side );
     const material = new THREE.MeshPhongMaterial( {color: 0xffffff} );
     const tile = new THREE.Mesh( geometry, material );
     tile.position.set(position_x_z.x, 0.5 * tile_height, position_x_z.z)
+    tile.rotateY(rotation_y)
     tile.receiveShadow = true
     tile.castShadow = true
     sceneElements.sceneGraph.add( tile );
@@ -26,6 +27,7 @@ export function loadTile(side, position_x_z){
     })
     boxBody.addShape(boxShape)
     boxBody.position.copy(tile.position)
+    boxBody.quaternion.copy(tile.quaternion)
     sceneElements.world.addBody(boxBody)
 
     // No need to link visual and physics world

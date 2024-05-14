@@ -15,12 +15,16 @@ function loadFenceItem(position, rotation_y) {
     const fenceSupportMaterial1 = new THREE.MeshPhongMaterial( {color: 0xffff00} );
     const fenceSupport1 = new THREE.Mesh( fenceSupportGeometry1, fenceSupportMaterial1 );
     fenceSupport1.translateY(0.5 * fenceSupportY)
+    fenceSupport1.receiveShadow = true
+    fenceSupport1.castShadow = true
 
     const fenceSupportGeometry2 = new THREE.BoxGeometry( fenceSupportXZ, fenceSupportY, fenceSupportXZ );
     const fenceSupportMaterial2 = new THREE.MeshPhongMaterial( {color: 0xffff00} );
     const fenceSupport2 = new THREE.Mesh( fenceSupportGeometry2, fenceSupportMaterial2 );
     fenceSupport2.translateX(1.35)
     fenceSupport2.translateY(0.5 * fenceSupportY)
+    fenceSupport2.receiveShadow = true
+    fenceSupport2.castShadow = true
 
     const fenceFrontGeometry1 = new THREE.BoxGeometry( fenceFrontX, fenceFrontY, fenceFrontZ );
     const fenceFrontMaterial1 = new THREE.MeshPhongMaterial( {color: 0xffff00} );
@@ -28,6 +32,8 @@ function loadFenceItem(position, rotation_y) {
     fenceFront1.translateX(0.675)
     fenceFront1.translateY(0.4)
     fenceFront1.translateZ(fenceSupportXZ)
+    fenceFront1.receiveShadow = true
+    fenceFront1.castShadow = true
 
     const fenceFrontGeometry2 = new THREE.BoxGeometry( fenceFrontX, fenceFrontY, fenceFrontZ );
     const fenceFrontMaterial2 = new THREE.MeshPhongMaterial( {color: 0xffff00} );
@@ -35,6 +41,8 @@ function loadFenceItem(position, rotation_y) {
     fenceFront2.translateX(0.675)
     fenceFront2.translateY(0.84)
     fenceFront2.translateZ(fenceSupportXZ)
+    fenceFront2.receiveShadow = true
+    fenceFront2.castShadow = true
 
     fenceItem.add(fenceSupport1)
     fenceItem.add(fenceSupport2)
@@ -78,7 +86,7 @@ function loadFenceGroup(position_x_z, rotation_y, name) {
 }
 
 export function loadFence() {
-    const side_size = 20.3
+    const side_size = 30
     const fences = [
         {position_x_z: {x: 0, z: side_size}, rotation_y: 0, name: "upper_fence"},
         {position_x_z: {x: side_size, z: 0}, rotation_y: Math.PI/2, name: "right_fence"},

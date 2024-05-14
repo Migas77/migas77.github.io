@@ -5,7 +5,7 @@ import {getImage, loadImage} from "./myImageLoader.js";
 
 const scaleFactor = 0.06
 const filename_frame = "glb/low_poly_framed_painting.glb"
-export function loadPainting(gltfLoader, filename_photo, position) {
+export function loadPainting(gltfLoader, filename_photo, position, rotation_y) {
     const group = new THREE.Group();
 
     gltfLoader.load( filename_frame, function ( gltf ) {
@@ -33,6 +33,7 @@ export function loadPainting(gltfLoader, filename_photo, position) {
     group.add(image)
 
     group.position.set(position.x, position.y, position.z)
+    group.rotateY(rotation_y)
     sceneElements.sceneGraph.add(group)
 
 }

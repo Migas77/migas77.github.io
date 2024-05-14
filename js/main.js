@@ -88,8 +88,8 @@ const helper = {
         // ***************************** //
         const spotLight1 = new THREE.SpotLight('rgb(255, 255, 255)', 40);
         spotLight1.decay = 1;
-        spotLight1.position.set(0, 8, 20);
-        // sceneElements.sceneGraph.add(spotLight1);
+        spotLight1.position.set(25, 8, 0);
+        sceneElements.sceneGraph.add(spotLight1);
 
         // Setup shadow properties for the spotlight
         spotLight1.castShadow = true;
@@ -180,23 +180,24 @@ const scene = {
         // Load Models
         // ************************** //
         loadGround(); // HAS TO BE THE FIRST ONE
-        loadFence();
-        loadCar(gltfLoader, {x: 0, y: 2, z: -13.5});
-        loadBall(gltfLoader, {x: 4.4, y:0, z:14.4});
+        // loadFence();
+        loadCar(gltfLoader, {x: 6, y: 2, z: 0});
+        // loadBall(gltfLoader, {x: 4.4, y:0, z:14.4});
         // entrance tiles
-        loadTile(0.5, {x: -0.4, z: -12})
-        loadTile(0.5, {x: 0.2, z: -11})
-        loadTile(0.5, {x: -0.2, z: -10})
-        loadTile(0.5, {x: 0.4, z: -9})
+        loadTile(0.5, {x: -0.4, z: -12}, 0, 0)
+        loadTile(0.5, {x: 0.2, z: -11}, 0)
+        loadTile(0.5, {x: -0.2, z: -10}, 0)
+        loadTile(0.5, {x: 0.4, z: -9}, 0)
         loadNameText(fontLoader, {x: -5.5, z: -8});
-        loadTile(0.5, {x: -0.1, z: -7})
-        loadTile(0.5, {x: 0.2, z: -6.2})
-        loadTile(0.5, {x: 0, z: -5})
-        loadTile(0.5, {x: -0.3, z: -4.2})
-        loadTile(0.5, {x: 0.4, z: -3.3})
-        loadTile(0.5, {x: 0.1, z: -2.5})
-        loadTile(0.5, {x: -0.3, z: -1.8})
-        loadTile(0.5, {x: 0, z: -1})
+        loadTile(0.5, {x: -0.1, z: -7}, 0)
+        loadTile(0.5, {x: 0.2, z: -6.2}, 0)
+        loadTile(0.5, {x: 0, z: -5}, 0)
+        loadTile(0.5, {x: -0.3, z: -4.2}, 0)
+        loadTile(0.5, {x: 0.4, z: -3.3}, 0)
+        loadTile(0.5, {x: 0.1, z: -2.5}, 0)
+        loadTile(0.5, {x: -0.3, z: -1.8}, 0)
+        loadTile(0.5, {x: 0, z: -1}, 0)
+
         loadStatue(
             gltfLoader,
             "glb/heavy_infantry_mandalorian_funko_pop.glb",
@@ -236,21 +237,37 @@ const scene = {
         loadRoadSign(fontLoader, "PLAYGROUND", -5.5, 2, 0, 0.06, false)
 
         // information section
-        loadRoadSign(fontLoader, "INFORMATION", 0, 7.5, Math.PI/2, 0.06, false)
-        loadTile(0.5, {x: -0.3, z: 8.2})
-        loadTile(0.5, {x: 0.2, z: 9.2})
-        loadTile(0.5, {x: -0.1, z: 10})
-        loadTile(0.5, {x: 0.5, z: 10.6})
-        loadTile(0.5, {x: 0, z: 11.3})
-        loadTile(0.5, {x: -0.4, z: 12})
-        loadTile(0.5, {x: -0.2, z: 12.8})
-        loadTile(0.5, {x: 0.1, z: 13.5})
-        loadTile(0.5, {x: -0.3, z: 14.2})
-        loadLightPole({x: -1.4, y:0, z:14.4}, Math.PI)
-        // loadPainting(gltfLoader, "images/sub19_subida.jpeg", {x: 0, y: 2, z: 0})
-        loadButton(2, 2, {x: 8, z: 6}, "Github", "https://github.com/Migas77")
-        loadImage("images/HISTORY_OF_MY_LIFE.png", 5, 5, {x:-0.8, y:0.01, z:16}, -Math.PI/2)
-        loadImage("images/HISTORY_OF_MY_LIFE_DETAILS.png", 7, 7, {x:2, y:0.02, z:17.4}, -Math.PI/2)
+        // loadRoadSign(fontLoader, "INFORMATION", 0, 7.5, Math.PI/2, 0.06, false)
+        // loadTile(0.5, {x: -0.3, z: 8.2})
+        // loadTile(0.5, {x: 0.2, z: 9.2})
+        // loadTile(0.5, {x: -0.1, z: 10})
+        // loadTile(0.5, {x: 0.5, z: 10.6})
+        // loadTile(0.5, {x: 0, z: 11.3})
+        // loadTile(0.5, {x: -0.4, z: 12})
+        // loadTile(0.5, {x: -0.2, z: 12.8})
+        // loadTile(0.5, {x: 0.1, z: 13.5})
+        // loadTile(0.5, {x: -0.3, z: 14.2})
+        // loadLightPole({x: -1.4, y:0, z:14.4}, Math.PI)
+        // loadButton(1.4, 1.4, {x: 1.4, z: 14.4}, "Github", "https://github.com/Migas77")
+        // loadButton(1.4, 1.4, {x: 3.2, z: 14.4}, "Linkedin", "https://www.linkedin.com/in/miguel-figueiredo-1495bb284/")
+        // loadButton(1.4, 1.4, {x: 5, z: 14.4}, "Mail", "mailto:miguel.belchior@ua.pt")
+        // loadImage("images/HISTORY_OF_MY_LIFE.png", 5, 5, {x:-0.8, y:0.01, z:16}, -Math.PI/2)
+        // loadImage("images/HISTORY_OF_MY_LIFE_DETAILS.png", 7, 7, {x:2, y:0.02, z:17.4}, -Math.PI/2)
+
+        // projects section
+        loadTile(0.5, {x: 8.5, z: 2.4}, 0)
+        loadTile(0.5, {x: 9.2, z: 2}, 0)
+        loadTile(0.5, {x: 10, z: 2.3}, 0)
+        loadTile(0.5, {x: 10.9, z: 2}, 0)
+        loadTile(0.5, {x: 11.7, z: 2.3}, 0)
+        loadTile(0.5, {x: 12.4, z: 1.7}, 0)
+        loadTile(0.5, {x: 13.2, z: 2}, 0)
+        loadPainting(gltfLoader, "images/sub19_subida.jpeg", {x: 17.2, y: 1.3, z: -1}, 0.49)
+        loadPainting(gltfLoader, "images/AFC.jpeg", {x: 21.2, y: 1.3, z: -1}, 0.49)
+        loadPainting(gltfLoader, "images/sub19_homenagem_subida.jpeg", {x: 25.2, y: 1.3, z: -1}, 0.49)
+        loadTile(0.5, {x: 24.4, z: 1.3}, -Math.PI/20)
+        loadTile(0.5, {x: 25.2, z: 2}, -Math.PI/20)
+        loadTile(0.5, {x: 26.1, z: 1.6}, -Math.PI/20)
         // loadImage("images/GITHUB.png", 10, 10, {x:4, y:0.03, z:17.1}, -Math.PI/2)
 
     }
@@ -344,7 +361,7 @@ function handleCarMovement() {
         if (goingForward)
             oppositeForce = oppositeForce.negate()
         oppositeForce.scale(sceneElements.vehicle.chassisBody.velocity.length() * 0.1)
-        sceneElements.vehicle.chassisBody.applyImpulse(oppositeForce, sceneElements.vehicle.chassisBody.position)
+        // sceneElements.vehicle.chassisBody.applyImpulse(oppositeForce, sceneElements.vehicle.chassisBody.position)
     }
 
     if (isCarBeingMoved === true){

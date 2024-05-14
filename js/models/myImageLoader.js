@@ -13,9 +13,13 @@ export function loadImage(filepath, side_x, side_y, position, rotation_x) {
 }
 
 export function getImage(filepath, side_x, side_y, position, rotation_x) {
+    const texture = textureLoader.load(filepath)
+    // texture.generateMipmaps = false;
+    // texture.minFilter = THREE.LinearFilter;
+    // texture.needsUpdate = true;
     const planeGeometry = new THREE.PlaneGeometry(side_x, side_y);
     const material = new THREE.MeshBasicMaterial({
-        map: textureLoader.load(filepath),
+        map: texture,
         transparent: true
     });
     const plane = new THREE.Mesh(planeGeometry, material);
