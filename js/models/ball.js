@@ -5,7 +5,7 @@ import {getPhysicsWorldId, sceneElements} from "../sceneElements.js";
 // ************************** //
 // 1. loadBall() - Load, add to the scene and world the ground model at y = 0
 // ************************** //
-export function loadBall(gltfLoader) {
+export function loadBall(gltfLoader, position) {
     let sphereMesh;
     const ballMaterial = new CANNON.Material('ball')
     const sphereBody = new CANNON.Body({
@@ -14,7 +14,7 @@ export function loadBall(gltfLoader) {
         material: ballMaterial
     })
     sphereBody.linearDamping = sphereBody.angularDamping = 0.5
-    sphereBody.position.set(2,0,0)
+    sphereBody.position.set(position.x,position.y,position.z)
     sceneElements.world.addBody(sphereBody)
     const scaleFactor = 0.7
     gltfLoader.load( "rocket_league_ball.glb", function ( gltf ) {

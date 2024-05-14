@@ -58,17 +58,29 @@ const helper = {
         // ************************** //
         // Add ambient light
         // ************************** //
-        const ambientLight = new THREE.AmbientLight('rgb(255, 255, 255)', 0.2);
+        const ambientLight = new THREE.AmbientLight('rgb(255, 255, 255)', 0.8);
         sceneElements.sceneGraph.add(ambientLight);
 
-        const dirLight = new THREE.DirectionalLight( 'rgb(255, 255, 255)', 2);
-        dirLight.position.set(0, 10, 0)
-        dirLight.castShadow = true
-        dirLight.decay = 1
-        dirLight.shadow.mapSize.width = 2048
-        dirLight.shadow.mapSize.height = 2048
+        const dirLight = new THREE.DirectionalLight( 'rgb(255, 255, 255)', 1);
+        dirLight.position.set(-20, 10, 0)
         dirLight.name = "directional_light"
+        dirLight.shadowMapWidth = 2048
+        dirLight.shadowMapHeight = 2048
+        dirLight.shadow.mapSize.width = 2000
+        dirLight.shadow.mapSize.height = 2000
+        dirLight.shadow.camera.left = -105
+        dirLight.shadow.camera.right = 105
+        dirLight.shadow.camera.top = 205
+        dirLight.shadow.camera.bottom = -205
+        dirLight.shadow.camera.near = 0.5
+        dirLight.shadow.camera.far = 300
+
+        dirLight.castShadow = true
+
+
         // sceneElements.sceneGraph.add(dirLight)
+        const helper = new THREE.CameraHelper(dirLight.shadow.camera)
+        // sceneElements.sceneGraph.add(helper)
 
 
         // ***************************** //
@@ -77,7 +89,7 @@ const helper = {
         const spotLight1 = new THREE.SpotLight('rgb(255, 255, 255)', 40);
         spotLight1.decay = 1;
         spotLight1.position.set(0, 8, 20);
-        sceneElements.sceneGraph.add(spotLight1);
+        // sceneElements.sceneGraph.add(spotLight1);
 
         // Setup shadow properties for the spotlight
         spotLight1.castShadow = true;
@@ -170,7 +182,7 @@ const scene = {
         loadGround(); // HAS TO BE THE FIRST ONE
         loadFence();
         loadCar(gltfLoader, {x: 0, y: 2, z: -13.5});
-        loadBall(gltfLoader);
+        loadBall(gltfLoader, {x: 4.4, y:0, z:14.4});
         // entrance tiles
         loadTile(0.5, {x: -0.4, z: -12})
         loadTile(0.5, {x: 0.2, z: -11})
@@ -234,12 +246,12 @@ const scene = {
         loadTile(0.5, {x: -0.2, z: 12.8})
         loadTile(0.5, {x: 0.1, z: 13.5})
         loadTile(0.5, {x: -0.3, z: 14.2})
-        // loadLightPole()
+        loadLightPole({x: -1.4, y:0, z:14.4}, Math.PI)
         // loadPainting(gltfLoader, "images/sub19_subida.jpeg", {x: 0, y: 2, z: 0})
         loadButton(2, 2, {x: 8, z: 6}, "Github", "https://github.com/Migas77")
         loadImage("images/HISTORY_OF_MY_LIFE.png", 5, 5, {x:-0.8, y:0.01, z:16}, -Math.PI/2)
-        loadImage("images/HISTORY_OF_MY_LIFE_DETAILS.png", 5, 5, {x:1.6, y:0.02, z:17.1}, -Math.PI/2)
-        loadImage("images/GITHUB.png", 5, 5, {x:4, y:0.03, z:17.1}, -Math.PI/2)
+        loadImage("images/HISTORY_OF_MY_LIFE_DETAILS.png", 7, 7, {x:2, y:0.02, z:17.4}, -Math.PI/2)
+        // loadImage("images/GITHUB.png", 10, 10, {x:4, y:0.03, z:17.1}, -Math.PI/2)
 
     }
 };

@@ -62,6 +62,8 @@ export function loadNameText(fontLoader, position_x_z) {
             textMesh.name = "name"
             textGeometry.center()
             textMesh.translateY(0.49)
+            textMesh.receiveShadow = true
+            textMesh.castShadow = true
             textBody.position.set(position_x_z.x + dict.x,1,position_x_z.z)
             sceneElements.world.addBody(textBody)
             sceneElements.sceneGraph.add(textMesh)
