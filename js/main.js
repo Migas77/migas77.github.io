@@ -154,7 +154,7 @@ const helper = {
             gravity: new CANNON.Vec3(0, -9.82, 0), // m/s²
         })
 
-        debugcannon = new cannonEsDebugger(sceneElements.sceneGraph, sceneElements.world);
+        // debugcannon = new cannonEsDebugger(sceneElements.sceneGraph, sceneElements.world);
     },
 
     render: function (sceneElements) {
@@ -182,7 +182,7 @@ const scene = {
         loadGround(); // HAS TO BE THE FIRST ONE
         // loadFence();
         loadCar(gltfLoader, {x: 6, y: 2, z: 0});
-        // loadBall(gltfLoader, {x: 4.4, y:0, z:14.4});
+        loadBall(gltfLoader, {x: 4.4, y:0, z:14.4});
         // entrance tiles
         loadTile(0.5, {x: -0.4, z: -12}, 0, 0)
         loadTile(0.5, {x: 0.2, z: -11}, 0)
@@ -237,22 +237,22 @@ const scene = {
         loadRoadSign(fontLoader, "PLAYGROUND", -5.5, 2, 0, 0.06, false)
 
         // information section
-        // loadRoadSign(fontLoader, "INFORMATION", 0, 7.5, Math.PI/2, 0.06, false)
-        // loadTile(0.5, {x: -0.3, z: 8.2})
-        // loadTile(0.5, {x: 0.2, z: 9.2})
-        // loadTile(0.5, {x: -0.1, z: 10})
-        // loadTile(0.5, {x: 0.5, z: 10.6})
-        // loadTile(0.5, {x: 0, z: 11.3})
-        // loadTile(0.5, {x: -0.4, z: 12})
-        // loadTile(0.5, {x: -0.2, z: 12.8})
-        // loadTile(0.5, {x: 0.1, z: 13.5})
-        // loadTile(0.5, {x: -0.3, z: 14.2})
-        // loadLightPole({x: -1.4, y:0, z:14.4}, Math.PI)
-        // loadButton(1.4, 1.4, {x: 1.4, z: 14.4}, "Github", "https://github.com/Migas77")
-        // loadButton(1.4, 1.4, {x: 3.2, z: 14.4}, "Linkedin", "https://www.linkedin.com/in/miguel-figueiredo-1495bb284/")
-        // loadButton(1.4, 1.4, {x: 5, z: 14.4}, "Mail", "mailto:miguel.belchior@ua.pt")
-        // loadImage("images/HISTORY_OF_MY_LIFE.png", 5, 5, {x:-0.8, y:0.01, z:16}, -Math.PI/2)
-        // loadImage("images/HISTORY_OF_MY_LIFE_DETAILS.png", 7, 7, {x:2, y:0.02, z:17.4}, -Math.PI/2)
+        loadRoadSign(fontLoader, "INFORMATION", 0, 7.5, Math.PI/2, 0.06, false)
+        loadTile(0.5, {x: -0.3, z: 8.2})
+        loadTile(0.5, {x: 0.2, z: 9.2})
+        loadTile(0.5, {x: -0.1, z: 10})
+        loadTile(0.5, {x: 0.5, z: 10.6})
+        loadTile(0.5, {x: 0, z: 11.3})
+        loadTile(0.5, {x: -0.4, z: 12})
+        loadTile(0.5, {x: -0.2, z: 12.8})
+        loadTile(0.5, {x: 0.1, z: 13.5})
+        loadTile(0.5, {x: -0.3, z: 14.2})
+        loadLightPole({x: -1.4, y:0, z:14.4}, Math.PI)
+        loadButton(1.4, 1.4, {x: 1.4, z: 14.4}, "Github", "https://github.com/Migas77")
+        loadButton(1.4, 1.4, {x: 3.2, z: 14.4}, "Linkedin", "https://www.linkedin.com/in/miguel-figueiredo-1495bb284/")
+        loadButton(1.4, 1.4, {x: 5, z: 14.4}, "Mail", "mailto:miguel.belchior@ua.pt")
+        loadImage("images/HISTORY_OF_MY_LIFE.png", 5, 5, {x:-0.8, y:0.01, z:16}, -Math.PI/2, -1)
+        loadImage("images/HISTORY_OF_MY_LIFE_DETAILS.png", 7, 7, {x:2, y:0.02, z:17.4}, -Math.PI/2)
 
         // projects section
         loadTile(0.5, {x: 8.5, z: 2.4}, 0)

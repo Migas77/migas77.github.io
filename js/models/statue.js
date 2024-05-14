@@ -4,7 +4,7 @@ import {getPhysicsWorldId, sceneElements} from "../sceneElements.js";
 
 export function loadStatue(gltfLoader, filename, position_x_z, offset, rotation_y) {
     const baseGroup = new THREE.Group()
-    const material = new THREE.MeshPhongMaterial( {color: 0xffff00} );
+    const material = new THREE.MeshPhongMaterial( {color: 0xFFFFFF} );
     const top_measures = {width: 2.8, height: 0.1}
     const bottom_measures = {width: 3, height: 0.6}
 

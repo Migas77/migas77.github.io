@@ -7,12 +7,12 @@ filename: string
 position: {x: 0, y: 0, z:0}
 rotation_y: 0
 */
-export function loadImage(filepath, side_x, side_y, position, rotation_x) {
-    const image = getImage(filepath, side_x, side_y, position, rotation_x)
+export function loadImage(filepath, side_x, side_y, position, rotation_x, render_order = null) {
+    const image = getImage(filepath, side_x, side_y, position, rotation_x, render_order)
     sceneElements.sceneGraph.add(image)
 }
 
-export function getImage(filepath, side_x, side_y, position, rotation_x) {
+export function getImage(filepath, side_x, side_y, position, rotation_x, render_order) {
     const texture = textureLoader.load(filepath)
     // texture.generateMipmaps = false;
     // texture.minFilter = THREE.LinearFilter;
@@ -23,6 +23,8 @@ export function getImage(filepath, side_x, side_y, position, rotation_x) {
         transparent: true
     });
     const plane = new THREE.Mesh(planeGeometry, material);
+    if (render_order !== null)
+        plane.renderOrder = render_order
     plane.position.set(position.x, position.y, position.z)
     plane.rotateX(rotation_x)
     return plane
