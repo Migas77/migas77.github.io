@@ -2,7 +2,7 @@ import * as THREE from "https://threejs.org/build/three.module.js";
 import * as CANNON from 'https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/+esm'
 import {getPhysicsWorldId, sceneElements} from "../sceneElements.js";
 
-export function loadStatue(gltfLoader, filename, position_x_z, offset, rotation_y) {
+export function loadStatue(gltfLoader, filename, scaleFactor, need_bounding_box, position_x_z, offset, rotation_y) {
     const baseGroup = new THREE.Group()
     const material = new THREE.MeshPhongMaterial( {color: 0xFFFFFF} );
     const top_measures = {width: 2.8, height: 0.1}
@@ -23,11 +23,8 @@ export function loadStatue(gltfLoader, filename, position_x_z, offset, rotation_
     baseGroup.add(bottom)
 
     const filepath = filename
-    const scaleFactor = 20
     gltfLoader.load( filepath, function ( gltf ) {
         gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
-        // gltf.scene.translateX(backX)
-        // gltf.scene.translateZ(-backZ)
         gltf.scene.name = filename
         gltf.scene.traverse(function (node) {
             if (node.isMesh){
@@ -35,12 +32,15 @@ export function loadStatue(gltfLoader, filename, position_x_z, offset, rotation_
                 node.receiveShadow = true
             }
         })
-        let bbox = new THREE.Box3().setFromObject(gltf.scene);
-        let size = bbox.getSize(new THREE.Vector3())
+        const bbox = new THREE.Box3().setFromObject(gltf.scene);
+        const size = bbox.getSize(new THREE.Vector3())
         // let helper = new THREE.Box3Helper(bbox, new THREE.Color(0, 255, 0));
         // sceneElements.sceneGraph.add(helper)
-        gltf.scene.translateX(offset.x)
-        gltf.scene.translateY(bottom_measures.height + top_measures.height + 0.5 * size.y + offset.y)
+        gltf.scene.position.set(
+            offset.x,
+            need_bounding_box ? bottom_measures.height + top_measures.height + offset.y + 0.5 * size.y: bottom_measures.height + top_measures.height + offset.y,
+            offset.z
+        )
         gltf.scene.rotation.y = rotation_y
         baseGroup.add(gltf.scene)
     }, undefined, function ( error ) {
@@ -68,7 +68,7 @@ export function loadStatue(gltfLoader, filename, position_x_z, offset, rotation_
 }
 
 export let mixer;
-export function loadAnimatedStatue(gltfLoader, filename, position_x_z, offset, rotation_y) {
+export function loadAnimatedStatue(gltfLoader, filename, scaleFactor, need_bounding_box, position_x_z, offset, rotation_y) {
     const baseGroup = new THREE.Group()
     const material = new THREE.MeshPhongMaterial( {color: 0xFFFFFF} );
     const top_measures = {width: 2.8, height: 0.1}
@@ -89,7 +89,6 @@ export function loadAnimatedStatue(gltfLoader, filename, position_x_z, offset, r
     baseGroup.add(bottom)
 
     const filepath = filename
-    const scaleFactor = 20
     gltfLoader.load( filepath, function ( gltf ) {
         gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
         gltf.scene.name = filename
@@ -98,21 +97,21 @@ export function loadAnimatedStatue(gltfLoader, filename, position_x_z, offset, r
                 node.castShadow = true
                 node.receiveShadow = true
             }
-
         })
         mixer = new THREE.AnimationMixer(gltf.scene)
         const clip = THREE.AnimationClip.findByName(gltf.animations, "Take 01")
         const action = mixer.clipAction(clip)
-        console.log("gltf.animations", gltf.animations)
-        console.log("clip", clip)
         action.play()
 
-
-
-        let bbox = new THREE.Box3().setFromObject(gltf.scene);
-        let size = bbox.getSize(new THREE.Vector3())
-        gltf.scene.translateX(offset.x)
-        gltf.scene.translateY(bottom_measures.height + top_measures.height + 0.5 * size.y + offset.y)
+        const bbox = new THREE.Box3().setFromObject(gltf.scene);
+        const size = bbox.getSize(new THREE.Vector3())
+        // let helper = new THREE.Box3Helper(bbox, new THREE.Color(0, 255, 0));
+        // sceneElements.sceneGraph.add(helper)
+        gltf.scene.position.set(
+            offset.x,
+            need_bounding_box ? bottom_measures.height + top_measures.height + offset.y + 0.5 * size.y: bottom_measures.height + top_measures.height + offset.y,
+            offset.z
+        )
         gltf.scene.rotation.y = rotation_y
         baseGroup.add(gltf.scene)
     }, undefined, function ( error ) {

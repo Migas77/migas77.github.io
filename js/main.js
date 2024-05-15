@@ -155,7 +155,7 @@ const helper = {
             gravity: new CANNON.Vec3(0, -9.82, 0), // m/s²
         })
 
-        // debugcannon = new cannonEsDebugger(sceneElements.sceneGraph, sceneElements.world);
+        debugcannon = new cannonEsDebugger(sceneElements.sceneGraph, sceneElements.world);
     },
 
     render: function (sceneElements) {
@@ -182,7 +182,7 @@ const scene = {
         // ************************** //
         loadGround(); // HAS TO BE THE FIRST ONE
         // loadFence();
-        loadCar(gltfLoader, {x: 6, y: 2, z: 0});
+        loadCar(gltfLoader, {x: 8, y: 2, z: 0});
         loadBall(gltfLoader, {x: 4.4, y:0, z:14.4});
         // entrance tiles
         loadTile(0.5, {x: -0.4, z: -12}, 0, 0)
@@ -202,6 +202,8 @@ const scene = {
         loadStatue(
             gltfLoader,
             "glb/heavy_infantry_mandalorian_funko_pop.glb",
+            20,
+            true,
             {x: 0, z: 2},
             {x: 0.12, y:-0.22, z:0},
             -0.6
@@ -209,6 +211,8 @@ const scene = {
         loadStatue(
             gltfLoader,
             "glb/heavy_infantry_mandalorian_funko_pop.glb",
+            20,
+            true,
             {x: 5.5, z: 7.5},
             {x: 0.12, y:-0.22, z:0},
             -0.6
@@ -216,6 +220,8 @@ const scene = {
         loadStatue(
             gltfLoader,
             "glb/heavy_infantry_mandalorian_funko_pop.glb",
+            20,
+            true,
             {x: -5.5, z: -3.5},
             {x: 0.12, y:-0.22, z:0},
             -0.6
@@ -223,13 +229,17 @@ const scene = {
         loadAnimatedStatue(
             gltfLoader,
             "glb/bb8_animated_star_wars-v1.glb",
+            0.8,
+            false,
             {x: 5.5, z: -3.5},
-            {x: 0.12, y:-0.22, z:0},
-            -0.6
+            {x: 0.8, y:0, z:0.2},
+            0
         )
         loadStatue(
             gltfLoader,
             "glb/heavy_infantry_mandalorian_funko_pop.glb",
+            20,
+            true,
             {x: -5.5, z: 7.5},
             {x: 0.12, y:-0.22, z:0},
             -0.6
