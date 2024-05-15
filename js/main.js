@@ -15,7 +15,7 @@ import {intersectCarAndButtons, loadButton} from "./models/button.js";
 import { loadLightPole } from "./models/lightpole.js";
 import { loadRoadSign } from "./models/road_sign.js";
 import { loadPainting } from "./models/paiting.js";
-import {loadAnimatedStatue, loadStatue, mixer} from "./models/statue.js";
+import {loadAnimatedStatue, loadStatueAndPassVisual, mixer} from "./models/statue.js";
 import {loadImage} from "./models/myImageLoader.js";
 import {loadTile} from "./models/tile.js";
 
@@ -28,7 +28,8 @@ const fontLoader = new FontLoader();
 // Camera Positions
 const [cameraOffsetX, cameraOffsetY, cameraOffsetZ] = [8, 6.7, 8]
 const clock = new THREE.Clock()
-
+let death_star_visual = {model: null}
+let death_star_step = 0
 
 
 // HELPER FUNCTIONS
@@ -199,7 +200,7 @@ const scene = {
         loadTile(0.5, {x: -0.3, z: -1.8}, 0)
         loadTile(0.5, {x: 0, z: -1}, 0)
 
-        loadStatue(
+        loadStatueAndPassVisual(
             gltfLoader,
             "glb/heavy_infantry_mandalorian_funko_pop.glb",
             20,
@@ -208,16 +209,18 @@ const scene = {
             {x: 0.12, y:-0.22, z:0},
             -0.6
         )
-        loadStatue(
+        loadStatueAndPassVisual(
             gltfLoader,
-            "glb/heavy_infantry_mandalorian_funko_pop.glb",
-            20,
+            "glb/death_star.glb",
+            0.1,
             true,
             {x: 5.5, z: 7.5},
-            {x: 0.12, y:-0.22, z:0},
-            -0.6
-        )
-        loadStatue(
+            {x: 0, y:0.3, z:0},
+            0,
+            death_star_visual
+        );
+        console.log(death_star_visual)
+        loadStatueAndPassVisual(
             gltfLoader,
             "glb/heavy_infantry_mandalorian_funko_pop.glb",
             20,
@@ -235,13 +238,13 @@ const scene = {
             {x: 0.8, y:0, z:0.2},
             0
         )
-        loadStatue(
+        loadStatueAndPassVisual(
             gltfLoader,
-            "glb/heavy_infantry_mandalorian_funko_pop.glb",
-            20,
+            "glb/death_star.glb",
+            0.1,
             true,
             {x: -5.5, z: 7.5},
-            {x: 0.12, y:-0.22, z:0},
+            {x: 0, y:0.3, z:0},
             -0.6
         )
         loadRoadSign(fontLoader, "PROJECTS", 5.5, 2, 0, 0.06, true)
@@ -306,6 +309,12 @@ const accelaratingForce = 10
 const brakeForce = 1000000
 // ************************** //
 function computeFrame(time) {
+
+    // animate death star
+    if (death_star_visual.model !== null){
+        death_star_step += 0.01
+        death_star_visual.model.rotation.y = death_star_step
+    }
 
     handleCarMovement()
     intersectCarAndButtons()

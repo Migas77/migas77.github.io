@@ -2,7 +2,7 @@ import * as THREE from "https://threejs.org/build/three.module.js";
 import * as CANNON from 'https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/+esm'
 import {getPhysicsWorldId, sceneElements} from "../sceneElements.js";
 
-export function loadStatue(gltfLoader, filename, scaleFactor, need_bounding_box, position_x_z, offset, rotation_y) {
+export function loadStatueAndPassVisual(gltfLoader, filename, scaleFactor, need_bounding_box, position_x_z, offset, rotation_y, visual_object = null) {
     const baseGroup = new THREE.Group()
     const material = new THREE.MeshPhongMaterial( {color: 0xFFFFFF} );
     const top_measures = {width: 2.8, height: 0.1}
@@ -42,6 +42,9 @@ export function loadStatue(gltfLoader, filename, scaleFactor, need_bounding_box,
             offset.z
         )
         gltf.scene.rotation.y = rotation_y
+        if (visual_object !== null){
+            visual_object.model = gltf.scene
+        }
         baseGroup.add(gltf.scene)
     }, undefined, function ( error ) {
         console.error( `Error loading statue model ${filepath}:\n${error}`);
@@ -65,6 +68,7 @@ export function loadStatue(gltfLoader, filename, scaleFactor, need_bounding_box,
 
     // No need to link visual and physics world
     // because the statue won't move
+    return [baseGroup, statueBaseBody]
 }
 
 export let mixer;
