@@ -89,7 +89,7 @@ const helper = {
         // ***************************** //
         const spotLight1 = new THREE.SpotLight('rgb(255, 255, 255)', 40);
         spotLight1.decay = 1;
-        spotLight1.position.set(25, 8, 0);
+        spotLight1.position.set(2, 8, 0);
         sceneElements.sceneGraph.add(spotLight1);
 
         // Setup shadow properties for the spotlight
@@ -219,14 +219,15 @@ const scene = {
             "Attack Position",
             x_wing_visual
         );
-        loadStatueAndPassVisual(
+        loadAnimatedStatueAndPassVisual(
             gltfLoader,
-            "glb/heavy_infantry_mandalorian_funko_pop.glb",
-            20,
-            true,
+            "glb/stormtrooper_dancing.glb",
+            1.2,
+            false,
             {x: -5.5, z: -3.5},
-            {x: 0.12, y:-0.22, z:0},
-            -0.6
+            {x: 0, y: 0, z: 0},
+            0.8,
+            "mixamo.com"
         )
         loadAnimatedStatueAndPassVisual(
             gltfLoader,
@@ -327,6 +328,10 @@ function computeFrame(time) {
         x_wing_step += 0.01
         x_wing_visual.model.rotation.z += 0.005 * Math.cos(x_wing_step)
         x_wing.mixer.update(x_wing.clock.getDelta())
+    }
+    const stormtrooper = sceneElements.animated_models["glb/stormtrooper_dancing.glb"]
+    if (stormtrooper !== undefined){
+        stormtrooper.mixer.update(stormtrooper.clock.getDelta())
     }
 
 
