@@ -11,7 +11,7 @@ import {open_link} from "../utils.js";
 
 const offset = 0.1
 const buttons = []
-export function loadButton(width, height, position_x_z, button_color, name, url_to_open) {
+export function loadButton(width, height, position_x_z, button_color, name, callback_function) {
 
     const x = 0;
     const y = 0;
@@ -77,7 +77,6 @@ export function loadButton(width, height, position_x_z, button_color, name, url_
     labelText.textContent = "Redirect"
     labelDiv.insertBefore(labelText, labelDiv.firstChild)
     const labelLink = document.createElement("a")
-    labelLink.href = url_to_open
     labelText.appendChild(labelLink)
     const btnLabel = new CSS2DObject(labelDiv)
     btnLabel.position.set(0, 0, 0)
@@ -124,7 +123,7 @@ export function loadButton(width, height, position_x_z, button_color, name, url_
         if (intersects.length > 0){
             const redirectDiv = document.querySelector(".Redirect" + name + ".hover")
             if (redirectDiv !== null){
-                open_link(redirectDiv.children[0].children[0].href)
+                callback_function()
             }
         }
     })
@@ -139,7 +138,7 @@ export function loadButton(width, height, position_x_z, button_color, name, url_
         if (event.key === 'Enter'){
             const redirectDiv = document.querySelector(".Redirect" + name + ".parked")
             if (redirectDiv !== null){
-                open_link(redirectDiv.children[0].children[0].href)
+                callback_function()
             }
         }
     })

@@ -38,5 +38,7 @@ export function loadBrick(width, height, depth, position, rotation_y){
         }
     })
 
+    return brickBody
+
 }
 

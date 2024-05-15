@@ -19,6 +19,8 @@ import {loadAnimatedStatueAndPassVisual, loadStatueAndPassVisual} from "./models
 import {loadImage} from "./models/myImageLoader.js";
 import {loadTile} from "./models/tile.js";
 import {loadBrick} from "./models/brick.js";
+import {open_link} from "./utils.js";
+import {resetBricksInCollection, saveInBrickCollection} from "./models/brick_utils.js";
 
 var debugcannon;
 
@@ -186,7 +188,7 @@ const scene = {
         // ************************** //
         loadGround(); // HAS TO BE THE FIRST ONE
         // loadFence();
-        loadCar(gltfLoader, {x: 14.5, y: 2, z: 0});
+        loadCar(gltfLoader, {x: -14.5, y: 2, z: 5});
         loadBall(gltfLoader, {x: -14, y:0, z: 2});
         // entrance tiles
         loadTile(0.5, {x: -0.4, z: -12}, 0, 0)
@@ -271,11 +273,11 @@ const scene = {
         loadTile(0.5, {x: 0.1, z: 13.5}, 0)
         loadTile(0.5, {x: -0.3, z: 14.2}, 0)
         loadLightPole({x: -1.4, y:0, z:14.4}, Math.PI)
-        loadButton(1.4, 1.4, {x: 1.4, z: 14.4}, 0x000000, "Github", "https://github.com/Migas77")
+        loadButton(1.4, 1.4, {x: 1.4, z: 14.4}, 0x000000, "Github", () => open_link("https://github.com/Migas77"))
         loadImage("images/github_logo.png", 2.31, 1.54, {x:1.4, y:0.01, z:14.4}, -Math.PI/2, -4)
-        loadButton(1.4, 1.4, {x: 3.2, z: 14.4}, 0xffffff, "Linkedin", "https://www.linkedin.com/in/miguel-figueiredo-1495bb284/")
+        loadButton(1.4, 1.4, {x: 3.2, z: 14.4}, 0xffffff, "Linkedin", () => open_link("https://www.linkedin.com/in/miguel-figueiredo-1495bb284/"))
         loadImage("images/linkedin_logo.png", 1.65, 1.65, {x:3.2, y:0.01, z:14.4}, -Math.PI/2, -3)
-        loadButton(1.4, 1.4, {x: 5, z: 14.4}, 0x000000, "Mail", "mailto:miguel.belchior@ua.pt")
+        loadButton(1.4, 1.4, {x: 5, z: 14.4}, 0x000000, "Mail", () => open_link("mailto:miguel.belchior@ua.pt"))
         loadImage("images/email_logo.png", 1.05, 1.05, {x:5, y:0.01, z:14.4}, -Math.PI/2, -2)
         loadImage("images/HISTORY_OF_MY_LIFE.png", 5, 5, {x:-0.8, y:0.01, z:16}, -Math.PI/2, -1)
         loadImage("images/HISTORY_OF_MY_LIFE_DETAILS.png", 7, 7, {x:2, y:0.02, z:17.4}, -Math.PI/2)
@@ -300,92 +302,103 @@ const scene = {
         loadTile(0.5, {x: -11, z: 2.1}, 0)
         loadTile(0.5, {x: -12.2, z: 1.4}, 0)
         loadTile(0.5, {x: -13, z: 2}, 0)
+        const bricks = []
 
         // First Wall
         // First Row
-        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0, z: 0}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0, z: 1}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0, z: 2}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0, z: 3}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0, z: 4}, 0)
+
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0, z: 0}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0, z: 1}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0, z: 2}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0, z: 3}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0, z: 4}, 0))
         // Second Row
-        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0.4, z: 0}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0.4, z: 1}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0.4, z: 2}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0.4, z: 3}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0.4, z: 4}, 0)
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0.4, z: 0}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0.4, z: 1}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0.4, z: 2}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0.4, z: 3}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0.4, z: 4}, 0))
         // Third row
-        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0.8, z: 0}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0.8, z: 1}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0.8, z: 2}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0.8, z: 3}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0.8, z: 4}, 0)
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0.8, z: 0}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0.8, z: 1}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0.8, z: 2}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0.8, z: 3}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0.8, z: 4}, 0))
         // Fourth Row
-        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 1.2, z: 0}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 1.2, z: 1}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 1.2, z: 2}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 1.2, z: 3}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 1.2, z: 4}, 0)
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -18, y: 1.2, z: 0}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -18, y: 1.2, z: 1}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -18, y: 1.2, z: 2}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -18, y: 1.2, z: 3}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -18, y: 1.2, z: 4}, 0))
         // Fifth Row
-        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 1.6, z: 0}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 1.6, z: 1}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 1.6, z: 2}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 1.6, z: 3}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 1.6, z: 4}, 0)
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -18, y: 1.6, z: 0}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -18, y: 1.6, z: 1}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -18, y: 1.6, z: 2}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -18, y: 1.6, z: 3}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -18, y: 1.6, z: 4}, 0))
 
         // Second Wall
         // First Row
-        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0, z: 0}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0, z: 1}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0, z: 2}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0, z: 3}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0, z: 4}, 0)
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0, z: 0}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0, z: 1}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0, z: 2}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0, z: 3}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0, z: 4}, 0))
         // Second Row
-        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0.4, z: -0.5}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0.4, z: 0.5}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0.4, z: 1.5}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0.4, z: 2.5}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0.4, z: 3.5}, 0)
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0.4, z: -0.5}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0.4, z: 0.5}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0.4, z: 1.5}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0.4, z: 2.5}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0.4, z: 3.5}, 0))
         // Third row
-        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0.8, z: 0}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0.8, z: 1}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0.8, z: 2}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0.8, z: 3}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0.8, z: 4}, 0)
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0.8, z: 0}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0.8, z: 1}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0.8, z: 2}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0.8, z: 3}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0.8, z: 4}, 0))
         // Fourth Row
-        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 1.2, z: -0.5}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 1.2, z: 0.5}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 1.2, z: 1.5}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 1.2, z: 2.5}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 1.2, z: 3.5}, 0)
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -22, y: 1.2, z: -0.5}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -22, y: 1.2, z: 0.5}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -22, y: 1.2, z: 1.5}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -22, y: 1.2, z: 2.5}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -22, y: 1.2, z: 3.5}, 0))
         // Fifth Row
-        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 1.6, z: 0}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 1.6, z: 1}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 1.6, z: 2}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 1.6, z: 3}, 0)
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -22, y: 1.6, z: 0}, 0),)
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -22, y: 1.6, z: 1}, 0),)
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -22, y: 1.6, z: 2}, 0),)
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -22, y: 1.6, z: 3}, 0),)
 
         // Third Wall
         // First Row
-        loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0, z: 0}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0, z: 1}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0, z: 2}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0, z: 3}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0, z: 4}, 0)
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0, z: 0}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0, z: 1}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0, z: 2}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0, z: 3}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0, z: 4}, 0))
         // Second Row
-        loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0.4, z: 0.5}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0.4, z: 1.5}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0.4, z: 2.5}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0.4, z: 3.5}, 0)
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0.4, z: 0.5}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0.4, z: 1.5}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0.4, z: 2.5}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0.4, z: 3.5}, 0))
         // Third Row
-        loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0.8, z: 1}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0.8, z: 2}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0.8, z: 3}, 0)
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0.8, z: 1}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0.8, z: 2}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0.8, z: 3}, 0))
         // Fourth Row
-        loadBrick(0.6, 0.4, 0.9, {x: -26, y: 1.2, z: 1.5}, 0)
-        loadBrick(0.6, 0.4, 0.9, {x: -26, y: 1.2, z: 2.5}, 0)
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -26, y: 1.2, z: 1.5}, 0))
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -26, y: 1.2, z: 2.5}, 0))
         // Fifth Row
-        loadBrick(0.6, 0.4, 0.9, {x: -26, y: 1.6, z: 2}, 0)
+        saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -26, y: 1.6, z: 2}, 0))
 
+        loadButton(1.4, 1.4, {x: -13, z: 2}, 0xffffff, "ResetBricks",() => resetBricksInCollection("brick_piles"))
+        /*
+        for (const brick_entry of bricks){
+                    brick_entry.brick.quaternion.setFromAxisAngle(x_axis, brick_entry.original_rotation.x)
+                    brick_entry.brick.quaternion.setFromAxisAngle(y_axis, brick_entry.original_rotation.x)
+                    brick_entry.brick.quaternion.setFromAxisAngle(z_axis, brick_entry.original_rotation.x)
+                    brick_entry.brick.position.copy(brick_entry.original_position)
+                }
+         */
 
 
 
