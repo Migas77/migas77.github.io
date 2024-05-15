@@ -15,7 +15,7 @@ import {intersectCarAndButtons, loadButton} from "./models/button.js";
 import { loadLightPole } from "./models/lightpole.js";
 import { loadRoadSign } from "./models/road_sign.js";
 import { loadPainting } from "./models/paiting.js";
-import {loadAnimatedStatue, loadStatueAndPassVisual, mixer} from "./models/statue.js";
+import {loadAnimatedStatue, loadStatueAndPassVisual} from "./models/statue.js";
 import {loadImage} from "./models/myImageLoader.js";
 import {loadTile} from "./models/tile.js";
 
@@ -27,10 +27,9 @@ const gltfLoader = new GLTFLoader();
 const fontLoader = new FontLoader();
 // Camera Positions
 const [cameraOffsetX, cameraOffsetY, cameraOffsetZ] = [8, 6.7, 8]
-const clock = new THREE.Clock()
 let death_star_visual = {model: null}
 let death_star_step = 0
-
+let animations = []
 
 // HELPER FUNCTIONS
 
@@ -156,7 +155,7 @@ const helper = {
             gravity: new CANNON.Vec3(0, -9.82, 0), // m/s²
         })
 
-        debugcannon = new cannonEsDebugger(sceneElements.sceneGraph, sceneElements.world);
+        // debugcannon = new cannonEsDebugger(sceneElements.sceneGraph, sceneElements.world);
     },
 
     render: function (sceneElements) {
@@ -209,17 +208,17 @@ const scene = {
             {x: 0.12, y:-0.22, z:0},
             -0.6
         )
-        loadStatueAndPassVisual(
+        loadAnimatedStatue(
             gltfLoader,
-            "glb/death_star.glb",
-            0.1,
+            "glb/x_wing.glb",
+            0.23,
             true,
             {x: 5.5, z: 7.5},
-            {x: 0, y:0.3, z:0},
+            {x: 0, y:0.2, z:0},
             0,
-            death_star_visual
+            "Attack Position",
+            animations
         );
-        console.log(death_star_visual)
         loadStatueAndPassVisual(
             gltfLoader,
             "glb/heavy_infantry_mandalorian_funko_pop.glb",
@@ -236,7 +235,9 @@ const scene = {
             false,
             {x: 5.5, z: -3.5},
             {x: 0.8, y:0, z:0.2},
-            0
+            0,
+            "Take 01",
+            animations
         )
         loadStatueAndPassVisual(
             gltfLoader,
@@ -245,7 +246,8 @@ const scene = {
             true,
             {x: -5.5, z: 7.5},
             {x: 0, y:0.3, z:0},
-            -0.6
+            0,
+            death_star_visual
         )
         loadRoadSign(fontLoader, "PROJECTS", 5.5, 2, 0, 0.06, true)
         loadRoadSign(fontLoader, "PLAYGROUND", -5.5, 2, 0, 0.06, false)
@@ -315,13 +317,17 @@ function computeFrame(time) {
         death_star_step += 0.01
         death_star_visual.model.rotation.y = death_star_step
     }
+    // play models own animations
+    if (animations.length > 0){
+        console.log(animations.length)
+        for (const animation of animations){
+            animation.mixer.update(animation.clock.getDelta())
+        }
+    }
 
     handleCarMovement()
     intersectCarAndButtons()
-    if (mixer !== undefined){
-        console.log("updating")
-        mixer.update(clock.getDelta())
-    }
+
 
     if (debugcannon !== undefined){
         debugcannon.update()

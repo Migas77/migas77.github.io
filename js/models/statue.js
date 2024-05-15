@@ -71,8 +71,7 @@ export function loadStatueAndPassVisual(gltfLoader, filename, scaleFactor, need_
     return [baseGroup, statueBaseBody]
 }
 
-export let mixer;
-export function loadAnimatedStatue(gltfLoader, filename, scaleFactor, need_bounding_box, position_x_z, offset, rotation_y) {
+export function loadAnimatedStatue(gltfLoader, filename, scaleFactor, need_bounding_box, position_x_z, offset, rotation_y, animation_name, animations) {
     const baseGroup = new THREE.Group()
     const material = new THREE.MeshPhongMaterial( {color: 0xFFFFFF} );
     const top_measures = {width: 2.8, height: 0.1}
@@ -102,8 +101,12 @@ export function loadAnimatedStatue(gltfLoader, filename, scaleFactor, need_bound
                 node.receiveShadow = true
             }
         })
-        mixer = new THREE.AnimationMixer(gltf.scene)
-        const clip = THREE.AnimationClip.findByName(gltf.animations, "Take 01")
+        const mixer = new THREE.AnimationMixer(gltf.scene)
+        animations.push({
+            mixer: mixer,
+            clock: new THREE.Clock()
+        })
+        const clip = THREE.AnimationClip.findByName(gltf.animations, animation_name)
         const action = mixer.clipAction(clip)
         action.play()
 
