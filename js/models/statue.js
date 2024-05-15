@@ -71,7 +71,7 @@ export function loadStatueAndPassVisual(gltfLoader, filename, scaleFactor, need_
     return [baseGroup, statueBaseBody]
 }
 
-export function loadAnimatedStatue(gltfLoader, filename, scaleFactor, need_bounding_box, position_x_z, offset, rotation_y, animation_name, animations) {
+export function loadAnimatedStatueAndPassVisual(gltfLoader, filename, scaleFactor, need_bounding_box, position_x_z, offset, rotation_y, animation_name, visual_object = null) {
     const baseGroup = new THREE.Group()
     const material = new THREE.MeshPhongMaterial( {color: 0xFFFFFF} );
     const top_measures = {width: 2.8, height: 0.1}
@@ -120,6 +120,9 @@ export function loadAnimatedStatue(gltfLoader, filename, scaleFactor, need_bound
             offset.z
         )
         gltf.scene.rotation.y = rotation_y
+        if (visual_object !== null){
+            visual_object.model = gltf.scene
+        }
         baseGroup.add(gltf.scene)
     }, undefined, function ( error ) {
         console.error( `Error loading statue model ${filepath}:\n${error}`);

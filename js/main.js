@@ -15,7 +15,7 @@ import {intersectCarAndButtons, loadButton} from "./models/button.js";
 import { loadLightPole } from "./models/lightpole.js";
 import { loadRoadSign } from "./models/road_sign.js";
 import { loadPainting } from "./models/paiting.js";
-import {loadAnimatedStatue, loadStatueAndPassVisual} from "./models/statue.js";
+import {loadAnimatedStatueAndPassVisual, loadStatueAndPassVisual} from "./models/statue.js";
 import {loadImage} from "./models/myImageLoader.js";
 import {loadTile} from "./models/tile.js";
 
@@ -29,7 +29,8 @@ const fontLoader = new FontLoader();
 const [cameraOffsetX, cameraOffsetY, cameraOffsetZ] = [8, 6.7, 8]
 let death_star_visual = {model: null}
 let death_star_step = 0
-
+let x_wing_visual = {model: null}
+let x_wing_step = 0
 // HELPER FUNCTIONS
 
 const helper = {
@@ -207,15 +208,16 @@ const scene = {
             {x: 0.12, y:-0.22, z:0},
             -0.6
         )
-        loadAnimatedStatue(
+        loadAnimatedStatueAndPassVisual(
             gltfLoader,
             "glb/x_wing.glb",
             0.23,
             true,
             {x: 5.5, z: 7.5},
-            {x: 0, y:0.2, z:0},
+            {x: 0, y:0.6, z:0},
             0,
             "Attack Position",
+            x_wing_visual
         );
         loadStatueAndPassVisual(
             gltfLoader,
@@ -226,7 +228,7 @@ const scene = {
             {x: 0.12, y:-0.22, z:0},
             -0.6
         )
-        loadAnimatedStatue(
+        loadAnimatedStatueAndPassVisual(
             gltfLoader,
             "glb/bb8_animated_star_wars-v1.glb",
             0.8,
@@ -315,13 +317,18 @@ function computeFrame(time) {
         death_star_visual.model.rotation.y = death_star_step
     }
     // play models own animations
-    const x_wing = sceneElements.animated_models["glb/x_wing.glb"]
-    if (x_wing !== undefined)
-        x_wing.mixer.update(x_wing.clock.getDelta())
     const bb8 = sceneElements.animated_models["glb/bb8_animated_star_wars-v1.glb"]
     if (bb8 !== undefined)
         bb8.mixer.update(bb8.clock.getDelta())
-    console.log(sceneElements.animated_models)
+    const x_wing = sceneElements.animated_models["glb/x_wing.glb"]
+    if (x_wing !== undefined && x_wing_visual !== null){
+        // the wings should be extended while the x_wind is in the air
+        // and retracted when is about to land
+        x_wing_step += 0.01
+        x_wing_visual.model.rotation.z += 0.005 * Math.cos(x_wing_step)
+        x_wing.mixer.update(x_wing.clock.getDelta())
+    }
+
 
 
     handleCarMovement()
