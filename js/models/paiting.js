@@ -1,6 +1,6 @@
 import * as THREE from "https://threejs.org/build/three.module.js";
 import * as CANNON from 'https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/+esm'
-import {sceneElements} from "../sceneElements.js";
+import {getPhysicsWorldId, sceneElements} from "../sceneElements.js";
 import {getImage, loadImage} from "./myImageLoader.js";
 
 const scaleFactor = 0.06
@@ -35,5 +35,18 @@ export function loadPainting(gltfLoader, filename_photo, position, rotation_y) {
     group.position.set(position.x, position.y, position.z)
     group.rotateY(rotation_y)
     sceneElements.sceneGraph.add(group)
+
+    // physics world
+    const groundMaterial = sceneElements.world.bodies[getPhysicsWorldId("ground_0")].material
+    const paintingShape = new CANNON.Box(new CANNON.Vec3(0.5 * 3.54, 0.5 * 2.04, 0.5 * 0.12))
+    const paintingBody = new CANNON.Body({
+        type: CANNON.Body.STATIC,
+        material: groundMaterial
+    })
+    paintingBody.addShape(paintingShape, group.position, group.quaternion)
+    sceneElements.world.addBody(paintingBody)
+
+    // No need to link visual and physics world
+    // because the painting won't move
 
 }
