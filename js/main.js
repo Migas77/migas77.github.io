@@ -202,10 +202,10 @@ const scene = {
         loadStatueAndPassVisual(
             gltfLoader,
             "glb/heavy_infantry_mandalorian_funko_pop.glb",
-            20,
+            16,
             true,
             {x: 0, z: 2},
-            {x: 0.12, y:-0.22, z:0},
+            {x: 0.12, y:-0.17, z:0},
             -0.6
         )
         loadAnimatedStatueAndPassVisual(
@@ -222,7 +222,7 @@ const scene = {
         loadAnimatedStatueAndPassVisual(
             gltfLoader,
             "glb/stormtrooper_dancing.glb",
-            1.2,
+            1.3,
             false,
             {x: -5.5, z: -3.5},
             {x: 0, y: 0, z: 0},
