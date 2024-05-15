@@ -34,7 +34,7 @@ export function loadBall(gltfLoader, position) {
 
     // Link visual and physics world
     sceneElements.world.addEventListener('postStep', () => {
-        if (sphereMesh != undefined){
+        if (sphereMesh !== undefined){
             sphereMesh.position.copy(sphereBody.position)
             sphereMesh.quaternion.copy(sphereBody.quaternion)
         }

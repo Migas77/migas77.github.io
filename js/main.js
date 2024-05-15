@@ -18,6 +18,7 @@ import { loadPainting } from "./models/paiting.js";
 import {loadAnimatedStatueAndPassVisual, loadStatueAndPassVisual} from "./models/statue.js";
 import {loadImage} from "./models/myImageLoader.js";
 import {loadTile} from "./models/tile.js";
+import {loadBrick} from "./models/brick.js";
 
 var debugcannon;
 
@@ -154,8 +155,11 @@ const helper = {
         sceneElements.world = new CANNON.World({
             gravity: new CANNON.Vec3(0, -9.82, 0), // m/s²
         })
+        // sleeps objects with really low velocity
+        // for example, the pile of bricks slides a bit. By doing this they won't move until they are crashed into
+        sceneElements.world.allowSleep = true
 
-        // debugcannon = new cannonEsDebugger(sceneElements.sceneGraph, sceneElements.world);
+        debugcannon = new cannonEsDebugger(sceneElements.sceneGraph, sceneElements.world);
     },
 
     render: function (sceneElements) {
@@ -182,8 +186,8 @@ const scene = {
         // ************************** //
         loadGround(); // HAS TO BE THE FIRST ONE
         // loadFence();
-        loadCar(gltfLoader, {x: 8, y: 2, z: 0});
-        loadBall(gltfLoader, {x: -8, y:0, z:2});
+        loadCar(gltfLoader, {x: -16.5, y: 2, z: 0});
+        loadBall(gltfLoader, {x: -14, y:0, z: 2});
         // entrance tiles
         loadTile(0.5, {x: -0.4, z: -12}, 0, 0)
         loadTile(0.5, {x: 0.2, z: -11}, 0)
@@ -199,6 +203,7 @@ const scene = {
         loadTile(0.5, {x: -0.3, z: -1.8}, 0)
         loadTile(0.5, {x: 0, z: -1}, 0)
 
+        // Statues
         loadStatueAndPassVisual(
             gltfLoader,
             "glb/heavy_infantry_mandalorian_funko_pop.glb",
@@ -249,20 +254,22 @@ const scene = {
             0,
             death_star_visual
         )
+
+        // Road Signs
+        loadRoadSign(fontLoader, "INFORMATION", 0, 7.5, Math.PI/2, 0.06, false)
         loadRoadSign(fontLoader, "PROJECTS", 5.5, 2, 0, 0.06, true)
         loadRoadSign(fontLoader, "PLAYGROUND", -5.5, 2, 0, 0.06, false)
 
-        // information section
-        loadRoadSign(fontLoader, "INFORMATION", 0, 7.5, Math.PI/2, 0.06, false)
-        loadTile(0.5, {x: -0.3, z: 8.2})
-        loadTile(0.5, {x: 0.2, z: 9.2})
-        loadTile(0.5, {x: -0.1, z: 10})
-        loadTile(0.5, {x: 0.5, z: 10.6})
-        loadTile(0.5, {x: 0, z: 11.3})
-        loadTile(0.5, {x: -0.4, z: 12})
-        loadTile(0.5, {x: -0.2, z: 12.8})
-        loadTile(0.5, {x: 0.1, z: 13.5})
-        loadTile(0.5, {x: -0.3, z: 14.2})
+        // Information Section
+        loadTile(0.5, {x: -0.3, z: 8.2}, 0)
+        loadTile(0.5, {x: 0.2, z: 9.2}, 0)
+        loadTile(0.5, {x: -0.1, z: 10}, 0)
+        loadTile(0.5, {x: 0.5, z: 10.6}, 0)
+        loadTile(0.5, {x: 0, z: 11.3}, 0)
+        loadTile(0.5, {x: -0.4, z: 12}, 0)
+        loadTile(0.5, {x: -0.2, z: 12.8}, 0)
+        loadTile(0.5, {x: 0.1, z: 13.5}, 0)
+        loadTile(0.5, {x: -0.3, z: 14.2}, 0)
         loadLightPole({x: -1.4, y:0, z:14.4}, Math.PI)
         loadButton(1.4, 1.4, {x: 1.4, z: 14.4}, 0x000000, "Github", "https://github.com/Migas77")
         loadImage("images/github_logo.png", 2.31, 1.54, {x:1.4, y:0.01, z:14.4}, -Math.PI/2, -4)
@@ -273,7 +280,7 @@ const scene = {
         loadImage("images/HISTORY_OF_MY_LIFE.png", 5, 5, {x:-0.8, y:0.01, z:16}, -Math.PI/2, -1)
         loadImage("images/HISTORY_OF_MY_LIFE_DETAILS.png", 7, 7, {x:2, y:0.02, z:17.4}, -Math.PI/2)
 
-        // projects section
+        // Projects Section
         loadTile(0.5, {x: 8.5, z: 2.4}, 0)
         loadTile(0.5, {x: 9.2, z: 2}, 0)
         loadTile(0.5, {x: 10, z: 2.3}, 0)
@@ -287,7 +294,100 @@ const scene = {
         loadTile(0.5, {x: 24.4, z: 1.3}, -Math.PI/20)
         loadTile(0.5, {x: 25.2, z: 2}, -Math.PI/20)
         loadTile(0.5, {x: 26.1, z: 1.6}, -Math.PI/20)
-        // loadImage("images/GITHUB.png", 10, 10, {x:4, y:0.03, z:17.1}, -Math.PI/2)
+
+        // Playground Section - 2
+        loadTile(0.5, {x: -10, z: 1.7}, 0)
+        loadTile(0.5, {x: -11, z: 2.1}, 0)
+        loadTile(0.5, {x: -12.2, z: 1.4}, 0)
+        loadTile(0.5, {x: -13, z: 2}, 0)
+
+        // First Wall
+        // First Row
+        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0, z: 0}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0, z: 1}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0, z: 2}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0, z: 3}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0, z: 4}, 0)
+        // Second Row
+        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0.4, z: 0}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0.4, z: 1}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0.4, z: 2}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0.4, z: 3}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0.4, z: 4}, 0)
+        // Third row
+        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0.8, z: 0}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0.8, z: 1}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0.8, z: 2}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0.8, z: 3}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0.8, z: 4}, 0)
+        // Fourth Row
+        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 1.2, z: 0}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 1.2, z: 1}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 1.2, z: 2}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 1.2, z: 3}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 1.2, z: 4}, 0)
+        // Fifth Row
+        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 1.6, z: 0}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 1.6, z: 1}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 1.6, z: 2}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 1.6, z: 3}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -18, y: 1.6, z: 4}, 0)
+
+        // Second Wall
+        // First Row
+        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0, z: 0}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0, z: 1}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0, z: 2}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0, z: 3}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0, z: 4}, 0)
+        // Second Row
+        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0.4, z: -0.5}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0.4, z: 0.5}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0.4, z: 1.5}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0.4, z: 2.5}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0.4, z: 3.5}, 0)
+        // Third row
+        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0.8, z: 0}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0.8, z: 1}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0.8, z: 2}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0.8, z: 3}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 0.8, z: 4}, 0)
+        // Fourth Row
+        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 1.2, z: -0.5}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 1.2, z: 0.5}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 1.2, z: 1.5}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 1.2, z: 2.5}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 1.2, z: 3.5}, 0)
+        // Fifth Row
+        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 1.6, z: 0}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 1.6, z: 1}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 1.6, z: 2}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -22, y: 1.6, z: 3}, 0)
+
+        // Third Wall
+        // First Row
+        loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0, z: 0}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0, z: 1}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0, z: 2}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0, z: 3}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0, z: 4}, 0)
+        // Second Row
+        loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0.4, z: 0.5}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0.4, z: 1.5}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0.4, z: 2.5}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0.4, z: 3.5}, 0)
+        // Third Row
+        loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0.8, z: 1}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0.8, z: 2}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -26, y: 0.8, z: 3}, 0)
+        // Fourth Row
+        loadBrick(0.6, 0.4, 0.9, {x: -26, y: 1.2, z: 1.5}, 0)
+        loadBrick(0.6, 0.4, 0.9, {x: -26, y: 1.2, z: 2.5}, 0)
+        // Fifth Row
+        loadBrick(0.6, 0.4, 0.9, {x: -26, y: 1.6, z: 2}, 0)
+
+
+
 
     }
 };
