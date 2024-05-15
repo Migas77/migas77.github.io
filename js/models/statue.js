@@ -102,10 +102,10 @@ export function loadAnimatedStatue(gltfLoader, filename, scaleFactor, need_bound
             }
         })
         const mixer = new THREE.AnimationMixer(gltf.scene)
-        animations.push({
+        sceneElements.animated_models[filename] = {
             mixer: mixer,
             clock: new THREE.Clock()
-        })
+        }
         const clip = THREE.AnimationClip.findByName(gltf.animations, animation_name)
         const action = mixer.clipAction(clip)
         action.play()
@@ -126,6 +126,7 @@ export function loadAnimatedStatue(gltfLoader, filename, scaleFactor, need_bound
     } );
 
     baseGroup.position.set(position_x_z.x, 0, position_x_z.z)
+    baseGroup.name = filename
     sceneElements.sceneGraph.add(baseGroup)
 
 

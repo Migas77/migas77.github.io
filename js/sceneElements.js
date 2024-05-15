@@ -8,6 +8,7 @@ export const sceneElements = {
     labelRenderer: null,
     camera: null,
     sceneGraph: null,   // visual world
+    animated_models: {},
     world: null,        // physics world
     raycaster: null,
     pointer: null,

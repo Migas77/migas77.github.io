@@ -29,7 +29,6 @@ const fontLoader = new FontLoader();
 const [cameraOffsetX, cameraOffsetY, cameraOffsetZ] = [8, 6.7, 8]
 let death_star_visual = {model: null}
 let death_star_step = 0
-let animations = []
 
 // HELPER FUNCTIONS
 
@@ -217,7 +216,6 @@ const scene = {
             {x: 0, y:0.2, z:0},
             0,
             "Attack Position",
-            animations
         );
         loadStatueAndPassVisual(
             gltfLoader,
@@ -237,7 +235,6 @@ const scene = {
             {x: 0.8, y:0, z:0.2},
             0,
             "Take 01",
-            animations
         )
         loadStatueAndPassVisual(
             gltfLoader,
@@ -318,12 +315,14 @@ function computeFrame(time) {
         death_star_visual.model.rotation.y = death_star_step
     }
     // play models own animations
-    if (animations.length > 0){
-        console.log(animations.length)
-        for (const animation of animations){
-            animation.mixer.update(animation.clock.getDelta())
-        }
-    }
+    const x_wing = sceneElements.animated_models["glb/x_wing.glb"]
+    if (x_wing !== undefined)
+        x_wing.mixer.update(x_wing.clock.getDelta())
+    const bb8 = sceneElements.animated_models["glb/bb8_animated_star_wars-v1.glb"]
+    if (bb8 !== undefined)
+        bb8.mixer.update(bb8.clock.getDelta())
+    console.log(sceneElements.animated_models)
+
 
     handleCarMovement()
     intersectCarAndButtons()
