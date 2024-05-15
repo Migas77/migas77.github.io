@@ -183,7 +183,7 @@ const scene = {
         loadGround(); // HAS TO BE THE FIRST ONE
         // loadFence();
         loadCar(gltfLoader, {x: 8, y: 2, z: 0});
-        loadBall(gltfLoader, {x: 4.4, y:0, z:14.4});
+        loadBall(gltfLoader, {x: -8, y:0, z:2});
         // entrance tiles
         loadTile(0.5, {x: -0.4, z: -12}, 0, 0)
         loadTile(0.5, {x: 0.2, z: -11}, 0)
@@ -264,9 +264,12 @@ const scene = {
         loadTile(0.5, {x: 0.1, z: 13.5})
         loadTile(0.5, {x: -0.3, z: 14.2})
         loadLightPole({x: -1.4, y:0, z:14.4}, Math.PI)
-        loadButton(1.4, 1.4, {x: 1.4, z: 14.4}, "Github", "https://github.com/Migas77")
-        loadButton(1.4, 1.4, {x: 3.2, z: 14.4}, "Linkedin", "https://www.linkedin.com/in/miguel-figueiredo-1495bb284/")
-        loadButton(1.4, 1.4, {x: 5, z: 14.4}, "Mail", "mailto:miguel.belchior@ua.pt")
+        loadButton(1.4, 1.4, {x: 1.4, z: 14.4}, 0x000000, "Github", "https://github.com/Migas77")
+        loadImage("images/github_logo.png", 2.31, 1.54, {x:1.4, y:0.01, z:14.4}, -Math.PI/2, -4)
+        loadButton(1.4, 1.4, {x: 3.2, z: 14.4}, 0xffffff, "Linkedin", "https://www.linkedin.com/in/miguel-figueiredo-1495bb284/")
+        loadImage("images/linkedin_logo.png", 1.65, 1.65, {x:3.2, y:0.01, z:14.4}, -Math.PI/2, -3)
+        loadButton(1.4, 1.4, {x: 5, z: 14.4}, 0x000000, "Mail", "mailto:miguel.belchior@ua.pt")
+        loadImage("images/email_logo.png", 1.05, 1.05, {x:5, y:0.01, z:14.4}, -Math.PI/2, -2)
         loadImage("images/HISTORY_OF_MY_LIFE.png", 5, 5, {x:-0.8, y:0.01, z:16}, -Math.PI/2, -1)
         loadImage("images/HISTORY_OF_MY_LIFE_DETAILS.png", 7, 7, {x:2, y:0.02, z:17.4}, -Math.PI/2)
 

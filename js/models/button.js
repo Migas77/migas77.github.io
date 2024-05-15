@@ -11,7 +11,7 @@ import {open_link} from "../utils.js";
 
 const offset = 0.1
 const buttons = []
-export function loadButton(width, height, position_x_z, name, url_to_open) {
+export function loadButton(width, height, position_x_z, button_color, name, url_to_open) {
 
     const x = 0;
     const y = 0;
@@ -52,7 +52,7 @@ export function loadButton(width, height, position_x_z, name, url_to_open) {
     
     // visible button which is just a border, so it can't be used for intersection
     const visible_button_geometry = new THREE.ShapeGeometry([rectangleDownShape, rectangleLeftShape, rectangleRightShape, rectangleUpShape]);
-    const visible_button_material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    const visible_button_material = new THREE.MeshPhongMaterial({ color: button_color });
     const visible_button_mesh = new THREE.Mesh(visible_button_geometry, visible_button_material);
     visible_button_geometry.center()
     visible_button_mesh.rotateX(- Math.PI/2)
