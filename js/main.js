@@ -390,7 +390,7 @@ const scene = {
         // Fifth Row
         saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -26, y: 1.6, z: 2}, 0))
 
-        loadButton(1.4, 1.4, {x: -13, z: 2}, 0xffffff, "ResetBricks",() => resetBricksInCollection("brick_piles"))
+        loadButton(1.4, 1.4, {x: -15.5, z: 0}, 0xffffff, "ResetBrickWalls",() => resetBricksInCollection("brick_piles"))
         /*
         for (const brick_entry of bricks){
                     brick_entry.brick.quaternion.setFromAxisAngle(x_axis, brick_entry.original_rotation.x)

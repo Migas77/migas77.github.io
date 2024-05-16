@@ -94,7 +94,6 @@ export function loadButton(width, height, position_x_z, button_color, name, call
 
         const intersects = sceneElements.raycaster.intersectObject(group_visible_invisible_button);
         if (intersects.length > 0){
-            console.log(group_visible_invisible_button)
             document.body.style.cursor = "pointer"
             const redirectDiv = document.querySelector(".Redirect" + name)
             if (redirectDiv !== null){
