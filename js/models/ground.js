@@ -1,11 +1,12 @@
 import * as THREE from "https://threejs.org/build/three.module.js";
 import * as CANNON from 'https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/+esm'
 import {sceneElements} from "../sceneElements.js";
+import {loading_manager} from "../main.js";
 
 // ************************** //
 // 1. loadGround() - Load, add to the scene and world the ball model at the position (0,0,0)
 // ************************** //
-const textureLoader = new THREE.TextureLoader();
+
 export function loadGround() {
     // const shaderMaterial = new THREE.ShaderMaterial( {
     //
@@ -40,7 +41,7 @@ export function loadGround() {
     // Visual Representation
     // #1098F7
     // #A1D1FF
-    const texture = textureLoader.load("matcaps/another_blue_2.png")
+    // const texture = textureLoader.load("matcaps/another_blue_2.png")
     const planeGeometry = new THREE.PlaneGeometry(300, 300);
     const planeMaterial = new THREE.MeshPhongMaterial({color: "#A1D1FF"});
     // const planeMaterial = new THREE.MeshPhongMaterial({map: texture});

@@ -1,7 +1,8 @@
 import * as THREE from "https://threejs.org/build/three.module.js";
 import {sceneElements} from "../sceneElements.js";
+import {textureLoader} from "../main.js";
 
-const textureLoader = new THREE.TextureLoader();
+
 /*
 filename: string
 position: {x: 0, y: 0, z:0}

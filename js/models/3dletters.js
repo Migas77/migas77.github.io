@@ -2,11 +2,12 @@ import * as THREE from "https://threejs.org/build/three.module.js";
 import * as CANNON from 'https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/+esm'
 import {sceneElements} from "../sceneElements.js";
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
+import {fontLoader} from "../main.js";
 
 // ************************** //
 // 1. loadNameText(fontLoader) - Load, add to the scene and world the 3D representation of my name at the position (0, 0, 0)
 // ************************** //
-export function loadNameText(fontLoader, position_x_z) {
+export function loadNameText(position_x_z) {
 
     fontLoader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
 

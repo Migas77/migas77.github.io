@@ -22,12 +22,14 @@ import {loadBrick} from "./models/brick.js";
 import {open_link} from "./utils.js";
 import {resetBricksInCollection, saveInBrickCollection} from "./models/brick_utils.js";
 
-var debugcannon;
+let debugcannon;
 
+// loading manager
+export const loading_manager = new THREE.LoadingManager()
 // loaders
-
-const gltfLoader = new GLTFLoader();
-const fontLoader = new FontLoader();
+export const textureLoader = new THREE.TextureLoader(loading_manager);
+export const gltfLoader = new GLTFLoader(loading_manager);
+export const fontLoader = new FontLoader(loading_manager);
 // Camera Positions
 const [cameraOffsetX, cameraOffsetY, cameraOffsetZ] = [8, 6.7, 8]
 let death_star_visual = {model: null}
@@ -39,6 +41,17 @@ let x_wing_step = 0
 const helper = {
 
     initEmptyScene: function (sceneElements) {
+        // ************************** //
+        // Put a Loading Screen
+        // ************************** //
+        const loading_progress_bar = document.getElementById("loading_progress_bar")
+        loading_manager.onProgress = function (url, itemsLoaded, itemsTotal){
+            loading_progress_bar.style.width = (100 * itemsLoaded/itemsTotal) + '%'
+        }
+        loading_manager.onLoad = function (){
+            const loading_div = document.getElementById("loading_animation")
+            loading_div.hidden = true
+        }
 
         // ************************** //
         // Create the 3D scene
@@ -188,14 +201,14 @@ const scene = {
         // ************************** //
         loadGround(); // HAS TO BE THE FIRST ONE
         // loadFence();
-        loadCar(gltfLoader, {x: -14.5, y: 2, z: 5});
-        loadBall(gltfLoader, {x: -14, y:0, z: 2});
+        loadCar({x: -14.5, y: 2, z: 5});
+        loadBall({x: -14, y:0, z: 2});
         // entrance tiles
         loadTile(0.5, {x: -0.4, z: -12}, 0, 0)
         loadTile(0.5, {x: 0.2, z: -11}, 0)
         loadTile(0.5, {x: -0.2, z: -10}, 0)
         loadTile(0.5, {x: 0.4, z: -9}, 0)
-        loadNameText(fontLoader, {x: -5.5, z: -8});
+        loadNameText({x: -5.5, z: -8});
         loadTile(0.5, {x: -0.1, z: -7}, 0)
         loadTile(0.5, {x: 0.2, z: -6.2}, 0)
         loadTile(0.5, {x: 0, z: -5}, 0)

@@ -1,11 +1,12 @@
 import * as THREE from "https://threejs.org/build/three.module.js";
 import * as CANNON from 'https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/+esm'
 import {getPhysicsWorldId, sceneElements} from "../sceneElements.js";
+import {gltfLoader} from "../main.js";
 
 // ************************** //
 // 1. loadCar(gltfLoader) - Load, add to the scene and world the Car Model at the position (0, 0, 0) facing the negative z axis
 // ************************** //
-export function loadCar(gltfLoader, position) {
+export function loadCar(position) {
     const vehicleGroup = new THREE.Group()
     vehicleGroup.name = "vehicle_group"
     const frontX = -0.40;    // same for both wheels at the front
@@ -47,7 +48,7 @@ export function loadCar(gltfLoader, position) {
 
     let chassisVisual;
     // chassis
-    gltfLoader.load( "rocket_league_octane_chassis.glb", function ( gltf ) {
+    gltfLoader.load( "glb/rocket_league_octane_chassis.glb", function ( gltf ) {
         gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
         gltf.scene.name = "chassis_2"
         chassisVisual = gltf.scene
@@ -63,7 +64,7 @@ export function loadCar(gltfLoader, position) {
     } );
 
     // front right
-    gltfLoader.load( "rocket_league_octane_wheel_fl.glb", function ( gltf ) {
+    gltfLoader.load( "glb/rocket_league_octane_wheel_fl.glb", function ( gltf ) {
         gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
         gltf.scene.translateX(frontX)
         gltf.scene.translateZ(-frontZ)
@@ -84,7 +85,7 @@ export function loadCar(gltfLoader, position) {
     vehicle.addWheel(wheelOptions)
 
     // front left
-    gltfLoader.load( "rocket_league_octane_wheel_fl.glb", function ( gltf ) {
+    gltfLoader.load( "glb/rocket_league_octane_wheel_fl.glb", function ( gltf ) {
         gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
         gltf.scene.translateX(frontX)
         gltf.scene.translateZ(frontZ)
@@ -104,7 +105,7 @@ export function loadCar(gltfLoader, position) {
     vehicle.addWheel(wheelOptions)
 
     // back right
-    gltfLoader.load( "rocket_league_octane_wheel_bl.glb", function ( gltf ) {
+    gltfLoader.load( "glb/rocket_league_octane_wheel_bl.glb", function ( gltf ) {
         gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
         gltf.scene.translateX(backX)
         gltf.scene.translateZ(-backZ)
@@ -125,7 +126,7 @@ export function loadCar(gltfLoader, position) {
     vehicle.addWheel(wheelOptions)
 
     // back left
-    gltfLoader.load( "rocket_league_octane_wheel_bl.glb", function ( gltf ) {
+    gltfLoader.load( "glb/rocket_league_octane_wheel_bl.glb", function ( gltf ) {
         gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
         gltf.scene.translateX(backX)
         gltf.scene.translateZ(backZ)

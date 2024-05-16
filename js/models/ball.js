@@ -1,11 +1,12 @@
 import * as THREE from "https://threejs.org/build/three.module.js";
 import * as CANNON from 'https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/+esm'
 import {getPhysicsWorldId, sceneElements} from "../sceneElements.js";
+import {gltfLoader} from "../main.js";
 
 // ************************** //
 // 1. loadBall() - Load, add to the scene and world the ground model at y = 0
 // ************************** //
-export function loadBall(gltfLoader, position) {
+export function loadBall(position) {
     let sphereMesh;
     const ballMaterial = new CANNON.Material('ball')
     const sphereBody = new CANNON.Body({
@@ -17,7 +18,7 @@ export function loadBall(gltfLoader, position) {
     sphereBody.position.set(position.x,position.y,position.z)
     sceneElements.world.addBody(sphereBody)
     const scaleFactor = 0.7
-    gltfLoader.load( "rocket_league_ball.glb", function ( gltf ) {
+    gltfLoader.load( "glb/rocket_league_ball.glb", function ( gltf ) {
         gltf.scene.scale.set(scaleFactor,scaleFactor,scaleFactor)
         gltf.scene.name = "ball_1"
         sphereMesh = gltf.scene
