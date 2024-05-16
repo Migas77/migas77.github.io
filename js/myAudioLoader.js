@@ -14,14 +14,13 @@ export function setAudio(filepath, model) {
 }
 
 
-export function setAndPlayAudioLoop(filepath, model) {
+export function setAudioLoop(filepath, model) {
     const audioLoader = new THREE.AudioLoader(loading_manager)
     const sound = new THREE.PositionalAudio(listener);
     audioLoader.load(filepath, function( buffer ) {
         sound.setBuffer( buffer );
         sound.setRefDistance( 10 );
         sound.setLoop(true)
-        sound.play()
     });
     model.add(sound)
 

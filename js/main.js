@@ -25,7 +25,7 @@ import {loadTile} from "./models/tile.js";
 import {loadBrick} from "./models/brick.js";
 import {open_link} from "./utils.js";
 import {resetBricksInCollection, saveInBrickCollection} from "./models/brick_utils.js";
-import {setAndPlayAudioLoop, setAudio} from "./myAudioLoader.js";
+import {setAudioLoop, setAudio} from "./myAudioLoader.js";
 
 let debugcannon;
 
@@ -45,6 +45,9 @@ let x_wing_visual = {model: null}
 let x_wing_step = 0
 // HELPER FUNCTIONS
 
+let context
+
+
 const helper = {
 
     initEmptyScene: function (sceneElements) {
@@ -57,12 +60,19 @@ const helper = {
             loading_progress_bar.style.transform = `translateX(-${100-(100 * itemsLoaded/itemsTotal)}%)`
         }
         loading_manager.onLoad = function (){
-            const loading_div = document.getElementById("loading_animation")
-            loading_div.style.opacity = "0";
-            setTimeout(() => {
-                loading_div.remove();
-            }, 1000);
-            // start playing music
+            const start_playing_button = document.getElementById("start_playing_button")
+            start_playing_button.style.opacity = "1"
+            start_playing_button.addEventListener("click", function (event){
+                const loading_div = document.getElementById("loading_animation")
+                loading_div.style.opacity = "0";
+                setTimeout(() => {
+                    loading_div.remove();
+                }, 1000);
+                // start playing music
+                const stormtrooper = sceneElements.sceneGraph.getObjectByName("glb/stormtrooper_dancing.glb")
+                const audio = stormtrooper.children[2].children[1]
+                audio.play()
+            })
         }
 
         // ************************** //
@@ -262,7 +272,7 @@ const scene = {
             0.8,
             "mixamo.com",
             (model) => {
-                setAndPlayAudioLoop("sounds/drum_loop.mp3", model)
+                setAudioLoop("sounds/drum_loop.mp3", model)
             }
         )
         loadAnimatedStatueAndPassVisual(
