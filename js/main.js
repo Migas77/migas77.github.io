@@ -15,12 +15,17 @@ import {intersectCarAndButtons, loadButton} from "./models/button.js";
 import { loadLightPole } from "./models/lightpole.js";
 import { loadRoadSign } from "./models/road_sign.js";
 import { loadPainting } from "./models/paiting.js";
-import {loadAnimatedStatueAndPassVisual, loadStatueAndPassVisual} from "./models/statue.js";
+import {
+    loadAnimatedStatueAndPassCallback,
+    loadAnimatedStatueAndPassVisual,
+    loadStatueAndPassVisual
+} from "./models/statue.js";
 import {loadImage} from "./models/myImageLoader.js";
 import {loadTile} from "./models/tile.js";
 import {loadBrick} from "./models/brick.js";
 import {open_link} from "./utils.js";
 import {resetBricksInCollection, saveInBrickCollection} from "./models/brick_utils.js";
+import {setAndPlayAudioLoop, setAudio} from "./myAudioLoader.js";
 
 let debugcannon;
 
@@ -57,6 +62,7 @@ const helper = {
             setTimeout(() => {
                 loading_div.remove();
             }, 1000);
+            // start playing music
         }
 
         // ************************** //
@@ -246,7 +252,7 @@ const scene = {
             "Attack Position",
             x_wing_visual
         );
-        loadAnimatedStatueAndPassVisual(
+        loadAnimatedStatueAndPassCallback(
             gltfLoader,
             "glb/stormtrooper_dancing.glb",
             1.3,
@@ -254,7 +260,10 @@ const scene = {
             {x: -5.5, z: -3.5},
             {x: 0, y: 0, z: 0},
             0.8,
-            "mixamo.com"
+            "mixamo.com",
+            (model) => {
+                setAndPlayAudioLoop("sounds/drum_loop.mp3", model)
+            }
         )
         loadAnimatedStatueAndPassVisual(
             gltfLoader,
