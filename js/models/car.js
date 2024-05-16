@@ -1,7 +1,8 @@
 import * as THREE from "https://threejs.org/build/three.module.js";
 import * as CANNON from 'https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/+esm'
 import {getPhysicsWorldId, sceneElements} from "../sceneElements.js";
-import {gltfLoader} from "../main.js";
+import {gltfLoader, listener} from "../main.js";
+import {setAudio} from "../myAudioLoader.js";
 
 // ************************** //
 // 1. loadCar(gltfLoader) - Load, add to the scene and world the Car Model at the position (0, 0, 0) facing the negative z axis
@@ -57,6 +58,11 @@ export function loadCar(position) {
                 node.castShadow = true
                 node.receiveShadow = true
             }
+        })
+        setAudio("sound.mp3", gltf.scene)
+        chassisBody.addEventListener("collide", function (event) {
+            let relativeVelocity = event.contact.getImpactVelocityAlongNormal();
+            gltf.scene.children[1].play()
         })
         vehicleGroup.add(gltf.scene)
     }, undefined, function ( error ) {
@@ -176,7 +182,6 @@ export function loadCar(position) {
     })
     sceneElements.world.addContactMaterial(wheel_ground)
 
-    // shadow
 
 
     // Update the wheel bodies + car

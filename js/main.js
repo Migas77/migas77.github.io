@@ -30,6 +30,8 @@ export const loading_manager = new THREE.LoadingManager()
 export const textureLoader = new THREE.TextureLoader(loading_manager);
 export const gltfLoader = new GLTFLoader(loading_manager);
 export const fontLoader = new FontLoader(loading_manager);
+export const audioLoader = new THREE.AudioLoader(loading_manager)
+export const listener = new THREE.AudioListener();
 // Camera Positions
 const [cameraOffsetX, cameraOffsetY, cameraOffsetZ] = [8, 6.7, 8]
 let death_star_visual = {model: null}
@@ -41,6 +43,7 @@ let x_wing_step = 0
 const helper = {
 
     initEmptyScene: function (sceneElements) {
+
         // ************************** //
         // Put a Loading Screen
         // ************************** //
@@ -70,6 +73,7 @@ const helper = {
         sceneElements.camera = camera;
         camera.position.set(cameraOffsetX, cameraOffsetY, cameraOffsetZ);
         camera.lookAt(0, 0, 0);
+        sceneElements.camera.add(listener);
 
         // ************************** //
         // Illumination
@@ -407,14 +411,6 @@ const scene = {
         saveInBrickCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -26, y: 1.6, z: 2}, 0))
 
         loadButton(1.4, 1.4, {x: -15.5, z: 0}, 0xffffff, "ResetBrickWalls",() => resetBricksInCollection("brick_piles"))
-        /*
-        for (const brick_entry of bricks){
-                    brick_entry.brick.quaternion.setFromAxisAngle(x_axis, brick_entry.original_rotation.x)
-                    brick_entry.brick.quaternion.setFromAxisAngle(y_axis, brick_entry.original_rotation.x)
-                    brick_entry.brick.quaternion.setFromAxisAngle(z_axis, brick_entry.original_rotation.x)
-                    brick_entry.brick.position.copy(brick_entry.original_position)
-                }
-         */
 
 
 
