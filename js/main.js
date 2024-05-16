@@ -46,7 +46,7 @@ const helper = {
         // ************************** //
         const loading_progress_bar = document.getElementById("loading_progress_bar")
         loading_manager.onProgress = function (url, itemsLoaded, itemsTotal){
-            loading_progress_bar.style.transform = `translateX(${100-(100 * itemsLoaded/itemsTotal)}%)`
+            loading_progress_bar.style.transform = `translateX(-${100-(100 * itemsLoaded/itemsTotal)}%)`
         }
         loading_manager.onLoad = function (){
             const loading_div = document.getElementById("loading_animation")
