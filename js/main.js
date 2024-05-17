@@ -57,6 +57,8 @@ const helper = {
         loading_manager.onLoad = function (){
             const start_playing_button = document.getElementById("start_playing_button")
             start_playing_button.style.opacity = "1"
+            const loading_text = document.getElementById("loading_text")
+            loading_text.innerText = "Loaded!"
             start_playing_button.addEventListener("click", function (event){
                 const loading_div = document.getElementById("loading_animation")
                 loading_div.style.opacity = "0";
