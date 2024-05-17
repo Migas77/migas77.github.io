@@ -83,8 +83,8 @@ export function loadNameText(position_x_z) {
             textBody.addEventListener("collide", function (event) {
                 if (event.body === sceneElements.world.bodies[0] && event.contact.getImpactVelocityAlongNormal() > 0.1){
                     // play randomly one of the hit sounds
+                    console.log(event.contact.getImpactVelocityAlongNormal())
                     const audios = textMesh.children
-                    console.log(audios.every(audio => !audio.isPlaying))
                     if (audios.every(audio => !audio.isPlaying)){
                         // if there isn't an audio playing for this object
                         const random_index = Math.floor(Math.random() * audios.length)

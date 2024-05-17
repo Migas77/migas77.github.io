@@ -1,21 +1,23 @@
-const brick_collections =new Map();
+const element_collections = new Map();
 
-export function saveInBrickCollection(collection_name, brick) {
-    const brick_entry = {
-        brick: brick,
-        original_position: brick.position.clone(),
-        original_quaternion: brick.quaternion.clone()
+export function saveElementInCollection(collection_name, element) {
+    const entry = {
+        element: element,
+        original_position: element.position.clone(),
+        original_quaternion: element.quaternion.clone()
     }
-    if (!brick_collections.has(collection_name))
-        brick_collections.set(collection_name, [brick_entry])
+    if (!element_collections.has(collection_name))
+        element_collections.set(collection_name, [entry])
     else
-        brick_collections.get(collection_name).push(brick_entry)
+        element_collections.get(collection_name).push(entry)
 }
 
-export function resetBricksInCollection(collection_name) {
-    for (const brick_entry of brick_collections.get(collection_name)){
-        brick_entry.brick.velocity.setZero()
-        brick_entry.brick.position.copy(brick_entry.original_position)
-        brick_entry.brick.quaternion.copy(brick_entry.original_quaternion)
+export function resetElementsInCollection(collection_name) {
+    const collection = element_collections.get(collection_name)
+    for (const entry of element_collections.get(collection_name)){
+        entry.element.velocity.setZero()
+        entry.element.angularVelocity.setZero()
+        entry.element.quaternion.copy(entry.original_quaternion)
+        entry.element.position.copy(entry.original_position)
     }
 }

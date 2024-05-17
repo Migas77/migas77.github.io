@@ -20,7 +20,7 @@ export function loadBrick(width, height, depth, position, rotation_y){
     const groundMaterial = sceneElements.world.bodies[getPhysicsWorldId("ground_0")].material
     const brickShape = new CANNON.Box(new CANNON.Vec3(0.5 * width, 0.5 * height, 0.5 * depth))
     const brickBody = new CANNON.Body({
-        mass: 0.1,
+        mass: 0.01,
         material: groundMaterial,
     })
     brickBody.position.set(position.x, 0.5 * height + position.y, position.z)

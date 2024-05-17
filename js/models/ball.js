@@ -16,6 +16,7 @@ export function loadBall(position) {
     })
     sphereBody.linearDamping = sphereBody.angularDamping = 0.5
     sphereBody.position.set(position.x,position.y,position.z)
+    sphereBody.allowSleep = false
     sceneElements.world.addBody(sphereBody)
     const scaleFactor = 0.7
     gltfLoader.load( "glb/rocket_league_ball.glb", function ( gltf ) {
@@ -45,7 +46,8 @@ export function loadBall(position) {
     const groundMaterial = sceneElements.world.bodies[getPhysicsWorldId("ground_0")].material
     const ball_ground = new CANNON.ContactMaterial(ballMaterial, groundMaterial, {
         friction: 0.5,
-        restitution: 0.7,
+        restitution: 0.8,
     })
     sceneElements.world.addContactMaterial(ball_ground)
+    return sphereBody
 }
