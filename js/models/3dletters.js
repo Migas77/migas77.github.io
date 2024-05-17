@@ -3,6 +3,8 @@ import * as CANNON from 'https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/+esm'
 import {sceneElements} from "../sceneElements.js";
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import {fontLoader} from "../main.js";
+import {brick_audio_names} from "./brick.js";
+import {getAudio} from "../myAudioLoader.js";
 
 // ************************** //
 // 1. loadNameText(fontLoader) - Load, add to the scene and world the 3D representation of my name at the position (0, 0, 0)
@@ -65,7 +67,8 @@ export function loadNameText(position_x_z) {
             textMesh.translateY(0.49)
             textMesh.receiveShadow = true
             textMesh.castShadow = true
-            textBody.position.set(position_x_z.x + dict.x,1,position_x_z.z)
+            textBody.position.set(position_x_z.x + dict.x,0.49,position_x_z.z)
+            brick_audio_names.forEach((brick_audio_name) => textMesh.add(getAudio(brick_audio_name)))
             sceneElements.world.addBody(textBody)
             sceneElements.sceneGraph.add(textMesh)
 
@@ -74,6 +77,19 @@ export function loadNameText(position_x_z) {
                 if (textMesh != undefined){
                     textMesh.position.copy(textBody.position)
                     textMesh.quaternion.copy(textBody.quaternion)
+                }
+            })
+
+            textBody.addEventListener("collide", function (event) {
+                if (event.body === sceneElements.world.bodies[0] && event.contact.getImpactVelocityAlongNormal() > 0.1){
+                    // play randomly one of the hit sounds
+                    const audios = textMesh.children
+                    console.log(audios.every(audio => !audio.isPlaying))
+                    if (audios.every(audio => !audio.isPlaying)){
+                        // if there isn't an audio playing for this object
+                        const random_index = Math.floor(Math.random() * audios.length)
+                        audios[random_index].play()
+                    }
                 }
             })
         }

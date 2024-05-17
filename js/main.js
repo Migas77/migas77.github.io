@@ -40,7 +40,6 @@ let death_star_step = 0
 let x_wing_visual
 let x_wing_step = 0
 // HELPER FUNCTIONS
-export const brick_audios = [...Array(9).keys()].map((i) => getAudio(`sounds/bricks/brick_hit_${i}.mp3`))
 
 const helper = {
 
@@ -67,7 +66,7 @@ const helper = {
                 // start playing music
                 const stormtrooper = sceneElements.sceneGraph.getObjectByName("glb/stormtrooper_dancing.glb")
                 const audio = stormtrooper.children[2].children[1]
-                // audio.play()
+                audio.play()
             })
         }
 
@@ -124,7 +123,7 @@ const helper = {
         // ***************************** //
         const spotLight1 = new THREE.SpotLight('rgb(255, 255, 255)', 40);
         spotLight1.decay = 1;
-        spotLight1.position.set(2, 8, 0);
+        spotLight1.position.set(2, 10, 0);
         sceneElements.sceneGraph.add(spotLight1);
 
         // Setup shadow properties for the spotlight
@@ -193,7 +192,7 @@ const helper = {
         // for example, the pile of bricks slides a bit. By doing this they won't move until they are crashed into
         sceneElements.world.allowSleep = true
 
-        // debugcannon = new cannonEsDebugger(sceneElements.sceneGraph, sceneElements.world);
+        debugcannon = new cannonEsDebugger(sceneElements.sceneGraph, sceneElements.world);
     },
 
     render: function (sceneElements) {
@@ -220,7 +219,7 @@ const scene = {
         // ************************** //
         loadGround(); // HAS TO BE THE FIRST ONE
         // loadFence();
-        loadCar({x: -14.5, y: 2, z: 5});
+        loadCar({x: 0, y: 2, z: -5});
         loadBall({x: -14, y:0, z: 2});
         // entrance tiles
         loadTile(0.5, {x: -0.4, z: -12}, 0, 0)
