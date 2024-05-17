@@ -4,7 +4,7 @@ import {audioLoader, listener, loading_manager} from "./main.js";
 import {sceneElements} from "./sceneElements.js";
 
 
-export function setAudio(filepath, model) {
+export function loadAudio(filepath, model) {
     const sound = new THREE.PositionalAudio(listener);
     audioLoader.load(filepath, function( buffer ) {
         sound.setBuffer( buffer );
@@ -14,8 +14,7 @@ export function setAudio(filepath, model) {
 }
 
 
-export function setAudioLoop(filepath, model) {
-    const audioLoader = new THREE.AudioLoader(loading_manager)
+export function loadAudioLoop(filepath, model) {
     const sound = new THREE.PositionalAudio(listener);
     audioLoader.load(filepath, function( buffer ) {
         sound.setBuffer( buffer );
@@ -23,5 +22,13 @@ export function setAudioLoop(filepath, model) {
         sound.setLoop(true)
     });
     model.add(sound)
+}
 
+export function getAudio(filepath){
+    const sound = new THREE.PositionalAudio(listener);
+    audioLoader.load(filepath, function( buffer ) {
+        sound.setBuffer( buffer );
+        sound.setRefDistance( 5 );
+    });
+    return sound
 }

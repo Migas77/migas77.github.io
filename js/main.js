@@ -15,17 +15,13 @@ import {intersectCarAndButtons, loadButton} from "./models/button.js";
 import { loadLightPole } from "./models/lightpole.js";
 import { loadRoadSign } from "./models/road_sign.js";
 import { loadPainting } from "./models/paiting.js";
-import {
-    loadAnimatedStatueAndPassCallback,
-    loadAnimatedStatueAndPassVisual,
-    loadStatueAndPassVisual
-} from "./models/statue.js";
+import { loadAnimatedStatueAndPassCallback, loadStatueAndPassCallback } from "./models/statue.js";
 import {loadImage} from "./models/myImageLoader.js";
 import {loadTile} from "./models/tile.js";
 import {loadBrick} from "./models/brick.js";
 import {open_link} from "./utils.js";
 import {resetBricksInCollection, saveInBrickCollection} from "./models/brick_utils.js";
-import {setAudioLoop, setAudio} from "./myAudioLoader.js";
+import {loadAudioLoop, loadAudio, getAudio} from "./myAudioLoader.js";
 
 let debugcannon;
 
@@ -39,14 +35,13 @@ export const audioLoader = new THREE.AudioLoader(loading_manager)
 export const listener = new THREE.AudioListener();
 // Camera Positions
 const [cameraOffsetX, cameraOffsetY, cameraOffsetZ] = [8, 6.7, 8]
-let death_star_visual = {model: null}
+let death_star_visual
 let death_star_step = 0
-let x_wing_visual = {model: null}
+let x_wing_visual
 let x_wing_step = 0
 // HELPER FUNCTIONS
-
-let context
-
+export const brick_audios = [...Array(9).keys()].map((i) => getAudio(`sounds/bricks/brick_hit_${i}.mp3`))
+console.log(brick_audios)
 
 const helper = {
 
@@ -242,7 +237,7 @@ const scene = {
         loadTile(0.5, {x: 0, z: -1}, 0)
 
         // Statues
-        loadStatueAndPassVisual(
+        loadStatueAndPassCallback(
             gltfLoader,
             "glb/heavy_infantry_mandalorian_funko_pop.glb",
             16,
@@ -251,7 +246,7 @@ const scene = {
             {x: 0.12, y:-0.17, z:0},
             -0.6
         )
-        loadAnimatedStatueAndPassVisual(
+        loadAnimatedStatueAndPassCallback(
             gltfLoader,
             "glb/x_wing.glb",
             0.23,
@@ -260,7 +255,7 @@ const scene = {
             {x: 0, y:0.6, z:0},
             0,
             "Attack Position",
-            x_wing_visual
+            (model) => x_wing_visual = model
         );
         loadAnimatedStatueAndPassCallback(
             gltfLoader,
@@ -271,11 +266,9 @@ const scene = {
             {x: 0, y: 0, z: 0},
             0.8,
             "mixamo.com",
-            (model) => {
-                setAudioLoop("sounds/drum_loop.mp3", model)
-            }
+            (model) => loadAudioLoop("sounds/drum_loop.mp3", model)
         )
-        loadAnimatedStatueAndPassVisual(
+        loadAnimatedStatueAndPassCallback(
             gltfLoader,
             "glb/bb8_animated_star_wars-v1.glb",
             0.8,
@@ -285,7 +278,7 @@ const scene = {
             0,
             "Take 01",
         )
-        loadStatueAndPassVisual(
+        loadStatueAndPassCallback(
             gltfLoader,
             "glb/death_star.glb",
             0.1,
@@ -293,7 +286,7 @@ const scene = {
             {x: -5.5, z: 7.5},
             {x: 0, y:0.3, z:0},
             0,
-            death_star_visual
+            (model) => death_star_visual = model
         )
 
         // Road Signs
@@ -460,22 +453,23 @@ const brakeForce = 1000000
 function computeFrame(time) {
 
     // animate death star
-    if (death_star_visual.model !== null){
+    if (death_star_visual !== undefined){
         death_star_step += 0.01
-        death_star_visual.model.rotation.y = death_star_step
+        death_star_visual.rotation.y = death_star_step
+    }
+    // animate x-wing
+    const x_wing = sceneElements.animated_models["glb/x_wing.glb"]
+    if (x_wing !== undefined && x_wing_visual !== undefined){
+        // the wings should be extended while the x_wind is in the air
+        // and retracted when is about to land
+        x_wing_step += 0.01
+        x_wing_visual.rotation.z += 0.005 * Math.cos(x_wing_step)
+        x_wing.mixer.update(x_wing.clock.getDelta())
     }
     // play models own animations
     const bb8 = sceneElements.animated_models["glb/bb8_animated_star_wars-v1.glb"]
     if (bb8 !== undefined)
         bb8.mixer.update(bb8.clock.getDelta())
-    const x_wing = sceneElements.animated_models["glb/x_wing.glb"]
-    if (x_wing !== undefined && x_wing_visual !== null){
-        // the wings should be extended while the x_wind is in the air
-        // and retracted when is about to land
-        x_wing_step += 0.01
-        x_wing_visual.model.rotation.z += 0.005 * Math.cos(x_wing_step)
-        x_wing.mixer.update(x_wing.clock.getDelta())
-    }
     const stormtrooper = sceneElements.animated_models["glb/stormtrooper_dancing.glb"]
     if (stormtrooper !== undefined){
         stormtrooper.mixer.update(stormtrooper.clock.getDelta())

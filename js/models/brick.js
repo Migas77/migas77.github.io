@@ -1,6 +1,7 @@
 import * as THREE from "https://threejs.org/build/three.module.js";
 import * as CANNON from 'https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/+esm'
 import {getPhysicsWorldId, sceneElements} from "../sceneElements.js";
+import {brick_audios} from "../main.js";
 
 const material = new THREE.MeshPhongMaterial( {color: 0xFFFFFF} );
 export function loadBrick(width, height, depth, position, rotation_y){
@@ -10,6 +11,7 @@ export function loadBrick(width, height, depth, position, rotation_y){
     const brick = new THREE.Mesh( brick_geometry, material );
     brick.castShadow = true
     brick.receiveShadow = true
+    brick_audios.forEach((brick_audio) => brick.add(brick_audio))
     sceneElements.sceneGraph.add(brick)
 
     // physics world
@@ -28,6 +30,14 @@ export function loadBrick(width, height, depth, position, rotation_y){
     brickBody.sleepSpeedLimit = 0.2
     brickBody.sleepTimeLimit = 1
 
+
+    brickBody.addEventListener("collide", function (event) {
+        if (event.body === sceneElements.world.bodies[0] && event.contact.getImpactVelocityAlongNormal() > 0.2){
+            // play randomly one of the brick hit sounds
+            const random_index = Math.floor(Math.random() * brick_audios.length)
+            brick_audios[random_index].play()
+        }
+    })
     sceneElements.world.addBody(brickBody)
 
     // Link visual and physics world
@@ -41,4 +51,6 @@ export function loadBrick(width, height, depth, position, rotation_y){
     return brickBody
 
 }
+
+
 
