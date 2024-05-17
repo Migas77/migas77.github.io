@@ -84,7 +84,7 @@ export function loadNameText(position_x_z) {
     } );
 }
 
-const letter_mass = 10
+const letter_mass = 0.1
 function getLetterDict(hitbox_x, hitbox_y, hitbox_z, letter, position_x) {
     return {
         "body": new CANNON.Body({

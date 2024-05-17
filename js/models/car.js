@@ -2,7 +2,6 @@ import * as THREE from "https://threejs.org/build/three.module.js";
 import * as CANNON from 'https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/+esm'
 import {getPhysicsWorldId, sceneElements} from "../sceneElements.js";
 import {gltfLoader, listener} from "../main.js";
-import {loadAudio} from "../myAudioLoader.js";
 
 // ************************** //
 // 1. loadCar(gltfLoader) - Load, add to the scene and world the Car Model at the position (0, 0, 0) facing the negative z axis
@@ -19,11 +18,14 @@ export function loadCar(position) {
     const scaleFactor = 0.01
 
     // Build the car chassis
-    const chassisShape = new CANNON.Box(new CANNON.Vec3(0.71, 0.20, 0.4))
-    const chassisBody = new CANNON.Body({ mass: 100 })
+    const chassisShape = new CANNON.Box(new CANNON.Vec3(0.72, 0.30, 0.45))
+    const chassisBody = new CANNON.Body({ mass: 200 })
     chassisBody.position.set(position.x, position.y, position.z)
     chassisBody.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), Math.PI/2)
-    chassisBody.addShape(chassisShape)
+    chassisBody.addShape(
+        chassisShape,
+        new CANNON.Vec3(0, -0.12, 0)
+    )
 
     // Create the vehicle
     const vehicle = new CANNON.RaycastVehicle({
@@ -182,7 +184,7 @@ export function loadCar(position) {
     // Update the wheel bodies + car
     sceneElements.world.addEventListener('postStep', () => {
         if (chassisVisual!=undefined){
-            chassisVisual.position.copy({x: chassisBody.position.x + 0.055, y: chassisBody.position.y - 0.49, z: chassisBody.position.z})
+            chassisVisual.position.copy({x: chassisBody.position.x , y: chassisBody.position.y - 0.49, z: chassisBody.position.z})
             chassisVisual.quaternion.copy(chassisBody.quaternion)
 
             // update wheels
@@ -208,4 +210,48 @@ export function loadCar(position) {
             }
         }
     })
+
+    // Car Movement
+    document.addEventListener('keydown', function onDocumentKeyDown(event) {
+        // 0 -> right front wheel
+        // 1 -> left front wheel
+        // 2 -> right back wheel
+        // 3 -> left back wheel
+        // vehicleGroup.children[4] - chassis
+        switch (event.key) {
+            case 'Enter':
+                break;
+            case 'w':
+            case 'ArrowUp':
+                break;
+            case 's':
+            case 'ArrowDown':
+                break;
+            case 'a':
+            case 'ArrowLeft':
+                break;
+            case 'd':
+            case 'ArrowRight':
+                break;
+        }
+    }, false);
+
+    document.addEventListener('keyup', function onDocumentKeyUp(event) {
+        switch (event.key) {
+            case 'Enter':
+                break;
+            case 'w':
+            case 'ArrowUp':
+                break;
+            case 's':
+            case 'ArrowDown':
+                break;
+            case 'a':
+            case 'ArrowLeft':
+                break;
+            case 'd':
+            case 'ArrowRight':
+                break;
+        }
+    }, false);
 }

@@ -67,7 +67,7 @@ const helper = {
                 // start playing music
                 const stormtrooper = sceneElements.sceneGraph.getObjectByName("glb/stormtrooper_dancing.glb")
                 const audio = stormtrooper.children[2].children[1]
-                audio.play()
+                // audio.play()
             })
         }
 
@@ -193,7 +193,7 @@ const helper = {
         // for example, the pile of bricks slides a bit. By doing this they won't move until they are crashed into
         sceneElements.world.allowSleep = true
 
-        debugcannon = new cannonEsDebugger(sceneElements.sceneGraph, sceneElements.world);
+        // debugcannon = new cannonEsDebugger(sceneElements.sceneGraph, sceneElements.world);
     },
 
     render: function (sceneElements) {
@@ -441,7 +441,7 @@ var keyEnter = false;
 var trackingVehicle = true;
 var isCarBeingMoved = false;
 const maxSteerVal = 0.5
-const maxForce = 100
+const maxForce = 200
 var carForward = new CANNON.Vec3()
 var carAngle = 0
 var oldPosition = new CANNON.Vec3(0, 4, -5)

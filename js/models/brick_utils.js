@@ -14,7 +14,8 @@ export function saveInBrickCollection(collection_name, brick) {
 
 export function resetBricksInCollection(collection_name) {
     for (const brick_entry of brick_collections.get(collection_name)){
-        brick_entry.brick.quaternion.copy(brick_entry.original_quaternion)
+        brick_entry.brick.velocity.setZero()
         brick_entry.brick.position.copy(brick_entry.original_position)
+        brick_entry.brick.quaternion.copy(brick_entry.original_quaternion)
     }
 }
