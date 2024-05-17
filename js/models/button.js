@@ -3,6 +3,7 @@ import * as CANNON from 'https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/+esm'
 import { CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 import {sceneElements} from "../sceneElements.js";
 import {open_link} from "../utils.js";
+import {loadAudio} from "../myAudioLoader.js";
 
 // ************************** //
 // 1. loadButton({x: , z: }, width: , height:, offset}) - Create a button
@@ -114,6 +115,7 @@ export function loadButton(width, height, position_x_z, button_color, name, call
         }
     })
 
+    loadAudio("sounds/mouse_click.mp3", group_visible_invisible_button)
     document.addEventListener('click', function onClick(event) {
         sceneElements.pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
         sceneElements.pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
@@ -122,6 +124,7 @@ export function loadButton(width, height, position_x_z, button_color, name, call
         if (intersects.length > 0){
             const redirectDiv = document.querySelector(".Redirect" + name + ".hover")
             if (redirectDiv !== null){
+                group_visible_invisible_button.children[group_visible_invisible_button.children.length - 1].play()
                 callback_function()
             }
         }
@@ -137,6 +140,7 @@ export function loadButton(width, height, position_x_z, button_color, name, call
         if (event.key === 'Enter'){
             const redirectDiv = document.querySelector(".Redirect" + name + ".parked")
             if (redirectDiv !== null){
+                group_visible_invisible_button.children[group_visible_invisible_button.children.length - 1].play()
                 callback_function()
             }
         }

@@ -41,7 +41,6 @@ let x_wing_visual
 let x_wing_step = 0
 // HELPER FUNCTIONS
 export const brick_audios = [...Array(9).keys()].map((i) => getAudio(`sounds/bricks/brick_hit_${i}.mp3`))
-console.log(brick_audios)
 
 const helper = {
 

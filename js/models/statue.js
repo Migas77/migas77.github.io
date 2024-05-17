@@ -2,7 +2,7 @@ import * as THREE from "https://threejs.org/build/three.module.js";
 import * as CANNON from 'https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/+esm'
 import {getPhysicsWorldId, sceneElements} from "../sceneElements.js";
 
-export function loadStatueAndPassCallback(gltfLoader, filename, scaleFactor, need_bounding_box, position_x_z, offset, rotation_y, callback = null) {
+export function loadStatueAndPassCallback(gltfLoader, filename, scaleFactor, need_bounding_box, position_x_z, offset, rotation_y, callback_function = null) {
     const baseGroup = new THREE.Group()
     const material = new THREE.MeshPhongMaterial( {color: 0xFFFFFF} );
     const top_measures = {width: 2.8, height: 0.1}
@@ -42,8 +42,8 @@ export function loadStatueAndPassCallback(gltfLoader, filename, scaleFactor, nee
             offset.z
         )
         gltf.scene.rotation.y = rotation_y
-        if (callback !== null){
-            callback(gltf.scene)
+        if (callback_function !== null){
+            callback_function(gltf.scene)
         }
         baseGroup.add(gltf.scene)
     }, undefined, function ( error ) {
@@ -71,7 +71,7 @@ export function loadStatueAndPassCallback(gltfLoader, filename, scaleFactor, nee
     return [baseGroup, statueBaseBody]
 }
 
-export function loadAnimatedStatueAndPassCallback(gltfLoader, filename, scaleFactor, need_bounding_box, position_x_z, offset, rotation_y, animation_name, callback = null) {
+export function loadAnimatedStatueAndPassCallback(gltfLoader, filename, scaleFactor, need_bounding_box, position_x_z, offset, rotation_y, animation_name, callback_function = null) {
     const baseGroup = new THREE.Group()
     const material = new THREE.MeshPhongMaterial( {color: 0xFFFFFF} );
     const top_measures = {width: 2.8, height: 0.1}
@@ -120,8 +120,8 @@ export function loadAnimatedStatueAndPassCallback(gltfLoader, filename, scaleFac
             offset.z
         )
         gltf.scene.rotation.y = rotation_y
-        if (callback !== null)
-            callback(gltf.scene)
+        if (callback_function !== null)
+            callback_function(gltf.scene)
         baseGroup.add(gltf.scene)
     }, undefined, function ( error ) {
         console.error( `Error loading statue model ${filepath}:\n${error}`);

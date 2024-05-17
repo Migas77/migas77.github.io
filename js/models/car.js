@@ -59,11 +59,6 @@ export function loadCar(position) {
                 node.receiveShadow = true
             }
         })
-        loadAudio("sound.mp3", gltf.scene)
-        chassisBody.addEventListener("collide", function (event) {
-
-            // gltf.scene.children[1].play()
-        })
         vehicleGroup.add(gltf.scene)
     }, undefined, function ( error ) {
         console.error( `Error loading model chassis: ${error}`);
