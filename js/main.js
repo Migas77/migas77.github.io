@@ -219,7 +219,7 @@ const scene = {
         // ************************** //
         loadGround(); // HAS TO BE THE FIRST ONE
         // loadFence();
-        loadCar({x: 0, y: 2, z: -5});
+        loadCar({x: 0, y: 1, z: -13.5});
         loadBall({x: -14, y:0, z: 2});
         // entrance tiles
         loadTile(0.5, {x: -0.4, z: -12}, 0, 0)
