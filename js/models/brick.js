@@ -2,9 +2,11 @@ import * as THREE from "https://threejs.org/build/three.module.js";
 import * as CANNON from 'https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/+esm'
 import {getPhysicsWorldId, sceneElements} from "../sceneElements.js";
 import {getAudio} from "../myAudioLoader.js";
+import {textureLoader} from "../main.js";
 
-const material = new THREE.MeshPhongMaterial( {color: 0xFFFFFF} );
+
 export const brick_audio_names = [...Array(9).keys()].map((i) => `sounds/bricks/brick_hit_${i}.mp3`)
+const material = new THREE.MeshPhongMaterial( {color: 0xFFFFFF} );
 
 export function loadBrick(width, height, depth, position, rotation_y){
 

@@ -123,7 +123,7 @@ const helper = {
         // ***************************** //
         const spotLight1 = new THREE.SpotLight('rgb(255, 255, 255)', 40);
         spotLight1.decay = 1;
-        spotLight1.position.set(2, 10, 0);
+        spotLight1.position.set(45, 10, 0);
         sceneElements.sceneGraph.add(spotLight1);
 
         // Setup shadow properties for the spotlight
@@ -218,7 +218,7 @@ const scene = {
         // Load Models
         // ************************** //
         loadGround(); // HAS TO BE THE FIRST ONE
-        // loadFence();
+        loadFence();
         loadCar({x: 0, y: 1, z: -13.5});
         saveElementInCollection("brick_piles", loadBall({x: -14, y:5, z: 2}));
         // entrance tiles
@@ -334,11 +334,10 @@ const scene = {
         loadTile(0.5, {x: -11, z: 2.1}, 0)
         loadTile(0.5, {x: -12.2, z: 1.4}, 0)
         loadTile(0.5, {x: -13, z: 2}, 0)
-        const bricks = []
 
         // First Wall
-        // First Row
 
+        // First Row
         saveElementInCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0, z: 0}, 0))
         saveElementInCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0, z: 1}, 0))
         saveElementInCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -18, y: 0, z: 2}, 0))
