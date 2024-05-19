@@ -32,23 +32,23 @@ export function loadNameText(position_x_z) {
 
 
         const models = [
-            getLetterDict(0.461, 0.49, 0.13, "M", 0),
-            getLetterDict(0.135, 0.49, 0.13, "I", 1),
-            getLetterDict(0.447, 0.51, 0.13, "G", 2),
-            getLetterDict(0.4, 0.50, 0.13, "U", 3),
-            getLetterDict(0.38, 0.49, 0.13, "E", 4),
-            getLetterDict(0.34, 0.49, 0.13, "L", 5),
-            getLetterDict(0.46, 0.49, 0.13, "", 6),
-            getLetterDict(0.36, 0.49, 0.13, "F", 6),
-            getLetterDict(0.135, 0.49, 0.13, "I", 7),
-            getLetterDict(0.447, 0.51, 0.13, "G", 8),
-            getLetterDict(0.4, 0.50, 0.13, "U", 9),
-            getLetterDict(0.38, 0.49, 0.13, "E", 10),
-            getLetterDict(0.135, 0.49, 0.13, "I", 11),
-            getLetterDict(0.40, 0.49, 0.13, "R", 12),
-            getLetterDict(0.38, 0.49, 0.13, "E", 13),
-            getLetterDict(0.41, 0.49, 0.13, "D", 14),
-            getLetterDict(0.46, 0.51, 0.13, "O", 15),
+            getLetterDict(0.461, 0.49, 0.13, "M", 0.7, -0.3),
+            getLetterDict(0.135, 0.49, 0.13, "I", 1.45, -0.3),
+            getLetterDict(0.447, 0.51, 0.13, "G", 2.2, -0.3),
+            getLetterDict(0.4, 0.50, 0.13, "U", 3.2, -0.3),
+            getLetterDict(0.38, 0.49, 0.13, "E", 4.1, -0.3),
+            getLetterDict(0.34, 0.49, 0.13, "L", 5.0, -0.3),
+
+            getLetterDict(0.36, 0.49, 0.13, "F", 6, 0.3),
+            getLetterDict(0.135, 0.49, 0.13, "I", 6.75, 0.3),
+            getLetterDict(0.447, 0.51, 0.13, "G", 7.5, 0.3),
+            getLetterDict(0.4, 0.50, 0.13, "U", 8.5, 0.3),
+            getLetterDict(0.38, 0.49, 0.13, "E", 9.4, 0.3),
+            getLetterDict(0.135, 0.49, 0.13, "I", 10.15, 0.3),
+            getLetterDict(0.40, 0.49, 0.13, "R", 10.9, 0.3),
+            getLetterDict(0.38, 0.49, 0.13, "E", 11.8, 0.3),
+            getLetterDict(0.41, 0.49, 0.13, "D", 12.7, 0.3),
+            getLetterDict(0.46, 0.51, 0.13, "O", 13.7, 0.3),
         ]
 
         for (let index = 0; index < models.length; index++) {
@@ -67,7 +67,7 @@ export function loadNameText(position_x_z) {
             textMesh.translateY(0.49)
             textMesh.receiveShadow = true
             textMesh.castShadow = true
-            textBody.position.set(position_x_z.x + dict.x,0.49,position_x_z.z)
+            textBody.position.set(position_x_z.x + dict.x,0.49,position_x_z.z + dict.z)
             brick_audio_names.forEach((brick_audio_name) => textMesh.add(getAudio(brick_audio_name)))
             sceneElements.world.addBody(textBody)
             sceneElements.sceneGraph.add(textMesh)
@@ -101,7 +101,7 @@ export function loadNameText(position_x_z) {
 }
 
 const letter_mass = 0.1
-function getLetterDict(hitbox_x, hitbox_y, hitbox_z, letter, position_x) {
+function getLetterDict(hitbox_x, hitbox_y, hitbox_z, letter, position_x, position_z) {
     return {
         "body": new CANNON.Body({
             mass: letter_mass,
@@ -109,5 +109,6 @@ function getLetterDict(hitbox_x, hitbox_y, hitbox_z, letter, position_x) {
         }),
         "letter": letter,
         "x": position_x,
+        "z": position_z
     }
 }
