@@ -96,41 +96,38 @@ const helper = {
         const ambientLight = new THREE.AmbientLight('rgb(255, 255, 255)', 0.8);
         sceneElements.sceneGraph.add(ambientLight);
 
-        const dirLight = new THREE.DirectionalLight( 'rgb(255, 255, 255)', 1);
-        dirLight.position.set(-20, 10, 0)
-        dirLight.name = "directional_light"
-        dirLight.shadowMapWidth = 2048
-        dirLight.shadowMapHeight = 2048
-        dirLight.shadow.mapSize.width = 2000
-        dirLight.shadow.mapSize.height = 2000
-        dirLight.shadow.camera.left = -105
-        dirLight.shadow.camera.right = 105
-        dirLight.shadow.camera.top = 205
-        dirLight.shadow.camera.bottom = -205
-        dirLight.shadow.camera.near = 0.5
-        dirLight.shadow.camera.far = 300
-
-        dirLight.castShadow = true
-
-
-        // sceneElements.sceneGraph.add(dirLight)
-        const helper = new THREE.CameraHelper(dirLight.shadow.camera)
-        // sceneElements.sceneGraph.add(helper)
-
-
         // ***************************** //
         // Add spotlight (with shadows)
         // ***************************** //
-        const spotLight1 = new THREE.SpotLight('rgb(255, 255, 255)', 40);
+        const spotLight1 = new THREE.SpotLight('rgb(255, 255, 255)', 30);
         spotLight1.decay = 1;
-        spotLight1.position.set(45, 10, 0);
-        sceneElements.sceneGraph.add(spotLight1);
-
+        spotLight1.position.set(33, 30, 0);
         // Setup shadow properties for the spotlight
         spotLight1.castShadow = true;
         spotLight1.shadow.mapSize.width = 2048;
         spotLight1.shadow.mapSize.height = 2048;
         spotLight1.name = "light 1";
+        sceneElements.sceneGraph.add(spotLight1);
+
+        const spotLight2 = new THREE.SpotLight('rgb(255, 255, 255)', 30);
+        spotLight2.decay = 1;
+        spotLight2.position.set(-33, 30, 0);
+        // Setup shadow properties for the spotlight
+        spotLight2.castShadow = true;
+        spotLight2.shadow.mapSize.width = 2048;
+        spotLight2.shadow.mapSize.height = 2048;
+        spotLight2.name = "light 2";
+        sceneElements.sceneGraph.add(spotLight2);
+
+        const spotLight3 = new THREE.SpotLight('rgb(255, 255, 255)', 30);
+        spotLight3.decay = 1;
+        spotLight3.position.set(0, 30, 0);
+        // Setup shadow properties for the spotlight
+        spotLight3.castShadow = true;
+        spotLight3.shadow.mapSize.width = 2048;
+        spotLight3.shadow.mapSize.height = 2048;
+        spotLight3.name = "light 3";
+        sceneElements.sceneGraph.add(spotLight3);
 
         // *********************************** //
         // Create renderer (with shadow map)
@@ -192,7 +189,7 @@ const helper = {
         // for example, the pile of bricks slides a bit. By doing this they won't move until they are crashed into
         sceneElements.world.allowSleep = true
 
-        debugcannon = new cannonEsDebugger(sceneElements.sceneGraph, sceneElements.world);
+        // debugcannon = new cannonEsDebugger(sceneElements.sceneGraph, sceneElements.world);
     },
 
     render: function (sceneElements) {

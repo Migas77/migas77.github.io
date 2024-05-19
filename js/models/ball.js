@@ -16,6 +16,7 @@ export function loadBall(position) {
     })
     sphereBody.linearDamping = sphereBody.angularDamping = 0.5
     sphereBody.position.set(position.x,position.y,position.z)
+    sphereBody.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), Math.PI/2)
     sphereBody.allowSleep = false
     sceneElements.world.addBody(sphereBody)
     const scaleFactor = 0.7

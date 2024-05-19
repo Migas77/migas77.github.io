@@ -53,7 +53,7 @@ function loadFenceItem(position, rotation_y, material) {
 function loadFenceGroup(position_x_z, rotation_y, name, material) {
 
     const fenceGroup = new THREE.Group();
-    for (let i = 0; i < 41; i++) {
+    for (let i = 0; i < 36; i++) {
         let fenceItem = loadFenceItem({x: 1.68*i, y:0, z:0}, 0, material)
         fenceGroup.add(fenceItem)
     }
@@ -88,7 +88,7 @@ export function loadFence() {
     material.map = textureLoader.load("textures/wood_planks_diff_1k.jpg")
     material.normalMap = textureLoader.load("textures/wood_planks_nor_gl_1k.jpg")
 
-    const side_size = 34.53
+    const side_size = 30.34
     const fences = [
         {position_x_z: {x: 0, z: side_size}, rotation_y: 0, name: "upper_fence"},
         {position_x_z: {x: side_size, z: 0}, rotation_y: Math.PI/2, name: "right_fence"},

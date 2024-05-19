@@ -140,6 +140,8 @@ function getLightPoleAtOrigin(
 
     // lightpole light
     const light_light = new THREE.PointLight(0xffffff, 100, 100)
+    light_light.shadow.mapSize.width = 2048;
+    light_light.shadow.mapSize.height = 2048;
     light_light.castShadow = true
     const light_geometry = new THREE.CylinderGeometry( light_top, light_bottom, light_height, 4, 1, false, Math.PI/4, 2*Math.PI);
     const light_material = new THREE.MeshStandardMaterial({
