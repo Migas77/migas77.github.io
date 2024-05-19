@@ -165,10 +165,11 @@ const helper = {
         const controls = new MapControls( camera, sceneElements.labelRenderer.domElement );
         sceneElements.controls = controls
         // how far can you dolly in and out
-        // controls.minDistance = 10.0
-        // controls.maxDistance = 20.0
+        controls.minDistance = 10.0
+        controls.maxDistance = 20.0
+        controls.maxTargetRadius = 50.0
         // Disable rotating
-        // controls.enableRotate = false;
+        controls.enableRotate = false;
         controls.enableDamping = true;
         controls.dampingFactor = 0.05;
         controls.panSpeed = 2
@@ -208,8 +209,8 @@ const scene = {
         // ************************** //
         // Coordinate Axis
         // ************************** //
-        const axes = new THREE.AxesHelper(15);
-        sceneGraph.add(axes);
+        // const axes = new THREE.AxesHelper(15);
+        // sceneGraph.add(axes);
 
         // ************************** //
         // Load Models
