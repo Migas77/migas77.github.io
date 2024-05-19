@@ -50,10 +50,8 @@ function loadFenceItem(position, rotation_y, material) {
     return fenceItem
 }
 
-function loadFenceGroup(position_x_z, rotation_y, name) {
-    const material = new THREE.MeshPhongMaterial();
-    material.map = textureLoader.load("textures/wooden_planks_diff_4k.jpg")
-    // material.displacementMap = textureLoader.load("textures/wooden_planks_disp_4k.png")
+function loadFenceGroup(position_x_z, rotation_y, name, material) {
+
     const fenceGroup = new THREE.Group();
     for (let i = 0; i < 41; i++) {
         let fenceItem = loadFenceItem({x: 1.68*i, y:0, z:0}, 0, material)
@@ -84,7 +82,12 @@ function loadFenceGroup(position_x_z, rotation_y, name) {
     sceneElements.world.addBody(fenceBody) // when I uncomment this line the car starts flying
 }
 
-export function loadFence(filepath) {
+
+export function loadFence() {
+    const material = new THREE.MeshPhongMaterial();
+    material.map = textureLoader.load("textures/wood_planks_diff_1k.jpg")
+    material.normalMap = textureLoader.load("textures/wood_planks_nor_gl_1k.jpg")
+
     const side_size = 34.53
     const fences = [
         {position_x_z: {x: 0, z: side_size}, rotation_y: 0, name: "upper_fence"},
@@ -94,6 +97,6 @@ export function loadFence(filepath) {
     ]
 
     for (const fence of fences) {
-        loadFenceGroup(fence.position_x_z, fence.rotation_y, fence.name)
+        loadFenceGroup(fence.position_x_z, fence.rotation_y, fence.name, material)
     }
 }
