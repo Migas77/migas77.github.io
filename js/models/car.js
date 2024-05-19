@@ -211,47 +211,4 @@ export function loadCar(position) {
         }
     })
 
-    // Car Movement
-    document.addEventListener('keydown', function onDocumentKeyDown(event) {
-        // 0 -> right front wheel
-        // 1 -> left front wheel
-        // 2 -> right back wheel
-        // 3 -> left back wheel
-        // vehicleGroup.children[4] - chassis
-        switch (event.key) {
-            case 'Enter':
-                break;
-            case 'w':
-            case 'ArrowUp':
-                break;
-            case 's':
-            case 'ArrowDown':
-                break;
-            case 'a':
-            case 'ArrowLeft':
-                break;
-            case 'd':
-            case 'ArrowRight':
-                break;
-        }
-    }, false);
-
-    document.addEventListener('keyup', function onDocumentKeyUp(event) {
-        switch (event.key) {
-            case 'Enter':
-                break;
-            case 'w':
-            case 'ArrowUp':
-                break;
-            case 's':
-            case 'ArrowDown':
-                break;
-            case 'a':
-            case 'ArrowLeft':
-                break;
-            case 'd':
-            case 'ArrowRight':
-                break;
-        }
-    }, false);
 }

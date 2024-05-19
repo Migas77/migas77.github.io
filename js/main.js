@@ -458,23 +458,17 @@ const scene = {
 
 // ************************** //
 // ANIMATION:
-// Displacement Values
-var dispX = 0.2, dispZ = 0.2;
 // To keep Track of the keyboard
 var keyArrowLeft = false, keyArrowUp = false, keyArrowRight = false, keyArrowDown = false;
-var keyEnter = false;
 // To keep track and move car
 var trackingVehicle = true;
-var isCarBeingMoved = false;
 const maxSteerVal = 0.5
 const maxForce = 200
 var carForward = new CANNON.Vec3()
-var carAngle = 0
 var oldPosition = new CANNON.Vec3(0, 4, -5)
 var carSpeed = 0
 var forwardSpeed = 0;
 var goingForward = false;
-const accelaratingForce = 10
 const brakeForce = 1000000
 // ************************** //
 function computeFrame(time) {
@@ -573,10 +567,6 @@ function handleCarMovement() {
         // sceneElements.vehicle.chassisBody.applyImpulse(oppositeForce, sceneElements.vehicle.chassisBody.position)
     }
 
-    if (isCarBeingMoved === true){
-
-    }
-
     if (trackingVehicle === true){
         const camera_position = sceneElements.camera.position
         const vehicle_position_cannon = sceneElements.vehicle.chassisBody.position
@@ -616,20 +606,14 @@ document.addEventListener('keydown', function onDocumentKeyDown(event) {
     // 2 -> right back wheel
     // 3 -> left back wheel
     switch (event.key) {
-        case 'Enter':
-            keyEnter = true;
-            break;
         case 'w':
         case 'ArrowUp':
-
             keyArrowUp = true;
             trackingVehicle = true;
-            isCarBeingMoved = true;
             break;
         case 's':
         case 'ArrowDown':
             keyArrowDown = true;
-            isCarBeingMoved = true;
             trackingVehicle = true;
             break;
         case 'a':
@@ -647,9 +631,6 @@ document.addEventListener('keydown', function onDocumentKeyDown(event) {
 
 document.addEventListener('keyup', function onDocumentKeyUp(event) {
     switch (event.key) {
-        case 'Enter':
-            keyEnter = false;
-            break;
         case 'w':
         case 'ArrowUp':
             keyArrowUp = false;
