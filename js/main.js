@@ -328,6 +328,27 @@ const scene = {
         loadTile(0.5, {x: 24.4, z: 1.3}, -Math.PI/20)
         loadTile(0.5, {x: 25.2, z: 2}, -Math.PI/20)
         loadTile(0.5, {x: 26.1, z: 1.6}, -Math.PI/20)
+        loadTile(0.5, {x: 27.0, z: 2}, -Math.PI/20)
+        loadTile(0.5, {x: 26.3, z: 2.5}, -Math.PI/20)
+        loadTile(0.5, {x: 27.6, z: 3}, -Math.PI/20)
+        loadPainting(gltfLoader, "images/KeyUsageProfiler_3.png", {x: 17.2, y: 1.3, z: 8}, 0.49)
+        loadPainting(gltfLoader, "images/KeyUsageProfiler_2.png", {x: 21.2, y: 1.3, z: 8}, 0.49)
+        loadPainting(gltfLoader, "images/KeyUsageProfiler_1.png", {x: 25.2, y: 1.3, z: 8}, 0.49)
+        loadTile(0.5, {x: 8.5, z: 10.6}, 0)
+        loadTile(0.5, {x: 9.2, z: 11}, 0)
+        loadTile(0.5, {x: 10, z: 10.7}, 0)
+        loadTile(0.5, {x: 10.9, z: 11}, 0)
+        loadTile(0.5, {x: 11.7, z: 10.7}, 0)
+        loadTile(0.5, {x: 12.4, z: 11.3}, 0)
+        loadTile(0.5, {x: 13.2, z: 11}, 0)
+        loadTile(0.5, {x: 24.4, z: 11.7}, -Math.PI/20)
+        loadTile(0.5, {x: 25.2, z: 11}, -Math.PI/20)
+        loadTile(0.5, {x: 26.1, z: 11.4}, -Math.PI/20)
+        loadTile(0.5, {x: 27.0, z: 11}, -Math.PI/20)
+        loadTile(0.5, {x: 26.3, z: 10.5}, -Math.PI/20)
+        loadTile(0.5, {x: 27.6, z: 10}, -Math.PI/20)
+
+
 
         // Playground Section - 2
         loadTile(0.5, {x: -10, z: 1.7}, 0)
