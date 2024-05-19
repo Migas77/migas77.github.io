@@ -312,7 +312,7 @@ const scene = {
         loadButton(1.4, 1.4, {x: 5, z: 14.4}, 0x000000, "Mail", () => open_link("mailto:miguel.belchior@ua.pt"))
         loadImage("images/email_logo.png", 1.05, 1.05, {x:5, y:0.01, z:14.4}, -Math.PI/2, -2)
         loadImage("images/HISTORY_OF_MY_LIFE.png", 5, 5, {x:-0.8, y:0.01, z:16}, -Math.PI/2, -1)
-        loadImage("images/HISTORY_OF_MY_LIFE_DETAILS.png", 7, 7, {x:2, y:0.02, z:17.4}, -Math.PI/2)
+        loadImage("images/HISTORY_OF_MY_LIFE_DETAILS.png", 7, 7, {x:2, y:0.011, z:17.4}, -Math.PI/2)
 
         // Projects Section
         loadTile(0.5, {x: 8.5, z: 2.4}, 0)
@@ -325,6 +325,9 @@ const scene = {
         loadPainting(gltfLoader, "images/sub19_subida.jpeg", {x: 17.2, y: 1.3, z: -1}, 0.49)
         loadPainting(gltfLoader, "images/AFC.jpeg", {x: 21.2, y: 1.3, z: -1}, 0.49)
         loadPainting(gltfLoader, "images/sub19_homenagem_subida.jpeg", {x: 25.2, y: 1.3, z: -1}, 0.49)
+        loadImage("images/under19s_promotion.png", 7, 7, {x:18.7, y:0.01, z:0.5}, -Math.PI/2, -2)
+        loadImage("images/to_1st_league.png", 7, 7, {x:20.49, y:0.011, z:1.5}, -Math.PI/2, -1)
+        loadImage("images/under19s_promotionDetails.png", 7, 7, {x:19.1, y:0.012, z:2.7}, -Math.PI/2)
         loadTile(0.5, {x: 24.4, z: 1.3}, -Math.PI/20)
         loadTile(0.5, {x: 25.2, z: 2}, -Math.PI/20)
         loadTile(0.5, {x: 26.1, z: 1.6}, -Math.PI/20)
@@ -334,6 +337,8 @@ const scene = {
         loadPainting(gltfLoader, "images/KeyUsageProfiler_3.png", {x: 17.2, y: 1.3, z: 8}, 0.49)
         loadPainting(gltfLoader, "images/KeyUsageProfiler_2.png", {x: 21.2, y: 1.3, z: 8}, 0.49)
         loadPainting(gltfLoader, "images/KeyUsageProfiler_1.png", {x: 25.2, y: 1.3, z: 8}, 0.49)
+        loadImage("images/KeyUsageProfiler.png", 7, 7, {x:18.9, y:0.01, z:9.5}, -Math.PI/2, -1)
+        loadImage("images/KeyUsageProfilerDetails.png", 7, 7, {x:18.8, y:0.011, z:10.7}, -Math.PI/2)
         loadTile(0.5, {x: 8.5, z: 10.6}, 0)
         loadTile(0.5, {x: 9.2, z: 11}, 0)
         loadTile(0.5, {x: 10, z: 10.7}, 0)
