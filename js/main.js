@@ -305,11 +305,11 @@ const scene = {
         loadTile(0.5, {x: 0.1, z: 13.5}, 0)
         loadTile(0.5, {x: -0.3, z: 14.2}, 0)
         loadLightPole({x: -1.4, y:0, z:14.4}, Math.PI)
-        loadButton(1.4, 1.4, {x: 1.4, z: 14.4}, 0x000000, "Github", () => open_link("https://github.com/Migas77"))
+        loadButton(1.4, 1.4, {x: 1.4, z: 14.4}, 0x000000, "Github", "Redirect", () => open_link("https://github.com/Migas77"))
         loadImage("images/github_logo.png", 2.31, 1.54, {x:1.4, y:0.01, z:14.4}, -Math.PI/2, -4)
-        loadButton(1.4, 1.4, {x: 3.2, z: 14.4}, 0xffffff, "Linkedin", () => open_link("https://www.linkedin.com/in/miguel-figueiredo-1495bb284/"))
+        loadButton(1.4, 1.4, {x: 3.2, z: 14.4}, 0xffffff, "Linkedin", "Redirect", () => open_link("https://www.linkedin.com/in/miguel-figueiredo-1495bb284/"))
         loadImage("images/linkedin_logo.png", 1.65, 1.65, {x:3.2, y:0.01, z:14.4}, -Math.PI/2, -3)
-        loadButton(1.4, 1.4, {x: 5, z: 14.4}, 0x000000, "Mail", () => open_link("mailto:miguel.belchior@ua.pt"))
+        loadButton(1.4, 1.4, {x: 5, z: 14.4}, 0x000000, "Mail", "Redirect", () => open_link("mailto:miguel.belchior@ua.pt"))
         loadImage("images/email_logo.png", 1.05, 1.05, {x:5, y:0.01, z:14.4}, -Math.PI/2, -2)
         loadImage("images/HISTORY_OF_MY_LIFE.png", 5, 5, {x:-0.8, y:0.01, z:16}, -Math.PI/2, -1)
         loadImage("images/HISTORY_OF_MY_LIFE_DETAILS.png", 7, 7, {x:2, y:0.011, z:17.4}, -Math.PI/2)
@@ -355,7 +355,7 @@ const scene = {
 
 
 
-        // Playground Section - 2
+        // Playground Section
         loadTile(0.5, {x: -10, z: 1.7}, 0)
         loadTile(0.5, {x: -11, z: 2.1}, 0)
         loadTile(0.5, {x: -12.2, z: 1.4}, 0)
@@ -447,8 +447,7 @@ const scene = {
         // Fifth Row
         saveElementInCollection("brick_piles", loadBrick(0.6, 0.4, 0.9, {x: -26, y: 1.6, z: 2}, 0))
 
-        loadButton(1.4, 1.4, {x: -15.5, z: 0}, 0xffffff, "ResetBrickWalls",() => resetElementsInCollection("brick_piles"))
-
+        loadButton(1.4, 1.4, {x: -15.5, z: 0}, 0xffffff, "ResetBrickWalls", "Reset", () => resetElementsInCollection("brick_piles"))
 
 
     }

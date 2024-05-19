@@ -12,7 +12,7 @@ import {loadAudio} from "../myAudioLoader.js";
 
 const offset = 0.1
 const buttons = []
-export function loadButton(width, height, position_x_z, button_color, name, callback_function) {
+export function loadButton(width, height, position_x_z, button_color, name, text_content, callback_function) {
 
     const x = 0;
     const y = 0;
@@ -75,7 +75,7 @@ export function loadButton(width, height, position_x_z, button_color, name, call
     labelDiv.style.opacity = "0"
     const labelText = document.createElement("p")
     labelText.className = "labelRedirect"
-    labelText.textContent = "Redirect"
+    labelText.textContent = text_content
     labelDiv.insertBefore(labelText, labelDiv.firstChild)
     const labelLink = document.createElement("a")
     labelText.appendChild(labelLink)
