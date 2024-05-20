@@ -13,7 +13,6 @@ export function saveElementInCollection(collection_name, element) {
 }
 
 export function resetElementsInCollection(collection_name) {
-    const collection = element_collections.get(collection_name)
     for (const entry of element_collections.get(collection_name)){
         entry.element.velocity.setZero()
         entry.element.angularVelocity.setZero()
